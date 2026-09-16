@@ -101,16 +101,7 @@ const projects = [
   },
 ];
 
-const clients = [
-  "TATA GROUP",
-  "ADOBE",
-  "NIKE",
-  "SPOTIFY",
-  "NOTION",
-  "AIRBNB",
-  "POLestar",
-  "LINEAR",
-];
+const clients: string[] = [];
 
 // Utility for staggering text lines smoothly (we keep the cool animations!)
 const textContainerVariants = {
@@ -223,25 +214,42 @@ function ServiceBox({ n, title, copy, index }: any) {
     offset: ["0 1.1", "0.6 1"],
   });
 
+  const { scrollYProgress: fillProgress } = useScroll({
+    target: ref,
+    offset: ["0 0.8", "0 0.4"],
+  });
+
   const scaleY = useTransform(scrollYProgress, [0, 1], [0.85, 1]);
   const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
   const smoothScaleY = useSpring(scaleY, { stiffness: 60, damping: 20 });
   const clipPath = useTransform(scrollYProgress, [0, 1], ["inset(100% 0 0 0)", "inset(0% 0 0 0)"]);
 
+  const fillOpacity = useTransform(fillProgress, [0, 1], [0, 1]);
+
   return (
     <motion.div
       ref={ref}
       style={{ scaleY: smoothScaleY, opacity }}
-      className="relative flex flex-col group h-full"
+      className="relative flex flex-col h-full"
     >
       <motion.div
         style={{ clipPath }}
-        className="absolute inset-0 border border-paper/10 bg-paper/5 rounded pointer-events-none z-0 transition-colors duration-500 group-hover:bg-paper/10"
+        className="absolute inset-0 border border-paper/10 bg-paper/5 rounded pointer-events-none z-0"
+      />
+      <motion.div
+        style={{ clipPath, opacity: fillOpacity }}
+        className="absolute inset-0 bg-paper/10 rounded pointer-events-none z-0"
       />
       <div className="relative z-10 flex flex-col h-full p-8 md:p-10">
-        <span className="font-display font-medium text-reg text-xl transition-colors group-hover:text-white">
-          {n} —
-        </span>
+        <div className="relative font-display font-medium text-xl w-fit">
+          <span className="text-reg">{n} —</span>
+          <motion.span
+            style={{ opacity: fillOpacity }}
+            className="absolute inset-0 text-white"
+          >
+            {n} —
+          </motion.span>
+        </div>
         <h3 className="mt-4 font-display text-2xl lg:text-3xl font-semibold tracking-tight">
           {title}
         </h3>
