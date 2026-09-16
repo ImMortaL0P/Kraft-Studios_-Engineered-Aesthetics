@@ -39,7 +39,7 @@
 }
 
 * { box-sizing: border-box; border-color: var(--line); }
-html { scroll-behavior: smooth; background: var(--paper); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+html { background: var(--paper); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-body); letter-spacing: .01em; transition: background-color .5s ease, color .5s ease; }
 a { color: inherit; text-decoration: none; }
 button, input, textarea { font: inherit; }
