@@ -319,10 +319,12 @@ function ScrollRevealChar({
   char,
   progress,
   range,
+  className = "",
 }: {
   char: string;
   progress: MotionValue<number>;
   range: [number, number];
+  className?: string;
 }) {
   const opacity = useTransform(progress, range, [0.22, 1]);
   const y = useTransform(progress, range, [16, 0]);
@@ -330,7 +332,7 @@ function ScrollRevealChar({
   return (
     <motion.span
       style={{ opacity, y, filter }}
-      className="relative inline-block will-change-transform"
+      className={`relative inline-block will-change-transform ${className}`}
     >
       {char}
     </motion.span>
@@ -343,14 +345,41 @@ function ScrollRevealText({
   className = "",
   windowStart = 0.12,
   windowEnd = 0.47,
+  by = "char",
 }: {
   text: string;
   progress: MotionValue<number>;
   className?: string;
   windowStart?: number;
   windowEnd?: number;
+  /**
+   * "char" splits every letter into its own inline-block, which breaks kerning —
+   * fine for upright faces, but italics overlap their neighbours. Use "word" there.
+   */
+  by?: "char" | "word";
 }) {
   const words = text.split(" ");
+
+  if (by === "word") {
+    return (
+      <span className={`inline-flex flex-wrap ${className}`}>
+        {words.map((word, wIdx) => {
+          const localStart = windowStart + (wIdx / words.length) * (windowEnd - windowStart);
+          const localEnd = Math.min(1, localStart + 0.06);
+          return (
+            <ScrollRevealChar
+              key={wIdx}
+              char={word}
+              progress={progress}
+              range={[localStart, localEnd] as [number, number]}
+              className="mr-[0.28em]"
+            />
+          );
+        })}
+      </span>
+    );
+  }
+
   let charCount = 0;
   const totalChars = text.replace(/\s/g, "").length;
 
@@ -1362,6 +1391,7 @@ function Mantra() {
                   progress={scrollYProgress}
                   windowStart={0.4}
                   windowEnd={0.62}
+                  by="word"
                 />
               </span>
             </motion.span>
