@@ -2,7 +2,18 @@ import { Link } from "@tanstack/react-router";
 import logoWordmark from "../Logos/Kraft Studios Wordmark T.png";
 import logoMonogram from "../Logos/Kraft Studios Monogram T.png";
 import { ArrowUp, ArrowUpRight, Moon, Sun } from "lucide-react";
-import { AnimatePresence, MotionConfig, motion, useInView, useScroll, useTransform, useSpring, useVelocity, useAnimationFrame, useMotionValue } from "framer-motion";
+import {
+  AnimatePresence,
+  MotionConfig,
+  motion,
+  useInView,
+  useScroll,
+  useTransform,
+  useSpring,
+  useVelocity,
+  useAnimationFrame,
+  useMotionValue,
+} from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 
 export const EASE = [0.22, 1, 0.36, 1] as const;
@@ -15,12 +26,78 @@ const navItems = [
 ];
 
 const indexLinks = [
-  { label: "Premise", href: "/#premise" },
-  { label: "Services", href: "/#services" },
-  { label: "Work", href: "/#work" },
-  { label: "Process", href: "/#process" },
-  { label: "Philosophy", href: "/#philosophy" },
+  { label: "Premise", hash: "premise" },
+  { label: "Blueprint", hash: "blueprint" },
+  { label: "Work", hash: "work" },
+  { label: "Process", hash: "process" },
+  { label: "Mantra", hash: "philosophy" },
+  { label: "Contact", hash: "contact" },
 ];
+
+/** Smooth-scroll to a section id, using Lenis when it is running. */
+export function scrollToId(id: string) {
+  if (typeof window === "undefined") return;
+  const el = document.getElementById(id);
+  if (!el) return;
+  const lenis = (window as unknown as { lenis?: { scrollTo: (t: Element, o?: object) => void } })
+    .lenis;
+  if (lenis?.scrollTo) lenis.scrollTo(el, { offset: -70, duration: 1.2 });
+  else
+    window.scrollTo({
+      top: el.getBoundingClientRect().top + window.scrollY - 70,
+      behavior: "smooth",
+    });
+}
+
+/** Footer / menu index link: scrolls on the homepage, navigates from elsewhere. */
+function IndexLink({ hash, label, onDone }: { hash: string; label: string; onDone?: () => void }) {
+  return (
+    <a
+      href={`#${hash}`}
+      className="hover:text-reg"
+      onClick={(e) => {
+        const target = document.getElementById(hash);
+        if (target) {
+          e.preventDefault();
+          scrollToId(hash);
+        }
+        onDone?.();
+      }}
+    >
+      {label}
+    </a>
+  );
+}
+
+/** Infinite marquee strip. */
+export function Ticker({
+  items,
+  className = "",
+  fast = false,
+}: {
+  items: ReactNode[];
+  className?: string;
+  fast?: boolean;
+}) {
+  const set = (key: string, hidden = false) => (
+    <div key={key} className="marquee-set" aria-hidden={hidden || undefined}>
+      {items.map((item, i) => (
+        <span key={i} className="flex items-center">
+          {item}
+          <span className="mx-8 inline-block size-1.5 rotate-45 bg-reg md:mx-12" />
+        </span>
+      ))}
+    </div>
+  );
+  return (
+    <div className={`marquee-mask overflow-hidden ${className}`}>
+      <div className={`marquee-track ${fast ? "fast" : ""}`}>
+        {set("a")}
+        {set("b", true)}
+      </div>
+    </div>
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /* Theme                                                               */
@@ -37,7 +114,11 @@ function ThemeToggle() {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
-    try { localStorage.setItem("kraft-theme", next); } catch { /* storage unavailable */ }
+    try {
+      localStorage.setItem("kraft-theme", next);
+    } catch {
+      /* storage unavailable */
+    }
   };
   return (
     <button
@@ -51,7 +132,11 @@ function ThemeToggle() {
         transition={{ type: "spring", stiffness: 500, damping: 34 }}
         className={`grid size-5 place-items-center rounded-full bg-ink text-paper ${theme === "dark" ? "ml-auto" : ""}`}
       >
-        {theme === "dark" ? <Moon size={11} strokeWidth={2.4} /> : <Sun size={11} strokeWidth={2.4} />}
+        {theme === "dark" ? (
+          <Moon size={11} strokeWidth={2.4} />
+        ) : (
+          <Sun size={11} strokeWidth={2.4} />
+        )}
       </motion.span>
     </button>
   );
@@ -80,7 +165,15 @@ export function SiteHeader() {
   }, []);
 
   useEffect(() => {
-    document.documentElement.style.overflow = open ? "hidden" : "";
+    const lenis = (window as unknown as { lenis?: { stop?: () => void; start?: () => void } })
+      .lenis;
+    if (open) {
+      if (typeof lenis?.stop === "function") lenis.stop();
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      if (typeof lenis?.start === "function") lenis.start();
+      document.documentElement.style.overflow = "";
+    }
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -88,20 +181,35 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className={`site-header ${scrolled && !open ? "is-scrolled" : ""} ${hidden && !open ? "is-hidden" : ""}`}>
+      <header
+        className={`site-header ${scrolled && !open ? "is-scrolled" : ""} ${hidden && !open ? "is-hidden" : ""}`}
+      >
         <div className="gutter mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-6">
-          <Link to="/" className="group flex items-center relative z-[2] w-[180px] sm:w-[220px]" aria-label="Kraft Studios home" onClick={() => setOpen(false)}>
-            <img src={logoWordmark} alt="Kraft Studios Logo" className="w-full h-auto object-contain opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+          <Link
+            to="/"
+            className="group flex items-center relative z-[2] w-[180px] sm:w-[220px]"
+            aria-label="Kraft Studios home"
+            onClick={() => setOpen(false)}
+          >
+            <img
+              src={logoWordmark}
+              alt="Kraft Studios Logo"
+              className="w-full h-auto object-contain opacity-90 transition-opacity duration-300 group-hover:opacity-100"
+            />
           </Link>
 
           <div className="relative z-[2] flex items-center gap-5 md:gap-7">
             <nav className="hidden items-center gap-7 lg:flex" aria-label="Main navigation">
               {navItems.map((item) => (
-                <Link key={item.to} to={item.to} className="nav-link">{item.label}</Link>
+                <Link key={item.to} to={item.to} className="nav-link">
+                  {item.label}
+                </Link>
               ))}
             </nav>
             <ThemeToggle />
-            <Link to="/contact" className="pill hidden sm:inline-flex">Start a project</Link>
+            <Link to="/contact" className="pill hidden sm:inline-flex">
+              Start a project
+            </Link>
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
@@ -111,8 +219,12 @@ export function SiteHeader() {
             >
               <span className="hidden sm:inline">{open ? "CLOSE" : "MENU"}</span>
               <span className="relative block h-3 w-6">
-                <span className={`absolute left-0 h-px w-full bg-ink transition-all duration-500 ${open ? "top-1/2 rotate-45" : "top-0.5 group-hover:w-2/3"}`} />
-                <span className={`absolute left-0 h-px w-full bg-ink transition-all duration-500 ${open ? "top-1/2 -rotate-45" : "bottom-0.5 top-auto"}`} />
+                <span
+                  className={`absolute left-0 h-px w-full bg-ink transition-all duration-500 ${open ? "top-1/2 rotate-45" : "top-0.5 group-hover:w-2/3"}`}
+                />
+                <span
+                  className={`absolute left-0 h-px w-full bg-ink transition-all duration-500 ${open ? "top-1/2 -rotate-45" : "bottom-0.5 top-auto"}`}
+                />
               </span>
             </button>
           </div>
@@ -141,7 +253,7 @@ export function SiteHeader() {
                       transition={{
                         duration: 0.8,
                         ease: EASE,
-                        delay: open ? 0.15 + i * 0.06 : (navItems.length - 1 - i) * 0.04
+                        delay: open ? 0.15 + i * 0.06 : (navItems.length - 1 - i) * 0.04,
                       }}
                     >
                       <Link
@@ -168,10 +280,17 @@ export function SiteHeader() {
               >
                 <div className="flex flex-wrap gap-x-6 gap-y-2">
                   {indexLinks.map((l) => (
-                    <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="hover:text-reg">{l.label}</a>
+                    <IndexLink
+                      key={l.hash}
+                      hash={l.hash}
+                      label={l.label}
+                      onDone={() => setOpen(false)}
+                    />
                   ))}
                 </div>
-                <a href="mailto:hello@kraftstudios.in" className="text-ink hover:text-reg">hello@kraftstudios.in</a>
+                <a href="mailto:hello@kraftstudios.in" className="text-ink hover:text-reg">
+                  hello@kraftstudios.in
+                </a>
               </motion.div>
             </div>
           </motion.div>
@@ -197,7 +316,8 @@ function buildBitmap(word: string) {
   const rows: string[] = Array.from({ length: 7 }, () => "");
   word.split("").forEach((ch, i) => {
     const g = GLYPHS[ch];
-    for (let r = 0; r < 7; r++) rows[r] += (i ? "0" : "") + g[r];
+    if (!g) return;
+    for (let r = 0; r < 7; r++) rows[r] = `${rows[r] ?? ""}${i ? "0" : ""}${g[r] ?? ""}`;
   });
   return rows;
 }
@@ -206,7 +326,7 @@ export function PixelWordmark({ word = "KRAFT" }: { word?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
   const rows = buildBitmap(word);
-  const cols = rows[0].length;
+  const cols = rows[0]?.length ?? 0;
 
   const heat = (el: EventTarget) => {
     const node = el as HTMLElement;
@@ -225,13 +345,19 @@ export function PixelWordmark({ word = "KRAFT" }: { word?: string }) {
       role="img"
     >
       {rows.flatMap((row, r) =>
-        row.split("").map((bit, c) => (
-          <span
-            key={`${r}-${c}`}
-            className={`pixel ${bit === "1" ? "on" : ""}`}
-            style={bit === "1" ? { transitionDelay: inView ? `${c * 22 + r * 30}ms` : "0ms" } : undefined}
-          />
-        )),
+        row
+          .split("")
+          .map((bit, c) => (
+            <span
+              key={`${r}-${c}`}
+              className={`pixel ${bit === "1" ? "on" : ""}`}
+              style={
+                bit === "1"
+                  ? { transitionDelay: inView ? `${c * 22 + r * 30}ms` : "0ms" }
+                  : undefined
+              }
+            />
+          )),
       )}
     </div>
   );
@@ -249,19 +375,19 @@ export function SiteFooter() {
           {/* Animated Monogram */}
           <motion.div className="w-28 h-28 md:w-40 md:h-40 group relative perspective-1000">
             <motion.div className="absolute inset-0 bg-reg/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            <motion.img 
-              src={logoMonogram} 
-              alt="Monogram" 
+            <motion.img
+              src={logoMonogram}
+              alt="Monogram"
               className="w-full h-full object-contain opacity-40 group-hover:opacity-100 transition-all duration-500 relative z-10"
-              whileHover={{ 
-                scale: 1.1, 
+              whileHover={{
+                scale: 1.1,
                 rotateY: 15,
                 rotateX: -10,
-                filter: "brightness(1.3) drop-shadow(0 20px 30px rgba(0,0,0,0.2))" 
+                filter: "brightness(1.3) drop-shadow(0 20px 30px rgba(0,0,0,0.2))",
               }}
             />
           </motion.div>
-          
+
           <div className="flex-1">
             <PixelWordmark />
           </div>
@@ -280,20 +406,30 @@ export function SiteFooter() {
               Start a conversation <ArrowUpRight size={16} className="arrow" />
             </Link>
           </div>
-          <FooterCol title="Studio" className="md:col-span-2 md:col-start-7">
-            {navItems.map((item) => <Link key={item.to} to={item.to} className="hover:text-reg">{item.label}</Link>)}
+          <FooterCol title="Studio" className="md:col-span-2 md:col-start-6">
+            {navItems.map((item) => (
+              <Link key={item.to} to={item.to} className="hover:text-reg">
+                {item.label}
+              </Link>
+            ))}
           </FooterCol>
           <FooterCol title="Index" className="md:col-span-2">
-            {indexLinks.map((l) => <a key={l.href} href={l.href} className="hover:text-reg">{l.label}</a>)}
+            {indexLinks.map((l) => (
+              <IndexLink key={l.hash} hash={l.hash} label={l.label} />
+            ))}
           </FooterCol>
-          <FooterCol title="Contact" className="col-span-2 md:col-span-2">
-            <a href="mailto:hello@kraftstudios.in" className="hover:text-reg">hello@kraftstudios.in</a>
+          <FooterCol title="Contact" className="col-span-2 md:col-span-3 md:col-start-10">
+            <a href="mailto:hello@kraftstudios.in" className="break-words hover:text-reg">
+              hello@kraftstudios.in
+            </a>
             <span className="text-ink/50">India · Working globally</span>
           </FooterCol>
         </div>
 
         <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-line py-6 font-mono text-[11px] uppercase tracking-[0.16em] text-ink/45 sm:flex-row sm:items-center">
-          <span>© 2026 Kraft Studios <span className="mx-2 text-ink/20">/</span> Sys. v1.1</span>
+          <span>
+            © 2026 Kraft Studios <span className="mx-2 text-ink/20">/</span> Sys. v1.1
+          </span>
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -310,7 +446,15 @@ export function SiteFooter() {
   );
 }
 
-function FooterCol({ title, children, className = "" }: { title: string; children: ReactNode; className?: string }) {
+function FooterCol({
+  title,
+  children,
+  className = "",
+}: {
+  title: string;
+  children: ReactNode;
+  className?: string;
+}) {
   return (
     <div className={className}>
       <p className="eyebrow mb-5 text-ink/40">{title}</p>
@@ -347,7 +491,7 @@ export function MaskLines({
           <motion.span
             className="block will-change-transform"
             initial={{ y: "110%", rotate: 2 }}
-            animate={show ? { y: "0%", rotate: 0 } : undefined}
+            animate={show ? { y: "0%", rotate: 0 } : { y: "110%", rotate: 2 }}
             transition={{ duration: 1.05, ease: EASE, delay: delay + i * 0.09 }}
           >
             {line}
@@ -359,7 +503,15 @@ export function MaskLines({
 }
 
 /** "01 — Label" eyebrow with a hairline that draws itself. */
-export function SectionLabel({ n, label, light = false }: { n: string; label: string; light?: boolean }) {
+export function SectionLabel({
+  n,
+  label,
+  light = false,
+}: {
+  n: string;
+  label: string;
+  light?: boolean;
+}) {
   return (
     <div className="flex items-center gap-4">
       <motion.span
@@ -367,7 +519,7 @@ export function SectionLabel({ n, label, light = false }: { n: string; label: st
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className={`eyebrow shrink-0 ${light ? "text-white/60" : "text-ink/55"}`}
+        className={`eyebrow shrink-0 ${light ? "opacity-60" : "text-ink/55"}`}
       >
         {n} — {label}
       </motion.span>
@@ -376,16 +528,27 @@ export function SectionLabel({ n, label, light = false }: { n: string; label: st
         whileInView={{ scaleX: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 1.4, ease: EASE, delay: 0.1 }}
-        className="h-px w-full max-w-[18rem] origin-left bg-line"
+        className={`h-px w-full max-w-[18rem] origin-left ${light ? "bg-current opacity-20" : "bg-line"}`}
       />
     </div>
   );
 }
 
 /** Fade-up block. */
-export function FadeUp({ children, className = "", delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
+export function FadeUp({
+  children,
+  className = "",
+  delay = 0,
+  id,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+  id?: string;
+}) {
   return (
     <motion.div
+      id={id}
       className={className}
       initial={{ opacity: 0, y: 26 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -396,7 +559,6 @@ export function FadeUp({ children, className = "", delay = 0 }: { children: Reac
     </motion.div>
   );
 }
-
 
 /* ------------------------------------------------------------------ */
 /* Sub-page scaffolding                                                */
@@ -416,15 +578,51 @@ export function PageFrame({ children }: { children: ReactNode }) {
   );
 }
 
-export function Reveal({ children, className = "", delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
-  return <div className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }}>{children}</div>;
+export function Reveal({
+  children,
+  className = "",
+  delay = 0,
+  id,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+  id?: string;
+}) {
+  return (
+    <div id={id} className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }}>
+      {children}
+    </div>
+  );
 }
 
-export function Eyebrow({ children, light = false }: { children: ReactNode; light?: boolean }) {
-  return <span className={`eyebrow ${light ? "text-white/60" : "text-ink/50"}`}>{children}</span>;
+export function Eyebrow({
+  children,
+  light = false,
+  className = "",
+}: {
+  children: ReactNode;
+  light?: boolean;
+  className?: string;
+}) {
+  return (
+    <span className={`eyebrow ${light ? "opacity-60" : "text-ink/50"} ${className}`}>
+      {children}
+    </span>
+  );
 }
 
-export function PageIntro({ number, label, title, copy }: { number: string; label: string; title: string; copy: string }) {
+export function PageIntro({
+  number,
+  label,
+  title,
+  copy,
+}: {
+  number: string;
+  label: string;
+  title: string;
+  copy: string;
+}) {
   return (
     <section className="grain site-shell relative grid grid-cols-12 gap-6 pb-20 pt-20 lg:pb-28 lg:pt-28">
       <div className="relative z-[2] col-span-12 lg:col-span-12">
@@ -435,11 +633,18 @@ export function PageIntro({ number, label, title, copy }: { number: string; labe
           as="h1"
           immediate
           delay={0.15}
-          lines={[<>{title}<span className="text-reg">.</span></>]}
+          lines={[
+            <>
+              {title.replace(/\.$/, "")}
+              <span className="text-reg">.</span>
+            </>,
+          ]}
           className="mt-6 max-w-[18ch] text-5xl font-semibold leading-[0.98] tracking-[-0.035em] sm:text-7xl lg:text-[6.5rem]"
         />
         <FadeUp delay={0.4}>
-          <p className="mt-10 max-w-[52ch] border-l-2 border-reg pl-5 text-base leading-relaxed text-ink/65 sm:text-lg">{copy}</p>
+          <p className="mt-10 max-w-[52ch] border-l-2 border-reg pl-5 text-base leading-relaxed text-ink/65 sm:text-lg">
+            {copy}
+          </p>
         </FadeUp>
       </div>
     </section>
@@ -449,12 +654,16 @@ export function PageIntro({ number, label, title, copy }: { number: string; labe
 function useReveal() {
   useEffect(() => {
     const nodes = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      }
-    }, { threshold: 0.12, rootMargin: "0px 0px -6%" });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries)
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -6%" },
+    );
     nodes.forEach((node) => observer.observe(node));
     return () => observer.disconnect();
   }, []);
