@@ -40,6 +40,15 @@ import brushCatalogue from "../assets/showcase/brush-06-catalogue.jpg";
 import brushCart from "../assets/showcase/brush-09-cart.jpg";
 import brushOrders from "../assets/showcase/brush-10-orders.jpg";
 import brushInventory from "../assets/showcase/brush-11-inventory.jpg";
+import toolsSuite from "../assets/showcase/kraft-tools-01-suite.jpg";
+import toolsFontPanel from "../assets/showcase/kraft-tools-02-font-panel.jpg";
+import toolsFontExcel from "../assets/showcase/kraft-tools-03-font-excel.jpg";
+import toolsPalettePanel from "../assets/showcase/kraft-tools-04-palette-panel.jpg";
+import toolsPaletteReport from "../assets/showcase/kraft-tools-05-palette-report.jpg";
+import toolsSamplerPicker from "../assets/showcase/kraft-tools-06-sampler-picker.jpg";
+import toolsSamplerPanel from "../assets/showcase/kraft-tools-07-sampler-panel.jpg";
+import toolsSamplerBoard from "../assets/showcase/kraft-tools-08-sampler-board.jpg";
+import toolsSamplerBoardInk from "../assets/showcase/kraft-tools-09-sampler-board-ink.jpg";
 
 import clientUmvadla from "../assets/clients/umvadla.png";
 import clientSharda from "../assets/clients/sharda.png";
@@ -186,6 +195,30 @@ const projects = [
     n: "04",
     cls: "lg:col-span-7",
     ratio: "aspect-[4/3] lg:aspect-[16/10]",
+  },
+  {
+    id: "design-data",
+    image: toolsSuite,
+    gallery: [
+      { src: toolsSuite, caption: "Kraft tools — Font Scraper, Palette Extractor, Image Sampler" },
+      { src: toolsFontPanel, caption: "Font Scraper — live specimens and the exact workbook preview" },
+      { src: toolsFontExcel, caption: "Font Scraper — Excel export with specimens, colours and CSS stacks" },
+      { src: toolsPalettePanel, caption: "Palette Extractor — every painted colour, weighted by area" },
+      { src: toolsPaletteReport, caption: "Palette Extractor — colour analysis report (PNG)" },
+      { src: toolsSamplerPicker, caption: "Image Sampler — in-page picker" },
+      { src: toolsSamplerPanel, caption: "Image Sampler — palette, swatch roles and nearby type" },
+      { src: toolsSamplerBoard, caption: "Image Sampler — design board, paper theme (PNG)" },
+      { src: toolsSamplerBoardInk, caption: "Image Sampler — design board, ink theme (PNG)" },
+    ],
+    alt: "Kraft Studios browser tools — Font Scraper, Palette Extractor and Image Sampler side panels",
+    tag: "Data Solutions for Designers",
+    title: "Kraft Tools",
+    desc: "Three Chrome tools that turn any website into data a designer can use — rendered typefaces to Excel, measured palettes and image boards to PNG.",
+    scope: "Chrome extensions · Colour science · Design data",
+    year: "2026",
+    n: "05",
+    cls: "lg:col-span-12",
+    ratio: "aspect-[4/3] lg:aspect-[21/9]",
   },
 ];
 
