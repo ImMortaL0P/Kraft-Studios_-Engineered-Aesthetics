@@ -5,7 +5,7 @@ import umvadlaImage from "../assets/showcase/umvadla-02-about.jpg";
 import hotelImage from "../assets/showcase-sharda.jpg";
 import noticeboardImage from "../assets/project-noticeboard.jpg";
 import brushImage from "../assets/showcase/brush-01-store.jpg";
-import toolsImage from "../assets/showcase/kraft-tools-01-suite.jpg";
+import toolsImage from "../assets/showcase/case-tools-01-cover-tight.jpg";
 import { Eyebrow, PageFrame, PageIntro } from "../components/KraftSite";
 
 export const Route = createFileRoute("/work")({
@@ -79,6 +79,8 @@ const studies = [
     scope: "Chrome extensions · Colour science · Design data",
     result:
       "Font Scraper, Palette Extractor and Image Sampler read the type, colour and imagery of any live site — and hand back Excel sheets, colour reports and design boards ready for production.",
+    fit: "contain",
+    bg: "#E9E6DE",
   },
 ];
 
@@ -111,11 +113,18 @@ function StickyProject({
         style={{ scale, opacity }}
         className="w-full bg-paper border border-line rounded-md overflow-hidden flex flex-col lg:flex-row shadow-sm"
       >
-        <div className="w-full lg:w-3/5 h-[30vh] sm:h-[40vh] lg:h-auto overflow-hidden relative group">
+        <div
+          className="w-full lg:w-3/5 h-[30vh] sm:h-[40vh] lg:h-auto overflow-hidden relative group"
+          style={study.bg ? { backgroundColor: study.bg } : undefined}
+        >
           <img
             src={study.image}
             alt={study.alt}
-            className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
+            className={`w-full h-full transition-transform duration-[1.5s] ease-out ${
+              study.fit === "contain"
+                ? "object-contain group-hover:scale-[1.02] lg:absolute lg:inset-0"
+                : "object-cover group-hover:scale-105"
+            }`}
           />
         </div>
         <div className="w-full lg:w-2/5 p-6 sm:p-8 lg:p-16 flex flex-col justify-center">

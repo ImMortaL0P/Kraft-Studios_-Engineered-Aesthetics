@@ -40,15 +40,16 @@ import brushCatalogue from "../assets/showcase/brush-06-catalogue.jpg";
 import brushCart from "../assets/showcase/brush-09-cart.jpg";
 import brushOrders from "../assets/showcase/brush-10-orders.jpg";
 import brushInventory from "../assets/showcase/brush-11-inventory.jpg";
-import toolsSuite from "../assets/showcase/kraft-tools-01-suite.jpg";
-import toolsFontPanel from "../assets/showcase/kraft-tools-02-font-panel.jpg";
-import toolsFontExcel from "../assets/showcase/kraft-tools-03-font-excel.jpg";
-import toolsPalettePanel from "../assets/showcase/kraft-tools-04-palette-panel.jpg";
-import toolsPaletteReport from "../assets/showcase/kraft-tools-05-palette-report.jpg";
-import toolsSamplerPicker from "../assets/showcase/kraft-tools-06-sampler-picker.jpg";
-import toolsSamplerPanel from "../assets/showcase/kraft-tools-07-sampler-panel.jpg";
-import toolsSamplerBoard from "../assets/showcase/kraft-tools-08-sampler-board.jpg";
-import toolsSamplerBoardInk from "../assets/showcase/kraft-tools-09-sampler-board-ink.jpg";
+import toolsSuite from "../assets/showcase/case-tools-01-cover.jpg";
+import toolsSuiteTight from "../assets/showcase/case-tools-01-cover-tight.jpg";
+import toolsFontPanel from "../assets/showcase/case-tools-02-font-panel.jpg";
+import toolsFontExcel from "../assets/showcase/case-tools-03-font-excel.jpg";
+import toolsPalettePanel from "../assets/showcase/case-tools-04-palette-panel.jpg";
+import toolsPaletteReport from "../assets/showcase/case-tools-05-palette-report.jpg";
+import toolsSamplerPicker from "../assets/showcase/case-tools-06-sampler-picker.jpg";
+import toolsSamplerPanel from "../assets/showcase/case-tools-07-sampler-panel.jpg";
+import toolsSamplerBoard from "../assets/showcase/case-tools-08-sampler-board.jpg";
+import toolsSamplerBoardInk from "../assets/showcase/case-tools-09-sampler-board-ink.jpg";
 
 import clientUmvadla from "../assets/clients/umvadla.png";
 import clientSharda from "../assets/clients/sharda.png";
@@ -219,6 +220,12 @@ const projects = [
     n: "05",
     cls: "lg:col-span-12",
     ratio: "aspect-[4/3] lg:aspect-[21/9]",
+    // Product shots, not photography: show the whole frame (no crop, no parallax)
+    // on a tile that matches the image ground, so any aspect ratio stays seamless.
+    fit: "contain",
+    bg: "#E9E6DE",
+    // below lg the card is 4:3 — swap to a tighter crop so the panels stay large
+    imageSmall: toolsSuiteTight,
   },
 ];
 
@@ -1201,7 +1208,14 @@ function ProjectCard({
         className="relative block w-full cursor-none overflow-hidden rounded-sm text-left"
         aria-label={`Open the ${project.title} showcase`}
       >
-        <ParallaxImg src={project.image} alt={project.alt} ratio={project.ratio} />
+        <ParallaxImg
+          src={project.image}
+          alt={project.alt}
+          ratio={project.ratio}
+          fit={project.fit}
+          bg={project.bg}
+          srcSmall={project.imageSmall}
+        />
         <span className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full bg-ink/70 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-paper backdrop-blur-sm">
           <Maximize2 size={11} />
           {shots > 1 ? `${shots} shots` : "View"}
@@ -1244,20 +1258,55 @@ function ProjectCard({
   );
 }
 
-function ParallaxImg({ src, alt, ratio }: { src: string; alt: string; ratio: string }) {
+function ParallaxImg({
+  src,
+  alt,
+  ratio,
+  fit,
+  bg,
+  srcSmall,
+}: {
+  src: string;
+  alt: string;
+  ratio: string;
+  fit?: string | undefined;
+  bg?: string | undefined;
+  srcSmall?: string | undefined;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 15, restDelta: 0.001 });
   const y = useTransform(smooth, [0, 1], ["-9%", "9%"]);
+  const contain = fit === "contain";
 
   return (
-    <div ref={ref} className={`relative w-full overflow-hidden rounded-sm bg-ink/5 ${ratio}`}>
+    <div
+      ref={ref}
+      className={`relative w-full overflow-hidden rounded-sm bg-ink/5 ${ratio}`}
+      style={bg ? { backgroundColor: bg } : undefined}
+    >
+      {srcSmall && (
+        <picture className="contents">
+          <source media="(min-width: 1024px)" srcSet={src} />
+          <img
+            src={srcSmall}
+            alt={alt}
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-contain transition-[scale] duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.02]"
+          />
+        </picture>
+      )}
       <motion.img
-        style={{ y }}
+        hidden={!!srcSmall}
+        style={contain ? {} : { y }}
         src={src}
         alt={alt}
         loading="lazy"
-        className="absolute inset-x-0 top-[-6%] h-[112%] w-full object-cover transition-[scale,filter] duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.04]"
+        className={
+          contain
+            ? "absolute inset-0 h-full w-full object-contain transition-[scale,filter] duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.02]"
+            : "absolute inset-x-0 top-[-6%] h-[112%] w-full object-cover transition-[scale,filter] duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.04]"
+        }
       />
       <span className="absolute left-4 top-4 size-4 border-l border-t border-white/60 mix-blend-difference" />
       <span className="absolute bottom-4 right-4 size-4 border-b border-r border-white/60 mix-blend-difference" />
