@@ -5,6 +5,7 @@ import umvadlaImage from "../assets/showcase/umvadla-02-about.jpg";
 import hotelImage from "../assets/showcase-sharda.jpg";
 import noticeboardImage from "../assets/project-noticeboard.jpg";
 import brushImage from "../assets/showcase/brush-01-store.jpg";
+import toolsImage from "../assets/showcase/kraft-tools-01-suite.jpg";
 import { Eyebrow, PageFrame, PageIntro } from "../components/KraftSite";
 
 export const Route = createFileRoute("/work")({
@@ -68,6 +69,16 @@ const studies = [
     scope: "Storefront · Catalogue · Fulfilment",
     result:
       "A custom print storefront where catalogue, checkout, inventory and order operations run on one spine instead of four tools.",
+  },
+  {
+    n: "05",
+    title: "Data solutions for designers",
+    client: "Kraft Studios · In-house tools",
+    image: toolsImage,
+    alt: "Font Scraper, Palette Extractor and Image Sampler side panels",
+    scope: "Chrome extensions · Colour science · Design data",
+    result:
+      "Font Scraper, Palette Extractor and Image Sampler read the type, colour and imagery of any live site — and hand back Excel sheets, colour reports and design boards ready for production.",
   },
 ];
 
