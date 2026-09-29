@@ -13,6 +13,7 @@ import { ReactLenis, type LenisRef } from "lenis/react";
 import appCss from "../styles.css?url";
 import { themeInitScript } from "../components/KraftSite";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import logoMonogram from "../Logos/Kraft Studios Monogram T.png";
 
 function NotFoundComponent() {
   return (
@@ -87,7 +88,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "Kraft Studios" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
@@ -100,7 +100,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
       },
-      { rel: "icon", href: `${import.meta.env.BASE_URL}kraft-monogram.ico`, type: "image/x-icon" },
+      { rel: "icon", href: logoMonogram, type: "image/png" },
     ],
     scripts: [{ children: themeInitScript }],
   }),
