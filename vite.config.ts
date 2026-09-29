@@ -5,7 +5,7 @@ import tsConfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  base: "/Kraft-Studios_-Engineered-Aesthetics/",
+  base: "/",
   plugins: [
     tanstackStart({
       spa: {
