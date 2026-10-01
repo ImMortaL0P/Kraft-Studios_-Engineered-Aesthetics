@@ -173,7 +173,7 @@ section[id] {
 .nav-link {
   position: relative;
   font-size: 0.82rem;
-  font-weight: 500;
+  font-weight: 700;
   color: color-mix(in oklab, var(--ink) 70%, transparent);
   transition: color 0.25s;
 }
@@ -207,7 +207,7 @@ section[id] {
   border: 1px solid color-mix(in oklab, var(--ink) 35%, transparent);
   padding: 0.5rem 1.05rem;
   font-size: 0.78rem;
-  font-weight: 600;
+  font-weight: 700;
   transition:
     background 0.35s,
     color 0.35s,
@@ -228,7 +228,7 @@ section[id] {
   color: var(--paper);
   padding: 0.95rem 1.5rem;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
   overflow: hidden;
   position: relative;
   isolation: isolate;
@@ -262,7 +262,7 @@ section[id] {
   align-items: center;
   gap: 0.4rem;
   font-size: 0.78rem;
-  font-weight: 600;
+  font-weight: 700;
   background-image: linear-gradient(currentColor, currentColor);
   background-size: 100% 1px;
   background-repeat: no-repeat;
@@ -283,13 +283,12 @@ section[id] {
   display: flex;
   width: max-content;
   animation: marquee 50s linear infinite;
+  will-change: transform;
 }
 .marquee-track.fast {
   animation-duration: 32s;
 }
-.marquee-track:hover {
-  animation-play-state: paused;
-}
+
 .marquee-set {
   display: flex;
   flex-shrink: 0;
@@ -297,7 +296,19 @@ section[id] {
 }
 @keyframes marquee {
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+  .marquee-set + .marquee-set {
+    display: none;
+  }
+  .marquee-mask {
+    overflow-x: auto;
   }
 }
 
@@ -385,9 +396,15 @@ section[id] {
   opacity: 1;
   transform: none;
 }
-.pixel.hot {
+.pixel:hover:not(.on) {
   background: var(--reg) !important;
   border-color: var(--reg) !important;
+  transition-duration: 0s;
+}
+.pixel:hover.on {
+  background: var(--reg) !important;
+  border-color: var(--reg) !important;
+  transform: scale(1.1) rotate(5deg);
   transition-duration: 0s;
 }
 
@@ -419,7 +436,7 @@ section[id] {
   padding-bottom: 0.3rem;
   font-family: var(--font-display);
   font-size: clamp(1.2rem, 2vw, 1.65rem);
-  font-weight: 500;
+  font-weight: 700;
 }
 .contact-direct:hover {
   color: var(--reg);
@@ -458,7 +475,7 @@ section[id] {
   max-width: 16ch;
   font-family: var(--font-display);
   font-size: 2rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.08;
   letter-spacing: -0.02em;
 }
@@ -488,7 +505,7 @@ section[id] {
   max-width: 20ch;
   font-family: var(--font-display);
   font-size: clamp(1.8rem, 3vw, 3rem);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.02em;
 }
@@ -556,7 +573,7 @@ section[id] {
   background: var(--ink);
   color: var(--paper);
   padding: 0.95rem 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition:
     background 0.3s,
@@ -636,6 +653,63 @@ h4 {
 .outline-type:hover {
   color: var(--ink);
   -webkit-text-stroke-color: var(--ink);
+}
+
+/* ---------- display ticker ---------- */
+/* One inherited variable dims every word in the band; the one being pointed at
+   sets it back to 1 for itself and fills with the accent. */
+.display-marquee {
+  --dt-dim: 1;
+}
+.display-marquee:hover,
+.display-marquee:focus-within {
+  --dt-dim: 0.2;
+}
+.display-item {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 6vw, 5.25rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  opacity: var(--dt-dim);
+  transition:
+    opacity 0.45s ease,
+    color 0.45s ease,
+    -webkit-text-stroke-color 0.45s ease;
+}
+.display-item:hover,
+.display-item:focus-visible {
+  --dt-dim: 1;
+  color: var(--reg);
+  -webkit-text-stroke-color: var(--reg);
+  outline: none;
+}
+.display-sep {
+  opacity: var(--dt-dim);
+  transition: opacity 0.45s ease;
+}
+@media (hover: none) {
+  /* No pointer to follow, so outline-only would just read as faint. */
+  .display-item {
+    color: var(--ink);
+    -webkit-text-stroke-width: 0;
+  }
+  .display-marquee:hover {
+    --dt-dim: 1;
+  }
+}
+
+/* ---------- stat figures ---------- */
+.stat-figure {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---------- project "view" cursor bubble ---------- */

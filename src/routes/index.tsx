@@ -14,6 +14,8 @@ import {
   MaskLines,
   PageFrame,
   SectionLabel,
+  DisplayTicker,
+  StatBand,
   Ticker,
   scrollToId,
 } from "../components/KraftSite";
@@ -34,22 +36,7 @@ import umvadlaHome from "../assets/showcase/umvadla-01-home.jpg";
 import shardaImage from "../assets/showcase-sharda.jpg";
 import noticeboardImage from "../assets/project-noticeboard.jpg";
 
-import brushStore from "../assets/showcase/brush-01-store.jpg";
-import brushArrivals from "../assets/showcase/brush-03-arrivals.jpg";
-import brushCatalogue from "../assets/showcase/brush-06-catalogue.jpg";
-import brushCart from "../assets/showcase/brush-09-cart.jpg";
-import brushOrders from "../assets/showcase/brush-10-orders.jpg";
-import brushInventory from "../assets/showcase/brush-11-inventory.jpg";
-import toolsSuite from "../assets/showcase/case-tools-01-cover.jpg";
-import toolsSuiteTight from "../assets/showcase/case-tools-01-cover-tight.jpg";
-import toolsFontPanel from "../assets/showcase/case-tools-02-font-panel.jpg";
-import toolsFontExcel from "../assets/showcase/case-tools-03-font-excel.jpg";
-import toolsPalettePanel from "../assets/showcase/case-tools-04-palette-panel.jpg";
-import toolsPaletteReport from "../assets/showcase/case-tools-05-palette-report.jpg";
-import toolsSamplerPicker from "../assets/showcase/case-tools-06-sampler-picker.jpg";
-import toolsSamplerPanel from "../assets/showcase/case-tools-07-sampler-panel.jpg";
-import toolsSamplerBoard from "../assets/showcase/case-tools-08-sampler-board.jpg";
-import toolsSamplerBoardInk from "../assets/showcase/case-tools-09-sampler-board-ink.jpg";
+import { caseStudies, type CaseStudy } from "../data/caseStudies";
 
 import clientUmvadla from "../assets/clients/umvadla.png";
 import clientSharda from "../assets/clients/sharda.png";
@@ -127,105 +114,6 @@ const services = [
     title: "Motion & Interface",
     copy: "Interactions modeled like physics. Smooth transitions and considered kinetic typography that reward users and build narrative momentum.",
     chips: ["Interface design", "Prototyping", "Kinetic typography", "Micro-interactions"],
-  },
-];
-
-const projects = [
-  {
-    id: "umvadla",
-    image: umvadlaImage,
-    gallery: [
-      { src: umvadlaImage, caption: "umvadla.in — school story and history page" },
-      { src: umvadlaHome, caption: "umvadla.in — live landing page" },
-    ],
-    alt: "Umvadla school website — about page with community photography",
-    tag: "Brandworld",
-    title: "Umvadla",
-    desc: "Zero-friction editorial publishing infrastructure designed to get out of the writer's way.",
-    scope: "Identity · Website · Bespoke CMS",
-    year: "2025",
-    n: "01",
-    cls: "lg:col-span-7",
-    ratio: "aspect-[4/3] lg:aspect-[16/10]",
-  },
-  {
-    id: "sharda",
-    image: shardaImage,
-    gallery: [{ src: shardaImage, caption: "Sharda Palace — identity and collateral system" }],
-    alt: "Sharda Palace identity system — folders, cards and stationery",
-    tag: "Identity & Systems",
-    title: "Sharda Palace",
-    desc: "A hospitality identity and the connected operations system behind it, replacing five fragmented tools.",
-    scope: "Identity · CRM · Automation",
-    year: "2025",
-    n: "02",
-    cls: "lg:col-span-5",
-    ratio: "aspect-[4/3] lg:aspect-[16/10]",
-  },
-  {
-    id: "noticeboard",
-    image: noticeboardImage,
-    gallery: [{ src: noticeboardImage, caption: "The Notice Board — verification pipeline" }],
-    alt: "Autonomous data pipeline visualisation",
-    tag: "Intelligence",
-    title: "Notice Board",
-    desc: "Autonomous data pipelines that scan, verify and publish exam and recruitment notices.",
-    scope: "Data · AI agents · Platform",
-    year: "2026",
-    n: "03",
-    cls: "lg:col-span-5",
-    ratio: "aspect-[4/3] lg:aspect-[16/10]",
-  },
-  {
-    id: "brush",
-    image: brushStore,
-    gallery: [
-      { src: brushStore, caption: "Storefront — wall-art configurator entry point" },
-      { src: brushArrivals, caption: "New arrivals — curated print drops" },
-      { src: brushCatalogue, caption: "Catalogue — filtering across collections" },
-      { src: brushCart, caption: "Cart — framing and size options carried through" },
-      { src: brushOrders, caption: "Admin — order management and fulfilment status" },
-      { src: brushInventory, caption: "Admin — inventory and product operations" },
-    ],
-    alt: "Brush storefront — custom wall art commerce",
-    tag: "Commerce",
-    title: "Brush",
-    desc: "A custom print storefront with catalogue, checkout and fulfilment wired into one operational spine.",
-    scope: "Storefront · Catalogue · Fulfilment",
-    year: "2026",
-    n: "04",
-    cls: "lg:col-span-7",
-    ratio: "aspect-[4/3] lg:aspect-[16/10]",
-  },
-  {
-    id: "design-data",
-    image: toolsSuite,
-    gallery: [
-      { src: toolsSuite, caption: "Kraft tools — Font Scraper, Palette Extractor, Image Sampler" },
-      { src: toolsFontPanel, caption: "Font Scraper — live specimens and the exact workbook preview" },
-      { src: toolsFontExcel, caption: "Font Scraper — Excel export with specimens, colours and CSS stacks" },
-      { src: toolsPalettePanel, caption: "Palette Extractor — every painted colour, weighted by area" },
-      { src: toolsPaletteReport, caption: "Palette Extractor — colour analysis report (PNG)" },
-      { src: toolsSamplerPicker, caption: "Image Sampler — in-page picker" },
-      { src: toolsSamplerPanel, caption: "Image Sampler — palette, swatch roles and nearby type" },
-      { src: toolsSamplerBoard, caption: "Image Sampler — design board, paper theme (PNG)" },
-      { src: toolsSamplerBoardInk, caption: "Image Sampler — design board, ink theme (PNG)" },
-    ],
-    alt: "Kraft Studios browser tools — Font Scraper, Palette Extractor and Image Sampler side panels",
-    tag: "Data Solutions for Designers",
-    title: "Kraft Tools",
-    desc: "Three Chrome tools that turn any website into data a designer can use — rendered typefaces to Excel, measured palettes and image boards to PNG.",
-    scope: "Chrome extensions · Colour science · Design data",
-    year: "2026",
-    n: "05",
-    cls: "lg:col-span-12",
-    ratio: "aspect-[4/3] lg:aspect-[21/9]",
-    // Product shots, not photography: show the whole frame (no crop, no parallax)
-    // on a tile that matches the image ground, so any aspect ratio stays seamless.
-    fit: "contain",
-    bg: "#E9E6DE",
-    // below lg the card is 4:3 — swap to a tighter crop so the panels stay large
-    imageSmall: toolsSuiteTight,
   },
 ];
 
@@ -366,12 +254,10 @@ function ScrollRevealChar({
   range: [number, number];
   className?: string;
 }) {
-  const opacity = useTransform(progress, range, [0.22, 1]);
-  const y = useTransform(progress, range, [16, 0]);
-  const filter = useTransform(progress, range, ["blur(4px)", "blur(0px)"]);
+  const opacity = useTransform(progress, range, [0.15, 1]);
   return (
     <motion.span
-      style={{ opacity, y, filter }}
+      style={{ opacity }}
       className={`relative inline-block will-change-transform ${className}`}
     >
       {char}
@@ -451,6 +337,36 @@ function ScrollRevealText({
 /* Page                                                                */
 /* ------------------------------------------------------------------ */
 
+
+export function StaggeredParagraph({ text, className = "" }: { text: string; className?: string }) {
+  const words = text.split(" ");
+  return (
+    <motion.p
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "0px 0px -10% 0px" }}
+      variants={{
+        visible: { transition: { staggerChildren: 0.015, delayChildren: 0.1 } }
+      }}
+      className={className}
+    >
+      {words.map((word, i) => (
+        <span key={i} className="inline-block overflow-hidden pb-[0.1em] mr-[0.25em] -mb-[0.1em]">
+          <motion.span
+            variants={{
+              hidden: { opacity: 0, y: "100%", rotate: 2 },
+              visible: { opacity: 1, y: "0%", rotate: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+            }}
+            className="inline-block will-change-transform"
+          >
+            {word}
+          </motion.span>
+        </span>
+      ))}
+    </motion.p>
+  );
+}
+
 function HomePage() {
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
@@ -462,16 +378,21 @@ function HomePage() {
         style={{ scaleX: progress }}
       />
       <SectionCounter />
-      <main>
-        <Hero />
-        <HeroImage />
-        <Partners />
-        <Premise />
-        <Blueprint />
-        <Work />
-        <Process />
-        <Mantra />
-        <ContactBand />
+      <main className="relative">
+        <div className="sticky bottom-0 z-0">
+          <Hero />
+          <HeroImage />
+        </div>
+        
+        <div className="relative z-10 bg-paper shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
+          <Partners />
+          <Premise />
+          <Blueprint />
+          <Work />
+          <Process />
+          <Mantra />
+          <ContactBand />
+        </div>
       </main>
     </PageFrame>
   );
@@ -617,11 +538,10 @@ function Hero() {
               transition={{ delay: 0.5, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               className="lg:col-span-4"
             >
-              <p className="max-w-[44ch] border-l-2 border-reg pl-5 text-[15px] leading-relaxed text-ink/70 md:text-base">
-                Connecting craft with evidence, design with engineering, people with systems. We
-                don't just design digital shells; we build the brandworlds and operational engines
-                that power them.
-              </p>
+              <StaggeredParagraph 
+                text="Connecting craft with evidence, design with engineering, people with systems. We don't just design digital shells; we build the brandworlds and operational engines that power them." 
+                className="max-w-[44ch] border-l-2 border-reg pl-5 text-[15px] leading-relaxed text-ink/70 md:text-base" 
+              />
               <div className="mt-8 flex flex-wrap items-center gap-5">
                 <Link to="/contact" className="pill-solid">
                   Start a project <ArrowRight size={16} className="arrow" />
@@ -643,7 +563,7 @@ function Hero() {
             >
               <span className="mt-1 size-1.5 shrink-0 rotate-45 bg-reg transition-transform duration-500 group-hover:rotate-[135deg]" />
               <span>
-                <span className="block text-sm font-semibold">{k}</span>
+                <span className="block text-sm font-bold">{k}</span>
                 <span className="mt-1 block text-[13px] leading-relaxed text-ink/55">{v}</span>
               </span>
             </FadeUp>
@@ -653,7 +573,7 @@ function Hero() {
 
       <div className="relative z-[2] border-y border-line py-4">
         <Ticker
-          className="text-[13px] text-ink/50"
+          className="text-[14px] font-bold text-ink/70"
           items={[
             "Connecting craft with evidence, design with engineering, people with systems",
             "Building the engine · Designing the soul",
@@ -666,7 +586,7 @@ function Hero() {
         type="button"
         onClick={() => scrollToId("premise")}
         aria-label="Scroll to the next section"
-        className="group absolute bottom-28 right-[clamp(1.25rem,4vw,4rem)] z-[3] hidden flex-col items-center gap-3 font-mono text-[10px] uppercase tracking-[0.24em] text-ink/40 lg:flex"
+        className="group absolute bottom-28 right-[clamp(1.25rem,4vw,4rem)] z-[3] hidden flex-col items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-ink/60 hover:text-ink lg:flex"
       >
         <span className="[writing-mode:vertical-rl]">Scroll</span>
         <span className="relative block h-12 w-px overflow-hidden bg-line">
@@ -709,7 +629,7 @@ function HeroImage() {
           style={{ y: captionY }}
           className="site-shell absolute inset-x-0 bottom-10 flex items-end justify-between gap-6 text-white"
         >
-          <p className="max-w-[16ch] font-display text-[clamp(1.5rem,3.4vw,3rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
+          <p className="max-w-[16ch] font-display text-[clamp(1.5rem,3.4vw,3rem)] font-bold leading-[1.05] tracking-[-0.03em]">
             Hand-aligned. Machine-checked.
           </p>
           <span className="hidden font-mono text-[10px] uppercase tracking-[0.26em] text-white/70 sm:block">
@@ -771,15 +691,27 @@ function Partners() {
         ))}
       </div>
 
-      <div className="mt-10">
-        <Ticker
-          className="text-[12px] uppercase tracking-[0.2em] text-ink/35"
+      {/* Counted off the arrays above, not typed in, so the band cannot claim
+          work that is not on the page. */}
+      <div className="site-shell mt-14 border-y border-line">
+        <StatBand
+          stats={[
+            { figure: String(caseStudies.length), label: "Case studies shipped", note: "Identity, platform and product" },
+            { figure: String(clients.length), label: "Clients and partners", note: "Schools, hospitality, platforms" },
+            { figure: "3", label: "Disciplines, one table", note: "Brand \u00b7 Software \u00b7 Operations" },
+            { figure: "2026", label: "Studio established", note: "Patna, India" },
+          ]}
+        />
+      </div>
+
+      <div className="mt-14 border-y border-line py-7 md:py-9">
+        <DisplayTicker
           items={[
-            "Identity systems",
-            "Custom platforms",
-            "Operational tooling",
-            "Editorial design",
-            "Motion & interface",
+            { label: "Identity systems" },
+            { label: "Custom platforms" },
+            { label: "Operational tooling" },
+            { label: "Editorial design" },
+            { label: "Motion & interface" },
           ]}
         />
       </div>
@@ -797,7 +729,7 @@ function Premise() {
           <div className="md:sticky md:top-28">
             <SectionLabel n="02" label="Premise" />
             <MaskLines
-              className="mt-8 font-display text-[clamp(2rem,3.6vw,3.1rem)] font-semibold leading-[1.1] tracking-[-0.025em]"
+              className="mt-8 font-display text-[clamp(2rem,3.6vw,3.1rem)] font-bold leading-[1.1] tracking-[-0.025em]"
               lines={[
                 "Most brands don't fail",
                 "on the surface.",
@@ -807,10 +739,10 @@ function Premise() {
               ]}
             />
             <FadeUp delay={0.25}>
-              <p className="mt-8 max-w-[40ch] text-[15px] leading-relaxed text-ink/60">
-                Identity is designed in one room, software is built in another, and operations live
-                in spreadsheets. Every handoff loses a little of the original intent.
-              </p>
+              <StaggeredParagraph
+                text="Identity is designed in one room, software is built in another, and operations live in spreadsheets. Every handoff loses a little of the original intent."
+                className="mt-8 max-w-[40ch] text-[15px] leading-relaxed text-ink/60"
+              />
             </FadeUp>
           </div>
         </div>
@@ -830,7 +762,7 @@ function Premise() {
                 0{i + 1}
               </span>
               <div className="transition-transform duration-500 group-hover:translate-x-1">
-                <h3 className="font-display text-xl font-semibold tracking-[-0.01em] md:text-2xl">
+                <h3 className="font-display text-xl font-bold tracking-[-0.01em] md:text-2xl">
                   {title}
                 </h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-ink/55">{copy}</p>
@@ -902,7 +834,7 @@ function ServiceCard({ service, index }: { service: (typeof services)[number]; i
             0{index + 1}/03
           </span>
         </div>
-        <h3 className="mt-5 font-display text-2xl font-semibold tracking-[-0.02em] lg:text-[1.75rem]">
+        <h3 className="mt-5 font-display text-2xl font-bold tracking-[-0.02em] lg:text-[1.75rem]">
           {service.title}
         </h3>
         <p className="mt-4 text-[15px] leading-relaxed text-paper/60">{service.copy}</p>
@@ -939,17 +871,17 @@ function Blueprint() {
         <SectionLabel n="03" label="System Blueprint" light />
         <div className="mt-8 flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end">
           <MaskLines
-            className="max-w-[20ch] font-display text-[clamp(1.9rem,3.8vw,3.4rem)] font-semibold leading-[1.06] tracking-[-0.03em]"
+            className="max-w-[20ch] font-display text-[clamp(1.9rem,3.8vw,3.4rem)] font-bold leading-[1.06] tracking-[-0.03em]"
             lines={[
               "Our operating loop compounds value.",
               "Everything flows from strategy to code.",
             ]}
           />
           <FadeUp delay={0.2}>
-            <p className="max-w-[46ch] text-[15px] leading-relaxed text-paper/60 lg:text-base">
-              We remove the translation layer between creative studios and engineering firms by
-              putting both disciplines at the exact same table.
-            </p>
+            <StaggeredParagraph
+              text="We remove the translation layer between creative studios and engineering firms by putting both disciplines at the exact same table."
+              className="max-w-[46ch] text-[15px] leading-relaxed text-paper/60 lg:text-base"
+            />
           </FadeUp>
         </div>
 
@@ -987,22 +919,26 @@ function Blueprint() {
 /* ---------- 04 work ---------- */
 
 function Work() {
-  const [lightbox, setLightbox] = useState<{ project: number; shot: number } | null>(null);
+  const spans = ["lg:col-span-7", "lg:col-span-5", "lg:col-span-5", "lg:col-span-7", "lg:col-span-12", "lg:col-span-12"];
+  const ratios = [
+    "aspect-[4/3] lg:aspect-[16/10]",
+    "aspect-[4/3] lg:aspect-[16/10]",
+    "aspect-[4/3] lg:aspect-[16/10]",
+    "aspect-[4/3] lg:aspect-[16/10]",
+    "aspect-[4/3] lg:aspect-[21/9]",
+    "aspect-[4/3] lg:aspect-[21/9]"
+  ];
 
   return (
     <section id="work" className="site-shell relative py-24 lg:py-36">
       <SectionLabel n="04" label="Selected Work" />
       <div className="mt-8 flex flex-wrap items-end justify-between gap-6 border-b border-line pb-10">
         <MaskLines
-          className="font-display text-[clamp(2.2rem,5vw,4.5rem)] font-semibold leading-[1.02] tracking-[-0.035em]"
+          className="font-display text-[clamp(2.2rem,5vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.035em]"
           lines={[
             "Case studies,",
-            <>
-              engineered for scale
-              <span key="d" className="text-reg">
-                .
-              </span>
-            </>,
+            <>{' '}</>,
+            <span key="d" className="text-reg">.</span>
           ]}
         />
         <FadeUp>
@@ -1013,169 +949,59 @@ function Work() {
       </div>
 
       <div className="mt-16 grid grid-cols-1 gap-x-6 gap-y-16 lg:grid-cols-12 lg:gap-y-24">
-        {projects.map((project, i) => (
+        {caseStudies.map((study, i) => (
           <ProjectCard
-            key={project.id}
-            project={project}
-            onOpen={() => setLightbox({ project: i, shot: 0 })}
+            key={study.slug}
+            study={study}
+            cls={spans[i % spans.length]!}
+            ratio={ratios[i % ratios.length]!}
           />
         ))}
       </div>
-
-      <Lightbox state={lightbox} onChange={setLightbox} />
     </section>
   );
 }
 
-/* ---------- showcase lightbox ---------- */
 
-function Lightbox({
-  state,
-  onChange,
+function ParallaxImg({
+  src,
+  alt,
+  ratio,
+  fit,
+  bg,
 }: {
-  state: { project: number; shot: number } | null;
-  onChange: (s: { project: number; shot: number } | null) => void;
+  src: string;
+  alt: string;
+  ratio: string;
+  fit?: "cover" | "contain";
+  bg?: string;
 }) {
-  const project = state ? projects[state.project] : undefined;
-  const shots = project?.gallery ?? [];
-  const shot = state ? shots[state.shot] : undefined;
-
-  useEffect(() => {
-    const lenis = (window as unknown as { lenis?: { stop?: () => void; start?: () => void } })
-      .lenis;
-    if (state) {
-      if (typeof lenis?.stop === "function") lenis.stop();
-      document.documentElement.style.overflow = "hidden";
-    } else {
-      if (typeof lenis?.start === "function") lenis.start();
-      document.documentElement.style.overflow = "";
-    }
-
-    const onKey = (e: KeyboardEvent) => {
-      if (!state) return;
-      if (e.key === "Escape") onChange(null);
-      if (e.key === "ArrowRight") onChange({ ...state, shot: (state.shot + 1) % shots.length });
-      if (e.key === "ArrowLeft")
-        onChange({ ...state, shot: (state.shot - 1 + shots.length) % shots.length });
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [state, shots.length, onChange]);
+  const ref = useRef<HTMLDivElement>(null);
+  // Continuous Scroll Parallax & Scaling for Portfolio Thumbnails
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1]);
 
   return (
-    <AnimatePresence>
-      {state && project && shot && (
-        <motion.div
-          className="fixed inset-0 z-[80] flex flex-col bg-ink/95 backdrop-blur-sm"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.35 }}
-          onClick={() => onChange(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${project.title} showcase`}
-        >
-          <div className="flex items-center justify-between gap-6 px-[clamp(1.25rem,4vw,3rem)] py-5 text-paper">
-            <div className="flex items-baseline gap-4">
-              <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-reg">
-                {project.n} — {project.tag}
-              </span>
-              <span className="font-display text-lg font-semibold">{project.title}</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => onChange(null)}
-              className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.24em] text-paper/70 transition-colors hover:text-paper"
-              autoFocus
-            >
-              Close
-              <X size={16} />
-            </button>
-          </div>
-
-          <div
-            className="relative flex flex-1 items-center justify-center px-[clamp(1rem,4vw,3rem)] pb-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {shots.length > 1 && (
-              <button
-                type="button"
-                aria-label="Previous shot"
-                onClick={() =>
-                  onChange({ ...state, shot: (state.shot - 1 + shots.length) % shots.length })
-                }
-                className="absolute left-3 z-10 grid size-11 place-items-center rounded-full border border-paper/20 text-paper/70 transition-colors hover:border-reg hover:bg-reg hover:text-white md:left-8"
-              >
-                <ChevronLeft size={18} />
-              </button>
-            )}
-
-            <motion.img
-              key={shot.src}
-              src={shot.src}
-              alt={shot.caption}
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              className="max-h-full max-w-full rounded-sm object-contain shadow-2xl"
-            />
-
-            {shots.length > 1 && (
-              <button
-                type="button"
-                aria-label="Next shot"
-                onClick={() => onChange({ ...state, shot: (state.shot + 1) % shots.length })}
-                className="absolute right-3 z-10 grid size-11 place-items-center rounded-full border border-paper/20 text-paper/70 transition-colors hover:border-reg hover:bg-reg hover:text-white md:right-8"
-              >
-                <ChevronRight size={18} />
-              </button>
-            )}
-          </div>
-
-          <div
-            className="flex flex-col gap-4 px-[clamp(1.25rem,4vw,3rem)] pb-6"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <p className="text-center font-mono text-[11px] uppercase tracking-[0.2em] text-paper/60">
-              {shot.caption}
-              <span className="ml-3 text-paper/30">
-                {String(state.shot + 1).padStart(2, "0")}/{String(shots.length).padStart(2, "0")}
-              </span>
-            </p>
-            {shots.length > 1 && (
-              <div className="flex justify-center gap-2 overflow-x-auto pb-1">
-                {shots.map((s, i) => (
-                  <button
-                    key={s.src}
-                    type="button"
-                    onClick={() => onChange({ ...state, shot: i })}
-                    aria-label={s.caption}
-                    aria-current={i === state.shot}
-                    className={`h-12 w-20 shrink-0 overflow-hidden rounded-sm border transition-all duration-300 ${
-                      i === state.shot
-                        ? "border-reg opacity-100"
-                        : "border-paper/15 opacity-50 hover:opacity-90"
-                    }`}
-                  >
-                    <img src={s.src} alt="" className="h-full w-full object-cover" />
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div ref={ref} className={`relative overflow-hidden w-full ${ratio}`} style={{ backgroundColor: bg }}>
+      <motion.img
+        src={src}
+        alt={alt}
+        className={`h-full w-full will-change-transform transform-gpu ${fit === "contain" ? "object-contain" : "object-cover"}`}
+        style={{ scale }}
+        loading="lazy"
+      />
+    </div>
   );
 }
 
 function ProjectCard({
-  project,
-  onOpen,
+  study,
+  cls,
+  ratio,
 }: {
-  project: (typeof projects)[number];
-  onOpen: () => void;
+  study: CaseStudy;
+  cls: string;
+  ratio: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["0 1.05", "0.5 1"] });
@@ -1189,65 +1015,63 @@ function ProjectCard({
   });
   const cursor = useRef<HTMLSpanElement>(null);
 
-  const shots = project.gallery?.length ?? 1;
-
-  const onMove = (e: MouseEvent<HTMLButtonElement>) => {
+  const onMove = (e: MouseEvent<HTMLAnchorElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
     cursor.current?.style.setProperty(
       "transform",
-      `translate(${e.clientX - r.left}px, ${e.clientY - r.top}px) translate(-50%, -50%)`,
+      "translate(" + (e.clientX - r.left) + "px, " + (e.clientY - r.top) + "px) translate(-50%, -50%)"
     );
   };
 
   return (
-    <motion.div ref={ref} style={{ opacity, y }} className={`group flex flex-col ${project.cls}`}>
-      <button
-        type="button"
-        onClick={onOpen}
+    <motion.div ref={ref} style={{ opacity, y }} className={"group flex flex-col will-change-transform transform-gpu " + cls}>
+      <Link
+        to="/work/$slug"
+        params={{ slug: study.slug }}
         onMouseMove={onMove}
         className="relative block w-full cursor-none overflow-hidden rounded-sm text-left"
-        aria-label={`Open the ${project.title} showcase`}
+        aria-label={"Read the " + study.title + " case study"}
       >
         <ParallaxImg
-          src={project.image}
-          alt={project.alt}
-          ratio={project.ratio}
-          fit={project.fit}
-          bg={project.bg}
-          srcSmall={project.imageSmall}
+          src={study.cover}
+          alt={study.coverAlt}
+          ratio={ratio}
+          fit={study.coverFit as any}
+          bg={study.coverBg as any}
         />
         <span className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full bg-ink/70 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-paper backdrop-blur-sm">
-          <Maximize2 size={11} />
-          {shots > 1 ? `${shots} shots` : "View"}
+          <ArrowUpRight size={11} />
+          View Case Study
         </span>
         <span
           ref={cursor}
           className="view-bubble pointer-events-none absolute left-0 top-0 grid size-24 place-items-center rounded-full bg-reg font-mono text-[10px] uppercase tracking-[0.2em] text-white"
           style={{ transform: "translate(-300px,-300px)" }}
         >
-          {shots > 1 ? "Open" : "View"}
+          Read
         </span>
-      </button>
+      </Link>
 
       <div className="mt-6 flex items-start justify-between gap-6 border-t border-line pt-5">
         <div>
-          <Eyebrow>{project.tag}</Eyebrow>
-          <h3 className="mt-2 font-display text-2xl font-semibold tracking-[-0.025em] transition-colors duration-300 group-hover:text-reg lg:text-[2.1rem]">
-            {project.title}
+          <Eyebrow>{study.client}</Eyebrow>
+          <h3 className="mt-2 font-display text-2xl font-bold tracking-[-0.025em] transition-colors duration-300 group-hover:text-reg lg:text-[2.1rem]">
+            {study.title}
           </h3>
           <p className="mt-3 max-w-[44ch] text-[15px] leading-relaxed text-ink/60">
-            {project.desc}
+            {study.summary}
           </p>
           <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.18em] text-ink/40">
-            {project.scope}
+            {study.services.slice(0, 3).join(" · ")}
           </p>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-4">
-          <span className="font-mono text-xs text-reg">{project.n}</span>
-          <span className="font-mono text-[10px] text-ink/30">{project.year}</span>
+          <span className="font-mono text-xs text-reg">{study.n}</span>
+          <span className="font-mono text-[10px] text-ink/30">{study.year}</span>
           <Link
-            to="/work"
-            aria-label={`Read the ${project.title} case study`}
+            to="/work/$slug"
+            params={{ slug: study.slug }}
+            aria-label={"Read the " + study.title + " case study"}
             className="grid size-10 place-items-center rounded-full border border-line transition-all duration-500 group-hover:rotate-45 group-hover:border-reg group-hover:bg-reg group-hover:text-white"
           >
             <ArrowUpRight size={15} />
@@ -1258,138 +1082,85 @@ function ProjectCard({
   );
 }
 
-function ParallaxImg({
-  src,
-  alt,
-  ratio,
-  fit,
-  bg,
-  srcSmall,
-}: {
-  src: string;
-  alt: string;
-  ratio: string;
-  fit?: string | undefined;
-  bg?: string | undefined;
-  srcSmall?: string | undefined;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 15, restDelta: 0.001 });
-  const y = useTransform(smooth, [0, 1], ["-9%", "9%"]);
-  const contain = fit === "contain";
-
-  return (
-    <div
-      ref={ref}
-      className={`relative w-full overflow-hidden rounded-sm bg-ink/5 ${ratio}`}
-      style={bg ? { backgroundColor: bg } : undefined}
-    >
-      {srcSmall && (
-        <picture className="contents">
-          <source media="(min-width: 1024px)" srcSet={src} />
-          <img
-            src={srcSmall}
-            alt={alt}
-            loading="lazy"
-            className="absolute inset-0 h-full w-full object-contain transition-[scale] duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.02]"
-          />
-        </picture>
-      )}
-      <motion.img
-        hidden={!!srcSmall}
-        style={contain ? {} : { y }}
-        src={src}
-        alt={alt}
-        loading="lazy"
-        className={
-          contain
-            ? "absolute inset-0 h-full w-full object-contain transition-[scale,filter] duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.02]"
-            : "absolute inset-x-0 top-[-6%] h-[112%] w-full object-cover transition-[scale,filter] duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.04]"
-        }
-      />
-      <span className="absolute left-4 top-4 size-4 border-l border-t border-white/60 mix-blend-difference" />
-      <span className="absolute bottom-4 right-4 size-4 border-b border-r border-white/60 mix-blend-difference" />
-    </div>
-  );
-}
-
 /* ---------- 05 process ---------- */
 
 function Process() {
-  const listRef = useRef<HTMLOListElement>(null);
-  const { scrollYProgress } = useScroll({ target: listRef, offset: ["start 70%", "end 60%"] });
-  const fill = useSpring(scrollYProgress, { stiffness: 140, damping: 30 });
-  const [reached, setReached] = useState(-1);
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    setReached(v <= 0.01 ? -1 : Math.min(steps.length - 1, Math.floor(v * steps.length)));
-  });
+  const containerRef = useRef<HTMLElement>(null);
+  
+  // By omitting offset, it defaults to ["start start", "end end"]
+  // meaning 0 is when the top of the container hits the top of the viewport,
+  // and 1 is when its bottom hits the bottom of the viewport.
+  const { scrollYProgress } = useScroll({ target: containerRef });
+  
+  // We have 4 cards, let's map scroll 0->1 to translate the track 0% -> -75% 
+  // so the last card comes clearly into view.
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-80%"]);
+  // A spring makes the dragging feeling physically weighty and premium
+  const smoothX = useSpring(x, { stiffness: 60, damping: 22, mass: 0.8 });
 
   return (
-    <section id="process" className="bg-surface py-24 md:py-36">
-      <div className="site-shell grid gap-12 md:grid-cols-12">
-        <div className="md:col-span-5">
-          <div className="md:sticky md:top-28">
-            <SectionLabel n="05" label="Process" />
-            <MaskLines
-              className="mt-8 font-display text-[clamp(2rem,3.6vw,3.1rem)] font-semibold leading-[1.1] tracking-[-0.025em]"
-              lines={[
-                "From blueprint",
-                <span key="l" className="text-ink/35">
-                  to running system.
-                </span>,
-              ]}
-            />
-            <FadeUp delay={0.2}>
-              <p className="mt-8 max-w-[38ch] text-[15px] leading-relaxed text-ink/60">
-                Four stages, short loops. Design, engineering and the business stay in the same
-                conversation from the first audit to the handover.
-              </p>
-            </FadeUp>
-          </div>
+    <section ref={containerRef} id="process" className="relative h-[400vh] bg-surface">
+      {/* Sticky boundary that captures the viewport while the section scrolls through */}
+      <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
+        
+        {/* 
+          Gradient Mask: This layer sits directly behind the text but above the cards. 
+          As cards slide left, they cross into this gradient and softly fade into the background 
+          color, preventing messy overlaps with the copy.
+        */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-full md:w-[600px] bg-gradient-to-r from-surface from-60% via-surface/80 to-transparent" />
+
+        {/* Fixed Title Header */}
+        <div className="absolute top-28 md:top-36 left-4 md:left-14 z-20 w-full md:w-[400px]">
+          <SectionLabel n="05" label="Process" />
+          <MaskLines
+            className="mt-6 md:mt-8 font-display text-[clamp(2.5rem,4vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.03em]"
+            lines={["From blueprint", <span key="l" className="text-ink/35">to running system.</span>]}
+          />
+          <FadeUp delay={0.2}>
+            <p className="mt-8 max-w-[34ch] text-[15px] leading-relaxed text-ink/70">
+              Four stages, short loops. Design, engineering and the business stay in the same
+              conversation from the first audit to the handover.
+            </p>
+          </FadeUp>
         </div>
 
-        <ol ref={listRef} className="relative md:col-span-7 lg:col-span-6 lg:col-start-7">
-          <span className="absolute bottom-3 left-[11px] top-3 w-px bg-line" />
-          <motion.span
-            style={{ scaleY: fill }}
-            className="absolute bottom-3 left-[11px] top-3 w-px origin-top bg-reg"
-          />
-          {steps.map((step, i) => {
-            const on = i <= reached;
-            return (
-              <li key={step.k} className="relative pb-14 pl-14 last:pb-0">
-                <span
-                  className={`absolute left-0 top-1 grid size-[23px] place-items-center rounded-full border bg-surface transition-colors duration-500 ${
-                    on ? "border-reg" : "border-ink/25"
-                  }`}
-                >
-                  <span
-                    className={`size-2 rounded-full transition-all duration-500 ${on ? "scale-100 bg-reg" : "scale-0 bg-ink"}`}
-                  />
-                </span>
-                <FadeUp>
-                  <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.24em]">
-                    <span className={on ? "text-reg" : "text-ink/45"}>Step 0{i + 1}</span>
-                    <span className="text-ink/25">/</span>
-                    <span className="text-ink/60">{step.k}</span>
-                  </div>
-                  <h3
-                    className={`mt-4 font-display text-2xl font-semibold tracking-[-0.02em] transition-opacity duration-500 md:text-[1.8rem] ${
-                      on ? "opacity-100" : "opacity-50"
-                    }`}
-                  >
-                    {step.title}
-                  </h3>
-                  <p className="mt-3 max-w-[46ch] text-[15px] leading-relaxed text-ink/60">
-                    {step.copy}
-                  </p>
-                  <span className="chip mt-5">Output — {step.out}</span>
-                </FadeUp>
-              </li>
-            );
-          })}
-        </ol>
+        {/* 
+          The horizontal track sliding left across the screen. 
+        */}
+        <motion.div 
+          style={{ x: smoothX }} 
+          className="flex h-max w-max gap-8 md:gap-14 px-4 md:pl-[500px] lg:pl-[600px] will-change-transform transform-gpu"
+        >
+          {steps.map((step, i) => (
+            <motion.div 
+              key={step.k} 
+              whileHover={{ y: -8, scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              className="group flex w-[85vw] md:w-[50vw] lg:w-[40vw] shrink-0 flex-col justify-between bg-paper p-10 md:p-14 border border-line/75 rounded-2xl shadow-[0_0_0_1px_transparent] hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:border-reg transition-all duration-300"
+            >
+              <div>
+                <div className="flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.24em]">
+                  <span className="text-reg">Step 0{i + 1}</span>
+                  <span className="text-ink/25">/</span>
+                  <span className="text-ink/60">{step.k}</span>
+                </div>
+                <h3 className="mt-8 md:mt-12 max-w-[14ch] font-display text-4xl md:text-5xl font-bold tracking-tight text-ink">
+                  {step.title}
+                </h3>
+              </div>
+              
+              <div className="mt-16 md:mt-24 border-t border-line/50 pt-8">
+                <p className="text-[17px] leading-relaxed text-ink/70">
+                  {step.copy}
+                </p>
+                <div className="mt-8">
+                  <span className="chip text-[11px] font-mono tracking-[0.1em] !px-4 !py-2">Output — {step.out}</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
@@ -1457,7 +1228,7 @@ function Mantra() {
         </div>
 
         <div className="col-span-12 flex flex-col justify-center lg:col-span-9">
-          <h2 className="font-display text-4xl font-semibold leading-[0.95] tracking-[-0.035em] sm:text-5xl md:text-7xl lg:text-[7.5rem]">
+          <h2 className="font-display text-4xl font-bold leading-[0.95] tracking-[-0.035em] sm:text-5xl md:text-7xl lg:text-[7.5rem]">
             <span className="block">
               <ScrollRevealText
                 text="Why build ordinary?"
@@ -1495,7 +1266,7 @@ function Mantra() {
               ],
             ].map(([k, v]) => (
               <div key={k}>
-                <h3 className="font-display text-base font-semibold">{k}</h3>
+                <h3 className="font-display text-base font-bold">{k}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink/55">{v}</p>
               </div>
             ))}
@@ -1520,7 +1291,7 @@ function ContactBand() {
           <div className="relative">
             <SectionLabel n="07" label="Contact" light />
             <MaskLines
-              className="mt-8 font-display text-[clamp(2.4rem,6vw,5.5rem)] font-semibold leading-[1] tracking-[-0.04em]"
+              className="mt-8 font-display text-[clamp(2.4rem,6vw,5.5rem)] font-bold leading-[1] tracking-[-0.04em]"
               lines={[
                 "Bring us the",
                 <>
@@ -1532,10 +1303,10 @@ function ContactBand() {
               ]}
             />
             <div className="mt-12 flex flex-wrap items-center justify-between gap-8 border-t border-paper/15 pt-8">
-              <p className="max-w-[44ch] text-[15px] leading-relaxed text-paper/60">
-                Tell us what needs to be built, changed or connected. We'll look at the visual,
-                technical and operational problem together.
-              </p>
+              <StaggeredParagraph 
+                text="Tell us what needs to be built, changed or connected. We'll look at the visual, technical and operational problem together."
+                className="max-w-[44ch] text-[15px] leading-relaxed text-paper/60"
+              />
               <div className="flex flex-wrap items-center gap-6">
                 <a href="mailto:hello@kraftstudios.in" className="link-line text-paper/80">
                   hello@kraftstudios.in

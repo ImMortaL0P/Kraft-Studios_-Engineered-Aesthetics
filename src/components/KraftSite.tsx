@@ -99,6 +99,95 @@ export function Ticker({
   );
 }
 
+/**
+ * The same marquee mechanism as `Ticker`, at display scale.
+ *
+ * Type is outlined rather than solid so a band of it reads as texture instead
+ * of a wall of ink; pointing at the band drops everything to a whisper and
+ * brings the one word under the cursor back, filled in the accent. The dimming
+ * is a single inherited custom property, so it costs one rule rather than one
+ * per item, and the only animated properties are `transform` on the track and
+ * `opacity` / `color` on the words — all compositor work.
+ *
+ * `items` may be plain words or links; a link gets the hover treatment for
+ * free and remains reachable by keyboard, which is why the duplicated set is
+ * hidden from assistive tech and taken out of the tab order.
+ */
+export function DisplayTicker({
+  items,
+  className = "",
+  fast = false,
+}: {
+  items: { label: string; to?: string }[];
+  className?: string;
+  fast?: boolean;
+}) {
+  const set = (key: string, hidden = false) => (
+    <div key={key} className="marquee-set" aria-hidden={hidden || undefined}>
+      {items.map((item, i) => {
+        const word = item.to ? (
+          <Link
+            to={item.to}
+            className="display-item outline-type"
+            tabIndex={hidden ? -1 : undefined}
+          >
+            {item.label}
+          </Link>
+        ) : (
+          <span className="display-item outline-type">{item.label}</span>
+        );
+        return (
+          <span key={i} className="flex items-center">
+            {word}
+            <span className="display-sep mx-5 inline-block size-2 rotate-45 bg-reg md:mx-8" />
+          </span>
+        );
+      })}
+    </div>
+  );
+
+  return (
+    <div className={`display-marquee marquee-mask overflow-hidden ${className}`}>
+      <div className={`marquee-track ${fast ? "fast" : ""}`}>
+        {set("a")}
+        {set("b", true)}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Four figures, each one read off the site's own data rather than typed in, so
+ * the band cannot drift out of step with the work it is counting.
+ */
+export function StatBand({
+  stats,
+  className = "",
+}: {
+  stats: { figure: string; label: string; note?: string }[];
+  className?: string;
+}) {
+  return (
+    <div className={`grid grid-cols-2 gap-px bg-line lg:grid-cols-4 ${className}`}>
+      {stats.map((s, i) => (
+        <FadeUp
+          key={s.label}
+          delay={i * 0.08}
+          className="bg-paper px-5 py-9 md:px-7 md:py-11 text-center flex flex-col items-center"
+        >
+          <p className="stat-figure">{s.figure}</p>
+          <p className="mt-3 text-sm font-bold leading-tight">{s.label}</p>
+          {s.note ? (
+            <p className="mt-1.5 font-mono text-[10px] uppercase leading-[1.7] tracking-[0.18em] text-ink/40">
+              {s.note}
+            </p>
+          ) : null}
+        </FadeUp>
+      ))}
+    </div>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Theme                                                               */
 /* ------------------------------------------------------------------ */
@@ -210,7 +299,7 @@ export function SiteHeader() {
             <Link to="/contact" className="pill hidden sm:inline-flex">
               Start a project
             </Link>
-            <button
+            <Magnetic><button
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
@@ -226,7 +315,7 @@ export function SiteHeader() {
                   className={`absolute left-0 h-px w-full bg-ink transition-all duration-500 ${open ? "top-1/2 -rotate-45" : "bottom-0.5 top-auto"}`}
                 />
               </span>
-            </button>
+          </button></Magnetic>
           </div>
         </div>
       </header>
@@ -262,7 +351,7 @@ export function SiteHeader() {
                         className="group flex items-baseline gap-5 py-3 md:py-4"
                       >
                         <span className="font-mono text-xs text-ink/40">0{i + 1}</span>
-                        <span className="text-[clamp(2.6rem,8vw,6.5rem)] font-semibold leading-none tracking-[-0.03em] transition-transform duration-500 group-hover:translate-x-4 group-hover:text-reg">
+                        <span className="text-[clamp(2.6rem,8vw,6.5rem)] font-bold leading-none tracking-[-0.03em] transition-transform duration-500 group-hover:translate-x-4 group-hover:text-reg">
                           {item.label}
                         </span>
                         <ArrowUpRight className="ml-auto self-center opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -328,20 +417,12 @@ export function PixelWordmark({ word = "KRAFT" }: { word?: string }) {
   const rows = buildBitmap(word);
   const cols = rows[0]?.length ?? 0;
 
-  const heat = (el: EventTarget) => {
-    const node = el as HTMLElement;
-    if (!node.classList?.contains("pixel")) return;
-    node.classList.add("hot");
-    window.setTimeout(() => node.classList.remove("hot"), 60);
-  };
-
-  return (
+    return (
     <div
       ref={ref}
       className={`pixel-grid ${inView ? "is-on" : ""}`}
       style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
-      onPointerOver={(e) => heat(e.target)}
-      aria-label={word}
+            aria-label={word}
       role="img"
     >
       {rows.flatMap((row, r) =>
@@ -399,7 +480,7 @@ export function SiteFooter() {
 
         <div className="mt-20 grid grid-cols-2 gap-10 border-t border-line pt-12 md:grid-cols-12">
           <div className="col-span-2 md:col-span-4">
-            <p className="max-w-[26ch] text-xl font-semibold leading-snug tracking-[-0.01em]">
+            <p className="max-w-[26ch] text-xl font-bold leading-snug tracking-[-0.01em]">
               Brand, software and operations — designed as one system.
             </p>
             <Link to="/contact" className="pill-solid mt-8">
@@ -430,7 +511,7 @@ export function SiteFooter() {
           <span>
             © 2026 Kraft Studios <span className="mx-2 text-ink/20">/</span> Sys. v1.1
           </span>
-          <button
+          <Magnetic><button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             className="group flex items-center gap-2 hover:text-ink"
@@ -439,7 +520,7 @@ export function SiteFooter() {
             <span className="grid size-7 place-items-center rounded-full border border-line transition-colors group-hover:border-reg group-hover:bg-reg group-hover:text-white">
               <ArrowUp size={12} />
             </span>
-          </button>
+          </button></Magnetic>
         </div>
       </div>
     </footer>
@@ -489,7 +570,7 @@ export function MaskLines({
       {lines.map((line, i) => (
         <span key={i} className="block overflow-hidden pb-[0.06em]">
           <motion.span
-            className="block will-change-transform"
+            className="block will-change-transform transform-gpu"
             initial={{ y: "110%", rotate: 2 }}
             animate={show ? { y: "0%", rotate: 0 } : { y: "110%", rotate: 2 }}
             transition={{ duration: 1.05, ease: EASE, delay: delay + i * 0.09 }}
@@ -549,7 +630,7 @@ export function FadeUp({
   return (
     <motion.div
       id={id}
-      className={className}
+      className={`${className} will-change-transform transform-gpu`}
       initial={{ opacity: 0, y: 26 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "0px 0px -10% 0px" }}
@@ -563,6 +644,35 @@ export function FadeUp({
 /* ------------------------------------------------------------------ */
 /* Sub-page scaffolding                                                */
 /* ------------------------------------------------------------------ */
+export function Magnetic({ children, className = "" }: { children: React.ReactElement, className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouse = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    const { height, width, left, top } = ref.current!.getBoundingClientRect();
+    const middleX = clientX - (left + width / 2);
+    const middleY = clientY - (top + height / 2);
+    setPosition({ x: middleX * 0.2, y: middleY * 0.2 });
+  };
+
+  const reset = () => {
+    setPosition({ x: 0, y: 0 });
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouse}
+      onMouseLeave={reset}
+      animate={{ x: position.x, y: position.y }}
+      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 export function PageFrame({ children }: { children: ReactNode }) {
   useReveal();
@@ -639,7 +749,7 @@ export function PageIntro({
               <span className="text-reg">.</span>
             </>,
           ]}
-          className="mt-6 max-w-[18ch] text-5xl font-semibold leading-[0.98] tracking-[-0.035em] sm:text-7xl lg:text-[6.5rem]"
+          className="mt-6 max-w-[18ch] text-5xl font-bold leading-[0.98] tracking-[-0.035em] sm:text-7xl lg:text-[6.5rem]"
         />
         <FadeUp delay={0.4}>
           <p className="mt-10 max-w-[52ch] border-l-2 border-reg pl-5 text-base leading-relaxed text-ink/65 sm:text-lg">

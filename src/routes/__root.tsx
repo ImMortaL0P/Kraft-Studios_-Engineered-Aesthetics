@@ -13,7 +13,6 @@ import { ReactLenis, type LenisRef } from "lenis/react";
 import appCss from "../styles.css?url";
 import { themeInitScript } from "../components/KraftSite";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import logoMonogram from "../Logos/Kraft Studios Monogram T.png";
 
 function NotFoundComponent() {
   return (
@@ -100,7 +99,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
       },
-      { rel: "icon", href: logoMonogram, type: "image/png" },
+      { rel: "icon", href: `${import.meta.env.BASE_URL}favicon.png`, type: "image/png" },
     ],
     scripts: [{ children: themeInitScript }],
   }),
