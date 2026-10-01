@@ -141,7 +141,7 @@ function CaseStudyCard({ study, index, total }: { study: CaseStudy; index: numbe
               transition={{ duration: 1.2, ease: "easeOut" }}
               src={study.cover}
               alt={study.coverAlt}
-              loading="lazy"
+              loading="lazy" decoding="async"
               className="absolute inset-0 h-full w-full object-cover"
               style={study.coverBg ? { backgroundColor: study.coverBg } : undefined}
             />

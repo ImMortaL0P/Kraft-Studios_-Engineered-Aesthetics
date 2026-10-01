@@ -502,7 +502,7 @@ function Hero() {
       <div className="site-shell relative z-[2] flex flex-1 flex-col">
         <FadeUp className="flex items-start justify-between gap-6 pt-10 font-mono text-[10px] uppercase leading-relaxed tracking-[0.26em] text-ink/50">
           <div className="flex items-center gap-3">
-            <img src={logoMonogram} alt="" className="h-8 w-8 object-contain opacity-70" />
+            <img src={logoMonogram} alt="" decoding="async" className="h-8 w-8 object-contain opacity-70" />
             <span>
               01 — Studio
               <br />
@@ -621,7 +621,9 @@ function HeroImage() {
         <motion.img
           src={heroImage}
           alt="A designer aligning registration marks by hand with a steel rule"
-          className="h-full w-full object-cover grayscale"
+          className="h-full w-full object-cover grayscale transform-gpu will-change-transform"
+          decoding="async"
+          fetchPriority="high"
           style={{ scale }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-black/15" />
@@ -675,6 +677,7 @@ function Partners() {
                 src={c.logo}
                 alt={c.name}
                 loading="lazy"
+                decoding="async"
                 className={`${c.h} w-auto max-w-[75%] object-contain opacity-70 transition-all duration-700 group-hover:opacity-100 ${
                   c.light
                     ? // white artwork: invert it on paper, leave it alone in the dark theme
@@ -989,6 +992,7 @@ function ParallaxImg({
         className={`h-full w-full will-change-transform transform-gpu ${fit === "contain" ? "object-contain" : "object-cover"}`}
         style={{ scale }}
         loading="lazy"
+        decoding="async"
       />
     </div>
   );
@@ -1188,11 +1192,11 @@ function Mantra() {
     >
       <motion.div
         style={{ y, scale, opacity: blobOpacity }}
-        className="pointer-events-none absolute -right-24 -top-24 h-[22rem] w-[22rem] rounded-full bg-reg/40 blur-[90px] lg:-right-40 lg:h-[34rem] lg:w-[34rem]"
+        className="pointer-events-none absolute -right-24 -top-24 h-[22rem] w-[22rem] rounded-full bg-reg/40 blur-[90px] lg:-right-40 lg:h-[34rem] lg:w-[34rem] transform-gpu will-change-transform"
       />
       <motion.div
         style={{ rotate, opacity: ringOpacity }}
-        className="pointer-events-none absolute -bottom-40 left-10 hidden h-[30rem] w-[30rem] rounded-full border border-dashed border-ink lg:block"
+        className="pointer-events-none absolute -bottom-40 left-10 hidden h-[30rem] w-[30rem] rounded-full border border-dashed border-ink lg:block transform-gpu will-change-transform"
       />
 
       <div className="site-shell relative z-10 grid grid-cols-12 gap-8 lg:gap-6">

@@ -155,6 +155,8 @@ function Cover({ study }: { study: CaseStudy }) {
         <img
           src={study.cover}
           alt={study.coverAlt}
+          fetchPriority="high"
+          decoding="async"
           className={`w-full ${study.coverFit === "contain" ? "object-contain" : "aspect-[16/9] object-cover"}`}
         />
       </div>
@@ -282,7 +284,7 @@ function Gallery({ study }: { study: CaseStudy }) {
           <FadeUp key={shot.src + i} delay={0.05} className={containerClass}>
             <figure>
               <div className={innerClass}>
-                <img src={shot.src} alt={shot.caption} loading="lazy" className="w-full shadow-sm" />
+                <img src={shot.src} alt={shot.caption} loading="lazy" decoding="async" className="w-full shadow-sm" />
               </div>
               <figcaption className="mt-4 flex items-baseline gap-4 font-mono text-[10px] uppercase leading-[1.8] tracking-[0.18em] text-ink/45">
                 <span className="text-reg">{String(i + 1).padStart(2, "0")}</span>

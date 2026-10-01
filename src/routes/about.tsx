@@ -49,7 +49,7 @@ function ParallaxImg({
         style={{ y }}
         src={src}
         alt={alt}
-        loading="lazy"
+        loading="lazy" decoding="async" fetchPriority="low"
         className="w-full h-[124%] object-cover absolute top-0 left-0"
       />
     </div>

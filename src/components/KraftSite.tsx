@@ -283,6 +283,7 @@ export function SiteHeader() {
             <img
               src={logoWordmark}
               alt="Kraft Studios Logo"
+              decoding="async"
               className="w-full h-auto object-contain opacity-90 transition-opacity duration-300 group-hover:opacity-100"
             />
           </Link>
@@ -459,6 +460,7 @@ export function SiteFooter() {
             <motion.img
               src={logoMonogram}
               alt="Monogram"
+              decoding="async"
               className="w-full h-full object-contain opacity-40 group-hover:opacity-100 transition-all duration-500 relative z-10"
               whileHover={{
                 scale: 1.1,
@@ -646,18 +648,25 @@ export function FadeUp({
 /* ------------------------------------------------------------------ */
 export function Magnetic({ children, className = "" }: { children: React.ReactElement, className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const springX = useSpring(x, { stiffness: 150, damping: 15, mass: 0.1 });
+  const springY = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
 
   const handleMouse = (e: React.MouseEvent) => {
+    if (!ref.current) return;
     const { clientX, clientY } = e;
-    const { height, width, left, top } = ref.current!.getBoundingClientRect();
+    const { height, width, left, top } = ref.current.getBoundingClientRect();
     const middleX = clientX - (left + width / 2);
     const middleY = clientY - (top + height / 2);
-    setPosition({ x: middleX * 0.2, y: middleY * 0.2 });
+    x.set(middleX * 0.2);
+    y.set(middleY * 0.2);
   };
 
   const reset = () => {
-    setPosition({ x: 0, y: 0 });
+    x.set(0);
+    y.set(0);
   };
 
   return (
@@ -665,9 +674,8 @@ export function Magnetic({ children, className = "" }: { children: React.ReactEl
       ref={ref}
       onMouseMove={handleMouse}
       onMouseLeave={reset}
-      animate={{ x: position.x, y: position.y }}
-      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
-      className={className}
+      style={{ x: springX, y: springY }}
+      className={`transform-gpu will-change-transform ${className}`}
     >
       {children}
     </motion.div>
