@@ -167,17 +167,15 @@ export const caseStudies: CaseStudy[] = [
     summary:
       "Bookings, guests, rooms, billing and money on one live database, where taking a reservation updates availability, the guest record, the ledger and the P&L in a single action.",
     live: { label: "hotel-booking-crm-community.vercel.app", href: "https://hotel-booking-crm-community.vercel.app" },
-    cover: shardaImage,
-    coverAlt: "Sharda Palace identity system — folders, cards and stationery",
+    cover: shardaDashboard,
+    coverAlt: "Sharda Palace CRM — Live operating dashboard and availability grid",
     shots: [
-      { src: shardaImage, caption: "Sharda Palace — identity and collateral system" },
-      { src: shardaDashboard, caption: "Live Operating Dashboard — check-ins, check-outs, and financials at a glance" },
+      { src: shardaDashboard, caption: "Live Operating Dashboard — check-ins, check-outs, and financials" },
       { src: shardaCmd, caption: "The ⌘K global command menu — instant navigation across 13 modules" },
-      { src: shardaCalendar, caption: "Room availability chart and booking engine" },
       { src: shardaGuest, caption: "Lifetime guest value and communication history" },
-      { src: shardaInvoice, caption: "One-click GST invoice and checkout screen" }
+      { src: shardaCalendar, caption: "Room availability chart and booking engine synced with OTAs" }
     ],
-    services: ["Brand identity", "Collateral system", "Property CRM", "Billing & GST", "Guest messaging"],
+    services: ["Brand identity", "Collateral system", "Property CRM", "Billing & GST", "Guest messaging", "Channel API Sync"],
     problem:
       "The desk ran on a paper register, a spreadsheet and a calculator. The same booking was written down three times, the room chart and the accounts book disagreed by the end of most weeks, and no one could answer who had changed a rate or waived a balance.",
     approach:
@@ -203,6 +201,11 @@ export const caseStudies: CaseStudy[] = [
         stack: "WhatsApp, SMS, Email",
         role: "Templates for the messages a hotel repeats, bulk sends addressed to a guest segment, and a delivery history per channel.",
       },
+      {
+        name: "Channel Manager",
+        stack: "REST APIs, Webhooks, OTA Interfaces",
+        role: "Multiplexes 6 custom APIs for 6 major OTA channels into one place, automatically syncing inventory and preventing overbooking.",
+      },
     ],
     capabilities: [
       {
@@ -216,6 +219,10 @@ export const caseStudies: CaseStudy[] = [
       {
         title: "Nothing runs in the hotel",
         body: "No server on the premises, no local backup to remember, no single computer whose failure stops the desk. Staff sign in from any device.",
+      },
+      {
+        title: "6 OTAs in one place",
+        body: "Integrated 6 custom APIs for 6 OTA channels directly into the dashboard. Availability, rates, and incoming reservations synchronize automatically across all platforms.",
       },
     ],
     outcomes: [
