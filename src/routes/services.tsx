@@ -35,10 +35,10 @@ const brands = [
       { figure: "300+", label: "Curated designs and still adding" },
       { figure: "1", label: "Pricing engine, two runtimes" },
       { figure: "16", label: "Cart shapes under parity test" },
-      { figure: "3", label: "Redundant payment gateways" }
+      { figure: "3", label: "Redundant payment gateways" },
     ],
     href: "https://brush-art.in",
-    bg: "bg-surface"
+    bg: "bg-surface",
   },
   {
     n: "02",
@@ -51,10 +51,10 @@ const brands = [
       { figure: "400+", label: "Active sources made ready to scrape" },
       { figure: "100%", label: "Human-approved" },
       { figure: "11", label: "Schema models behind provenance" },
-      { figure: "12h", label: "Discovery cadence" }
+      { figure: "12h", label: "Discovery cadence" },
     ],
     href: "https://thenoticeboard.in",
-    bg: "bg-paper"
+    bg: "bg-paper",
   },
   {
     n: "03",
@@ -68,15 +68,20 @@ const brands = [
       { figure: "5", label: "Tools on one shared design system" },
       { figure: "0", label: "Runtime dependencies across the kit" },
       { figure: "171", label: "Style rules shared, written once" },
-      { figure: "0", label: "Bytes sent off the machine" }
+      { figure: "0", label: "Bytes sent off the machine" },
     ],
     href: "https://immortal0p.github.io/ScrapeX-Website",
-    bg: "bg-surface"
+    bg: "bg-surface",
   },
   {
     n: "04",
     title: "The Side Quest",
-    titleNode: <><span className="block">The Side</span><span className="block">Quest</span></>,
+    titleNode: (
+      <>
+        <span className="block">The Side</span>
+        <span className="block">Quest</span>
+      </>
+    ),
     domain: "thesidequest.in",
     logo: null,
     wordmarkClass: "font-quest text-[4.5rem] md:text-[6rem] lg:text-[7rem] leading-none mb-12",
@@ -86,11 +91,11 @@ const brands = [
       { figure: "4+", label: "Design Subcultures" },
       { figure: "12", label: "Pages of pure inspiration" },
       { figure: "1.2k", label: "Curated Artifacts" },
-      { figure: "100%", label: "In-house Publishing" }
+      { figure: "100%", label: "In-house Publishing" },
     ],
     href: "https://thesidequest.in",
-    bg: "bg-paper"
-  }
+    bg: "bg-paper",
+  },
 ];
 
 function BandwidthBars() {
@@ -101,14 +106,23 @@ function BandwidthBars() {
   const velocityY = useTransform(smoothVelocity, [-0.5, 0.5], ["-80%", "80%"]);
 
   return (
-    <div ref={ref} className="hidden lg:flex mt-12 overflow-hidden w-full max-w-[200px] gap-1 opacity-20 relative h-20 items-end">
+    <div
+      ref={ref}
+      className="hidden lg:flex mt-12 overflow-hidden w-full max-w-[200px] gap-1 opacity-20 relative h-20 items-end"
+    >
       {[...Array(12)].map((_, i) => (
         <motion.div
           key={i}
           style={{ y: velocityY }}
           initial={{ height: `${20 + Math.random() * 80}%` }}
           animate={{ height: [`${20 + Math.random() * 80}%`, `${20 + Math.random() * 80}%`] }}
-          transition={{ duration: 1.5 + Math.random(), delay: i * 0.05, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+          transition={{
+            duration: 1.5 + Math.random(),
+            delay: i * 0.05,
+            repeat: Infinity,
+            repeatType: "mirror",
+            ease: "easeInOut",
+          }}
           className="w-full bg-paper"
         />
       ))}
@@ -129,36 +143,47 @@ function BrandsPage() {
 
         <div className="flex flex-col">
           {brands.map((brand) => (
-            <section key={brand.n} className={`py-20 md:py-32 lg:py-40 border-t border-line ${brand.bg}`}>
+            <section
+              key={brand.n}
+              className={`py-20 md:py-32 lg:py-40 border-t border-line ${brand.bg}`}
+            >
               <div className="site-shell">
                 <Reveal>
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-8 lg:mb-12">
                     <div>
                       <Eyebrow className="mb-8 block">{brand.n} — Internal Brand</Eyebrow>
                       {brand.logo ? (
-                        <img 
-                          src={brand.logo} 
-                          alt={brand.title} 
-                          className={brand.logoClass || "h-16 md:h-20 lg:h-24 w-auto object-contain object-left block"} 
+                        <img
+                          src={brand.logo}
+                          alt={brand.title}
+                          className={
+                            brand.logoClass ||
+                            "h-16 md:h-20 lg:h-24 w-auto object-contain object-left block"
+                          }
                         />
                       ) : (
-                        <h2 className={brand.wordmarkClass || "font-display italic text-6xl md:text-7xl lg:text-8xl leading-none tracking-tight"}>
+                        <h2
+                          className={
+                            brand.wordmarkClass ||
+                            "font-display italic text-6xl md:text-7xl lg:text-8xl leading-none tracking-tight"
+                          }
+                        >
                           {brand.titleNode || brand.title}
                         </h2>
                       )}
                     </div>
-                    
+
                     <div className="flex flex-col gap-4 justify-end md:text-right">
-                       <div className="flex flex-wrap md:justify-end items-center gap-3">
-                          {brand.items.map((item) => (
-                            <span
-                              key={item}
-                              className="rounded-full border border-line bg-transparent px-4 py-2 font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-ink/65"
-                            >
-                              {item}
-                            </span>
-                          ))}
-                       </div>
+                      <div className="flex flex-wrap md:justify-end items-center gap-3">
+                        {brand.items.map((item) => (
+                          <span
+                            key={item}
+                            className="rounded-full border border-line bg-transparent px-4 py-2 font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-ink/65"
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </Reveal>
@@ -171,26 +196,39 @@ function BrandsPage() {
                       </p>
                     </FadeUp>
                   </div>
-                  
+
                   <div className="lg:col-span-1" />
-                  
+
                   <div className="lg:col-span-5 flex flex-col justify-between">
                     <FadeUp delay={0.2}>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10 border-t border-line pt-10">
-                        {brand.stats.map(s => (
+                        {brand.stats.map((s) => (
                           <div key={s.label}>
-                            <div className="font-display text-4xl lg:text-5xl font-medium tracking-tight text-ink">{s.figure}</div>
-                            <div className="font-mono text-[10.5px] uppercase tracking-[0.22em] leading-relaxed text-ink/50 mt-4 max-w-[15ch]">{s.label}</div>
+                            <div className="font-display text-4xl lg:text-5xl font-medium tracking-tight text-ink">
+                              {s.figure}
+                            </div>
+                            <div className="font-mono text-[10.5px] uppercase tracking-[0.22em] leading-relaxed text-ink/50 mt-4 max-w-[15ch]">
+                              {s.label}
+                            </div>
                           </div>
                         ))}
                       </div>
                     </FadeUp>
 
                     <FadeUp delay={0.3} className="mt-16 lg:mt-24 pt-8 border-t border-line">
-                      <a href={brand.href} target="_blank" rel="noreferrer noopener" className="group flex items-center justify-between">
+                      <a
+                        href={brand.href}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="group flex items-center justify-between"
+                      >
                         <div>
-                          <span className="block font-medium text-ink transition-colors group-hover:text-reg text-xl">Visit Platform</span>
-                          <span className="block font-mono text-[11px] uppercase tracking-[0.22em] text-ink/45 mt-2">{brand.domain}</span>
+                          <span className="block font-medium text-ink transition-colors group-hover:text-reg text-xl">
+                            Visit Platform
+                          </span>
+                          <span className="block font-mono text-[11px] uppercase tracking-[0.22em] text-ink/45 mt-2">
+                            {brand.domain}
+                          </span>
                         </div>
                         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-ink text-paper transition-transform duration-500 group-hover:scale-110">
                           <ArrowUpRight className="size-6 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

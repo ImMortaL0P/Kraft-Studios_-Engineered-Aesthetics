@@ -596,12 +596,11 @@ section[id] {
   color: #fff;
 }
 
-
 @media (max-width: 767px) {
   html {
     scroll-behavior: auto;
   }
-  
+
   .reveal,
   .reveal.is-visible {
     opacity: 1;

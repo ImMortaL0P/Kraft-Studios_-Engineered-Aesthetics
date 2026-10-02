@@ -1,5 +1,5 @@
-const fs = require('fs');
-let code = fs.readFileSync('src/routes/services.tsx', 'utf8');
+const fs = require("fs");
+let code = fs.readFileSync("src/routes/services.tsx", "utf8");
 
 // Replace PageIntro
 code = code.replace(
@@ -14,7 +14,7 @@ code = code.replace(
           label="Our Brands"
           title="In-house ecosystems"
           copy="Beyond client work, we independently build, scale, and operate our own proprietary brands spanning verified information systems, curated aesthetics, and print infrastructure."
-        />`
+        />`,
 );
 
 // Replace capabilities array
@@ -67,9 +67,6 @@ const replaceLinkStr = `                    <span className="font-display text-r
 
 code = code.replace(targetLinkStr, replaceLinkStr);
 
-code = code.replace(
-  'title="Services — Kraft Studios"',
-  'title="Our Brands — Kraft Studios"'
-);
+code = code.replace('title="Services — Kraft Studios"', 'title="Our Brands — Kraft Studios"');
 
-fs.writeFileSync('src/routes/services.tsx', code);
+fs.writeFileSync("src/routes/services.tsx", code);

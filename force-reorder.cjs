@@ -1,6 +1,6 @@
-const fs = require('fs');
+const fs = require("fs");
 
-let code = fs.readFileSync('src/routes/services.tsx', 'utf8');
+let code = fs.readFileSync("src/routes/services.tsx", "utf8");
 
 const regex = /const brands = \[[\s\S]*?\];/m;
 
@@ -58,4 +58,4 @@ const replacement = `const brands = [
 
 code = code.replace(regex, replacement);
 
-fs.writeFileSync('src/routes/services.tsx', code);
+fs.writeFileSync("src/routes/services.tsx", code);

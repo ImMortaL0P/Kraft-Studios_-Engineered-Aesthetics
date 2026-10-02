@@ -1,7 +1,7 @@
 // Modern Feature Grid Layout
 // Copy and customize this layout for your Next.js pages
 
-import React from 'react';
+import React from "react";
 
 interface Feature {
   icon: React.ReactNode;
@@ -23,9 +23,9 @@ export const FeatureGrid: React.FC<FeatureGridProps> = ({
   columns = 3,
 }) => {
   const gridCols = {
-    2: 'md:grid-cols-2',
-    3: 'md:grid-cols-2 lg:grid-cols-3',
-    4: 'md:grid-cols-2 lg:grid-cols-4',
+    2: "md:grid-cols-2",
+    3: "md:grid-cols-2 lg:grid-cols-3",
+    4: "md:grid-cols-2 lg:grid-cols-4",
   };
 
   return (
@@ -34,15 +34,9 @@ export const FeatureGrid: React.FC<FeatureGridProps> = ({
         {(title || subtitle) && (
           <div className="text-center mb-16">
             {title && (
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-                {title}
-              </h2>
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">{title}</h2>
             )}
-            {subtitle && (
-              <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-                {subtitle}
-              </p>
-            )}
+            {subtitle && <p className="text-xl text-slate-600 max-w-3xl mx-auto">{subtitle}</p>}
           </div>
         )}
 
@@ -56,12 +50,8 @@ export const FeatureGrid: React.FC<FeatureGridProps> = ({
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
                 {feature.icon}
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-slate-600 leading-relaxed">
-                {feature.description}
-              </p>
+              <h3 className="text-xl font-semibold text-slate-900 mb-2">{feature.title}</h3>
+              <p className="text-slate-600 leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>

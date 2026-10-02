@@ -37,9 +37,11 @@ export const Route = createFileRoute("/work/$slug")({
 /* ------------------------------------------------------------------ */
 
 function CaseStudyPage() {
-  const study = Route.useLoaderData() as CaseStudy; if(!study) return null;
+  const study = Route.useLoaderData() as CaseStudy;
+  if (!study) return null;
   const index = caseStudies.findIndex((c) => c.slug === study.slug);
-  const next = caseStudies[(index + 1) % caseStudies.length]; if (!next) return null;
+  const next = caseStudies[(index + 1) % caseStudies.length];
+  if (!next) return null;
 
   return (
     <PageFrame>
@@ -273,7 +275,11 @@ function Gallery({ study }: { study: CaseStudy }) {
             const spanClass = i < 2 ? "lg:col-span-3" : "lg:col-span-2";
 
             return (
-              <FadeUp key={shot.src + i} delay={i * 0.05} className={`${spanClass} flex flex-col h-full`}>
+              <FadeUp
+                key={shot.src + i}
+                delay={i * 0.05}
+                className={`${spanClass} flex flex-col h-full`}
+              >
                 <figure data-cursor="view" className="flex flex-col h-full">
                   <div
                     className="flex-1 overflow-hidden rounded-md border border-line flex items-center justify-center p-12 lg:p-16"
@@ -308,10 +314,10 @@ function Gallery({ study }: { study: CaseStudy }) {
           // Editorial alternating layout logic
           const isOdd = i % 2 !== 0;
           const isThird = (i + 1) % 3 === 0;
-          
+
           let containerClass = "w-full";
           let innerClass = "overflow-hidden rounded-md border border-line bg-surface";
-          
+
           if (isOdd) {
             containerClass = "w-full md:w-[85%] md:ml-auto";
           }
@@ -321,18 +327,25 @@ function Gallery({ study }: { study: CaseStudy }) {
           }
 
           return (
-          <FadeUp key={shot.src + i} delay={0.05} className={containerClass}>
-            <figure data-cursor="view">
-              <div className={innerClass}>
-                <img src={shot.src} alt={shot.caption} loading="lazy" decoding="async" className="w-full shadow-sm" />
-              </div>
-              <figcaption className="mt-4 flex items-baseline gap-4 font-mono text-[10px] uppercase leading-[1.8] tracking-[0.18em] text-ink/45">
-                <span className="text-reg">{String(i + 1).padStart(2, "0")}</span>
-                <span>{shot.caption}</span>
-              </figcaption>
-            </figure>
-          </FadeUp>
-        )})}
+            <FadeUp key={shot.src + i} delay={0.05} className={containerClass}>
+              <figure data-cursor="view">
+                <div className={innerClass}>
+                  <img
+                    src={shot.src}
+                    alt={shot.caption}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full shadow-sm"
+                  />
+                </div>
+                <figcaption className="mt-4 flex items-baseline gap-4 font-mono text-[10px] uppercase leading-[1.8] tracking-[0.18em] text-ink/45">
+                  <span className="text-reg">{String(i + 1).padStart(2, "0")}</span>
+                  <span>{shot.caption}</span>
+                </figcaption>
+              </figure>
+            </FadeUp>
+          );
+        })}
       </div>
     </section>
   );
@@ -358,7 +371,11 @@ function Outcomes({ study }: { study: CaseStudy }) {
 function NextStudy({ next }: { next: CaseStudy }) {
   return (
     <section className="site-shell py-20 md:py-28">
-      <Link to="/work/$slug" params={{ slug: next.slug }} className="group block border-t border-line pt-10">
+      <Link
+        to="/work/$slug"
+        params={{ slug: next.slug }}
+        className="group block border-t border-line pt-10"
+      >
         <Eyebrow>Next case study</Eyebrow>
         <div className="mt-5 flex flex-wrap items-end justify-between gap-6">
           <h2 className="font-display text-3xl font-bold leading-[1.05] tracking-tight transition-colors duration-500 group-hover:text-reg md:text-5xl">

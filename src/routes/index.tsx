@@ -28,7 +28,15 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { Suspense, lazy, useEffect, useRef, useState, type MouseEvent, type RefObject } from "react";
+import {
+  Suspense,
+  lazy,
+  useEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+  type RefObject,
+} from "react";
 
 import heroImage from "../assets/kraft-hero.jpg";
 import umvadlaImage from "../assets/showcase/umvadla-02-about.jpg";
@@ -39,10 +47,14 @@ import noticeboardImage from "../assets/project-noticeboard.jpg";
 import { caseStudies, type CaseStudy } from "../data/caseStudies";
 
 const LazyProcessSection = lazy(() =>
-  import("../components/home-visual-sections").then((module) => ({ default: module.ProcessSection })),
+  import("../components/home-visual-sections").then((module) => ({
+    default: module.ProcessSection,
+  })),
 );
 const LazyMantraSection = lazy(() =>
-  import("../components/home-visual-sections").then((module) => ({ default: module.MantraSection })),
+  import("../components/home-visual-sections").then((module) => ({
+    default: module.MantraSection,
+  })),
 );
 
 import clientUmvadla from "../assets/clients/umvadla.png";
@@ -344,7 +356,6 @@ function ScrollRevealText({
 /* Page                                                                */
 /* ------------------------------------------------------------------ */
 
-
 export function StaggeredParagraph({ text, className = "" }: { text: string; className?: string }) {
   const words = text.split(" ");
   return (
@@ -353,7 +364,7 @@ export function StaggeredParagraph({ text, className = "" }: { text: string; cla
       whileInView="visible"
       viewport={{ once: true, margin: "0px 0px -10% 0px" }}
       variants={{
-        visible: { transition: { staggerChildren: 0.015, delayChildren: 0.1 } }
+        visible: { transition: { staggerChildren: 0.015, delayChildren: 0.1 } },
       }}
       className={className}
     >
@@ -362,7 +373,12 @@ export function StaggeredParagraph({ text, className = "" }: { text: string; cla
           <motion.span
             variants={{
               hidden: { opacity: 0, y: "100%", rotate: 2 },
-              visible: { opacity: 1, y: "0%", rotate: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+              visible: {
+                opacity: 1,
+                y: "0%",
+                rotate: 0,
+                transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+              },
             }}
             className="inline-block will-change-transform"
           >
@@ -390,7 +406,7 @@ function HomePage() {
           <Hero />
           <HeroImage />
         </div>
-        
+
         <div className="relative z-10 bg-paper shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
           <Partners />
           <Premise />
@@ -511,9 +527,17 @@ function Hero() {
       <div className="blueprint-grid pointer-events-none absolute inset-0" />
 
       <div className="site-shell relative z-[2] flex flex-1 flex-col">
-        <FadeUp immediate className="flex flex-col gap-4 pt-10 font-mono text-[10px] uppercase leading-relaxed tracking-[0.26em] text-ink/50 sm:flex-row sm:items-start sm:justify-between">
+        <FadeUp
+          immediate
+          className="flex flex-col gap-4 pt-10 font-mono text-[10px] uppercase leading-relaxed tracking-[0.26em] text-ink/50 sm:flex-row sm:items-start sm:justify-between"
+        >
           <div className="flex items-center gap-3">
-            <img src={logoMonogram} alt="" decoding="async" className="h-8 w-8 object-contain opacity-70" />
+            <img
+              src={logoMonogram}
+              alt=""
+              decoding="async"
+              className="h-8 w-8 object-contain opacity-70"
+            />
             <span>
               01 — Studio
               <br />
@@ -549,9 +573,9 @@ function Hero() {
               transition={{ delay: 0.5, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               className="lg:col-span-4"
             >
-              <StaggeredParagraph 
-                text="Connecting craft with evidence, design with engineering, people with systems. We don't just design digital shells; we build the brandworlds and operational engines that power them." 
-                className="max-w-[44ch] border-l-2 border-reg pl-5 text-[15px] leading-relaxed text-ink/70 md:text-base" 
+              <StaggeredParagraph
+                text="Connecting craft with evidence, design with engineering, people with systems. We don't just design digital shells; we build the brandworlds and operational engines that power them."
+                className="max-w-[44ch] border-l-2 border-reg pl-5 text-[15px] leading-relaxed text-ink/70 md:text-base"
               />
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
                 <Link to="/contact" className="pill-solid">
@@ -711,9 +735,21 @@ function Partners() {
       <div className="site-shell mt-14 border-y border-line">
         <StatBand
           stats={[
-            { figure: String(caseStudies.length), label: "Case studies shipped", note: "Identity, platform and product" },
-            { figure: String(clients.length), label: "Clients and partners", note: "Schools, hospitality, platforms" },
-            { figure: "3", label: "Disciplines, one table", note: "Brand \u00b7 Software \u00b7 Operations" },
+            {
+              figure: String(caseStudies.length),
+              label: "Case studies shipped",
+              note: "Identity, platform and product",
+            },
+            {
+              figure: String(clients.length),
+              label: "Clients and partners",
+              note: "Schools, hospitality, platforms",
+            },
+            {
+              figure: "3",
+              label: "Disciplines, one table",
+              note: "Brand \u00b7 Software \u00b7 Operations",
+            },
             { figure: "2026", label: "Studio established", note: "Patna, India" },
           ]}
         />
@@ -934,14 +970,21 @@ function Blueprint() {
 /* ---------- 04 work ---------- */
 
 function Work() {
-  const spans = ["lg:col-span-7", "lg:col-span-5", "lg:col-span-5", "lg:col-span-7", "lg:col-span-12", "lg:col-span-12"];
+  const spans = [
+    "lg:col-span-7",
+    "lg:col-span-5",
+    "lg:col-span-5",
+    "lg:col-span-7",
+    "lg:col-span-12",
+    "lg:col-span-12",
+  ];
   const ratios = [
     "aspect-[4/3] lg:aspect-[16/10]",
     "aspect-[4/3] lg:aspect-[16/10]",
     "aspect-[4/3] lg:aspect-[16/10]",
     "aspect-[4/3] lg:aspect-[16/10]",
     "aspect-[4/3] lg:aspect-[21/9]",
-    "aspect-[4/3] lg:aspect-[21/9]"
+    "aspect-[4/3] lg:aspect-[21/9]",
   ];
 
   return (
@@ -952,8 +995,10 @@ function Work() {
           className="font-display text-[clamp(2.2rem,5vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.035em]"
           lines={[
             "Case studies,",
-            <>{' '}</>,
-            <span key="d" className="text-reg">.</span>
+            <> </>,
+            <span key="d" className="text-reg">
+              .
+            </span>,
           ]}
         />
         <FadeUp>
@@ -977,7 +1022,6 @@ function Work() {
   );
 }
 
-
 function ParallaxImg({
   src,
   alt,
@@ -997,7 +1041,11 @@ function ParallaxImg({
   const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1]);
 
   return (
-    <div ref={ref} className={`relative overflow-hidden w-full ${ratio}`} style={{ backgroundColor: bg }}>
+    <div
+      ref={ref}
+      className={`relative overflow-hidden w-full ${ratio}`}
+      style={{ backgroundColor: bg }}
+    >
       <motion.img
         src={src}
         alt={alt}
@@ -1010,15 +1058,7 @@ function ParallaxImg({
   );
 }
 
-function ProjectCard({
-  study,
-  cls,
-  ratio,
-}: {
-  study: CaseStudy;
-  cls: string;
-  ratio: string;
-}) {
+function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; ratio: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["0 1.05", "0.5 1"] });
   const opacity = useSpring(useTransform(scrollYProgress, [0, 1], [0.25, 1]), {
@@ -1035,12 +1075,20 @@ function ProjectCard({
     const r = e.currentTarget.getBoundingClientRect();
     cursor.current?.style.setProperty(
       "transform",
-      "translate(" + (e.clientX - r.left) + "px, " + (e.clientY - r.top) + "px) translate(-50%, -50%)"
+      "translate(" +
+        (e.clientX - r.left) +
+        "px, " +
+        (e.clientY - r.top) +
+        "px) translate(-50%, -50%)",
     );
   };
 
   return (
-    <motion.div ref={ref} style={{ opacity, y }} className={"group flex flex-col will-change-transform transform-gpu " + cls}>
+    <motion.div
+      ref={ref}
+      style={{ opacity, y }}
+      className={"group flex flex-col will-change-transform transform-gpu " + cls}
+    >
       <Link
         to="/work/$slug"
         params={{ slug: study.slug }}
@@ -1052,8 +1100,8 @@ function ProjectCard({
           src={study.cover}
           alt={study.coverAlt}
           ratio={ratio}
-          fit={study.coverFit as any}
-          bg={study.coverBg as any}
+          fit={study.coverFit}
+          bg={study.coverBg}
         />
         <span className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full bg-ink/70 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-paper backdrop-blur-sm">
           <ArrowUpRight size={11} />
@@ -1098,7 +1146,6 @@ function ProjectCard({
   );
 }
 
-
 /* ---------- 07 contact ---------- */
 
 function ContactBand() {
@@ -1125,7 +1172,7 @@ function ContactBand() {
               ]}
             />
             <div className="mt-12 flex flex-wrap items-center justify-between gap-8 border-t border-paper/15 pt-8">
-              <StaggeredParagraph 
+              <StaggeredParagraph
                 text="Tell us what needs to be built, changed or connected. We'll look at the visual, technical and operational problem together."
                 className="max-w-[44ch] text-[15px] leading-relaxed text-paper/60"
               />

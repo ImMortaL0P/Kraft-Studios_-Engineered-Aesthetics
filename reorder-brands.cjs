@@ -1,6 +1,6 @@
-const fs = require('fs');
+const fs = require("fs");
 
-let code = fs.readFileSync('src/routes/services.tsx', 'utf8');
+let code = fs.readFileSync("src/routes/services.tsx", "utf8");
 
 // The brands are currently defined in an array in services.tsx
 // We can use a regex to extract the brands array content, but it's easier to just do a string replacement of the whole array block since we know exactly how it looks.
@@ -59,9 +59,15 @@ const brushChunk = `{
   }`;
 
 // Create new chunks with updated numbers and background colors to maintain the alternating bg pattern
-const newBrushChunk = brushChunk.replace('n: "03",', 'n: "01",').replace('bg: "bg-surface"', 'bg: "bg-surface"');
-const newNoticeboardChunk = noticeboardChunk.replace('n: "01",', 'n: "02",').replace('bg: "bg-surface"', 'bg: "bg-paper"');
-const newSidequestChunk = sidequestChunk.replace('n: "02",', 'n: "03",').replace('bg: "bg-paper"', 'bg: "bg-surface"');
+const newBrushChunk = brushChunk
+  .replace('n: "03",', 'n: "01",')
+  .replace('bg: "bg-surface"', 'bg: "bg-surface"');
+const newNoticeboardChunk = noticeboardChunk
+  .replace('n: "01",', 'n: "02",')
+  .replace('bg: "bg-surface"', 'bg: "bg-paper"');
+const newSidequestChunk = sidequestChunk
+  .replace('n: "02",', 'n: "03",')
+  .replace('bg: "bg-paper"', 'bg: "bg-surface"');
 
 // Using regex to replace the array definition
 const arrayRegex = /const brands = \[\s*\{[\s\S]*?\}\s*\];/m;
@@ -74,4 +80,4 @@ const newArray = `const brands = [
 
 code = code.replace(arrayRegex, newArray);
 
-fs.writeFileSync('src/routes/services.tsx', code);
+fs.writeFileSync("src/routes/services.tsx", code);

@@ -27,14 +27,14 @@ function ContactPage() {
     const formData = new FormData(event.currentTarget);
     fetch("https://formsubmit.co/ajax/admin@kraftstudios.site", {
       method: "POST",
-      headers: { 
-        'Accept': 'application/json'
+      headers: {
+        Accept: "application/json",
       },
-      body: formData
+      body: formData,
     })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.log(error));
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.log(error));
 
     event.preventDefault();
     setSent(true);

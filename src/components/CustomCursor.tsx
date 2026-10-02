@@ -3,12 +3,14 @@ import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motio
 import { ArrowUpRight, Plus, ScanLine, GripHorizontal } from "lucide-react";
 
 export function CustomCursor() {
-  const [flavor, setFlavor] = useState<"default" | "link" | "text" | "view" | "visit" | "drag" | "expand" | "explore">("default");
-  
+  const [flavor, setFlavor] = useState<
+    "default" | "link" | "text" | "view" | "visit" | "drag" | "expand" | "explore"
+  >("default");
+
   // Start off-screen
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
-  
+
   const springX = useSpring(cursorX, { damping: 30, stiffness: 400, mass: 0.1 });
   const springY = useSpring(cursorY, { damping: 30, stiffness: 400, mass: 0.1 });
 
@@ -16,17 +18,19 @@ export function CustomCursor() {
     const move = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
-      
+
       const target = e.target as HTMLElement;
       if (!target) return;
-      
+
       const customCursor = target.closest("[data-cursor]");
       const isView = target.closest(".case-row, .case-image");
-      const isLink = target.closest("a, button, [role='button'], .pill, .contact-direct, .nav-link, .display-item");
+      const isLink = target.closest(
+        "a, button, [role='button'], .pill, .contact-direct, .nav-link, .display-item",
+      );
       const isInput = target.closest("input, textarea");
-      
+
       if (customCursor) {
-        const type = customCursor.getAttribute("data-cursor") as any;
+        const type = customCursor.getAttribute("data-cursor");
         setFlavor(type || "view");
       } else if (isInput) {
         setFlavor("text");
@@ -36,15 +40,20 @@ export function CustomCursor() {
         // If it's an external link, show 'visit'
         const isExternal = target.closest("a[target='_blank'], a[href^='http']");
         if (isExternal) {
-            setFlavor("visit");
+          setFlavor("visit");
         } else {
-            setFlavor("link");
+          setFlavor("link");
         }
       } else {
         const sel = window.getSelection();
         if (sel && sel.toString().length > 0) {
           setFlavor("text");
-        } else if (target.tagName.toLowerCase() === 'p' || target.tagName.toLowerCase() === 'h1' || target.tagName.toLowerCase() === 'h2' || target.tagName.toLowerCase() === 'h3') {
+        } else if (
+          target.tagName.toLowerCase() === "p" ||
+          target.tagName.toLowerCase() === "h1" ||
+          target.tagName.toLowerCase() === "h2" ||
+          target.tagName.toLowerCase() === "h3"
+        ) {
           setFlavor("text");
         } else {
           setFlavor("default");
@@ -57,14 +66,69 @@ export function CustomCursor() {
   }, []);
 
   const variants = {
-    default: { height: 16, width: 16, opacity: 1, backgroundColor: "#fff", mixBlendMode: "difference" as any },
-    link: { height: 60, width: 60, opacity: 1, backgroundColor: "#fff", mixBlendMode: "difference" as any },
-    text: { height: 32, width: 3, opacity: 1, borderRadius: "2px", backgroundColor: "#fff", mixBlendMode: "difference" as any },
-    view: { height: 80, width: 80, opacity: 1, backgroundColor: "var(--ink)", mixBlendMode: "normal" as any, border: "0px solid transparent" },
-    visit: { height: 80, width: 80, opacity: 1, backgroundColor: "var(--ink)", mixBlendMode: "normal" as any, border: "0px solid transparent" },
-    drag: { height: 60, width: 60, opacity: 1, backgroundColor: "var(--surface)", mixBlendMode: "normal" as any, border: "1px solid var(--line)" },
-    expand: { height: 70, width: 70, opacity: 1, backgroundColor: "var(--ink)", mixBlendMode: "normal" as any, border: "0px solid transparent" },
-    explore: { height: 90, width: 90, opacity: 1, backgroundColor: "rgba(255, 255, 255, 0.1)", mixBlendMode: "normal" as any, border: "1px solid var(--ink)", backdropFilter: "blur(4px)" },
+    default: {
+      height: 16,
+      width: 16,
+      opacity: 1,
+      backgroundColor: "#fff",
+      mixBlendMode: "difference",
+    },
+    link: {
+      height: 60,
+      width: 60,
+      opacity: 1,
+      backgroundColor: "#fff",
+      mixBlendMode: "difference",
+    },
+    text: {
+      height: 32,
+      width: 3,
+      opacity: 1,
+      borderRadius: "2px",
+      backgroundColor: "#fff",
+      mixBlendMode: "difference",
+    },
+    view: {
+      height: 80,
+      width: 80,
+      opacity: 1,
+      backgroundColor: "var(--ink)",
+      mixBlendMode: "normal",
+      border: "0px solid transparent",
+    },
+    visit: {
+      height: 80,
+      width: 80,
+      opacity: 1,
+      backgroundColor: "var(--ink)",
+      mixBlendMode: "normal",
+      border: "0px solid transparent",
+    },
+    drag: {
+      height: 60,
+      width: 60,
+      opacity: 1,
+      backgroundColor: "var(--surface)",
+      mixBlendMode: "normal",
+      border: "1px solid var(--line)",
+    },
+    expand: {
+      height: 70,
+      width: 70,
+      opacity: 1,
+      backgroundColor: "var(--ink)",
+      mixBlendMode: "normal",
+      border: "0px solid transparent",
+    },
+    explore: {
+      height: 90,
+      width: 90,
+      opacity: 1,
+      backgroundColor: "rgba(255, 255, 255, 0.1)",
+      mixBlendMode: "normal",
+      border: "1px solid var(--ink)",
+      backdropFilter: "blur(4px)",
+    },
   };
 
   return (
@@ -76,7 +140,7 @@ export function CustomCursor() {
           }
         }
       `}</style>
-      
+
       <motion.div
         className="pointer-events-none fixed left-0 top-0 z-[99999] hidden flex-col items-center justify-center transform-gpu will-change-transform md:flex"
         style={{
@@ -84,7 +148,7 @@ export function CustomCursor() {
           y: springY,
           translateX: "-50%",
           translateY: "-50%",
-          borderRadius: 9999
+          borderRadius: 9999,
         }}
         animate={flavor}
         variants={variants}
@@ -129,28 +193,28 @@ export function CustomCursor() {
             </motion.div>
           )}
           {flavor === "explore" && (
-             <motion.div
-             key="explore-icon"
-             initial={{ opacity: 0, scale: 0.5 }}
-             animate={{ opacity: 1, scale: 1 }}
-             exit={{ opacity: 0, scale: 0.5 }}
-             transition={{ duration: 0.2 }}
-             className="text-[var(--ink)]"
-           >
-             <ScanLine className="w-6 h-6" />
-           </motion.div>
+            <motion.div
+              key="explore-icon"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              transition={{ duration: 0.2 }}
+              className="text-[var(--ink)]"
+            >
+              <ScanLine className="w-6 h-6" />
+            </motion.div>
           )}
           {flavor === "drag" && (
-             <motion.div
-             key="drag-icon"
-             initial={{ opacity: 0, scale: 0.5 }}
-             animate={{ opacity: 1, scale: 1 }}
-             exit={{ opacity: 0, scale: 0.5 }}
-             transition={{ duration: 0.2 }}
-             className="text-[var(--ink)]"
-           >
-             <GripHorizontal className="w-6 h-6" />
-           </motion.div>
+            <motion.div
+              key="drag-icon"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              transition={{ duration: 0.2 }}
+              className="text-[var(--ink)]"
+            >
+              <GripHorizontal className="w-6 h-6" />
+            </motion.div>
           )}
         </AnimatePresence>
       </motion.div>

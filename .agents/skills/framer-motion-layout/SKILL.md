@@ -18,7 +18,7 @@ The `layout` prop enables automatic position animations when layout changes:
 
 ```jsx
 <motion.div layout>
-  {items.map(item => (
+  {items.map((item) => (
     <motion.div key={item.id} layout />
   ))}
 </motion.div>
@@ -26,11 +26,11 @@ The `layout` prop enables automatic position animations when layout changes:
 
 ### Layout Modes
 
-| Mode | Behavior |
-|------|----------|
-| `true` | Animate position and size |
-| `"position"` | Animate only position |
-| `"size"` | Animate only size |
+| Mode         | Behavior                  |
+| ------------ | ------------------------- |
+| `true`       | Animate position and size |
+| `"position"` | Animate only position     |
+| `"size"`     | Animate only size         |
 
 ```jsx
 <motion.div layout="position" />
@@ -89,7 +89,7 @@ function TodoList({ todos }) {
   return (
     <motion.ul>
       <AnimatePresence>
-        {todos.map(todo => (
+        {todos.map((todo) => (
           <motion.li
             key={todo.id}
             layout
@@ -107,15 +107,13 @@ function TodoList({ todos }) {
 ### AnimatePresence Modes
 
 ```jsx
-<AnimatePresence mode="wait">
-  {isOpen && <Modal key="modal" />}
-</AnimatePresence>
+<AnimatePresence mode="wait">{isOpen && <Modal key="modal" />}</AnimatePresence>
 ```
 
-| Mode | Description |
-|------|-------------|
-| `"sync"` | All animations run simultaneously (default) |
-| `"wait"` | Exit completes before enter starts |
+| Mode          | Description                                     |
+| ------------- | ----------------------------------------------- |
+| `"sync"`      | All animations run simultaneously (default)     |
+| `"wait"`      | Exit completes before enter starts              |
 | `"popLayout"` | Exiting element removed from layout immediately |
 
 ## Reorderable Lists
@@ -126,7 +124,7 @@ Combine layout with drag for reorderable lists:
 function ReorderableList({ items, setItems }) {
   return (
     <AnimatePresence>
-      {items.map(item => (
+      {items.map((item) => (
         <motion.div
           key={item.id}
           layout
@@ -155,17 +153,17 @@ function Grid({ items }) {
       style={{
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
-        gap: 10
+        gap: 10,
       }}
     >
-      {items.map(item => (
+      {items.map((item) => (
         <motion.div
           key={item.id}
           layout
           style={{
             width: "100%",
             aspectRatio: 1,
-            backgroundColor: item.color
+            backgroundColor: item.color,
           }}
         />
       ))}
@@ -189,10 +187,7 @@ Elements must have exit states for AnimatePresence:
 ### Exit with layout
 
 ```jsx
-<motion.div
-  layout
-  exit={{ opacity: 0, x: -100, transition: { duration: 0.3 } }}
-/>
+<motion.div layout exit={{ opacity: 0, x: -100, transition: { duration: 0.3 } }} />
 ```
 
 ## Crossfade with layoutId
@@ -206,11 +201,7 @@ function Toggle() {
   return (
     <AnimatePresence mode="popLayout">
       {showA ? (
-        <motion.div
-          key="a"
-          layoutId="shape"
-          style={{ backgroundColor: "red" }}
-        />
+        <motion.div key="a" layoutId="shape" style={{ backgroundColor: "red" }} />
       ) : (
         <motion.div
           key="b"

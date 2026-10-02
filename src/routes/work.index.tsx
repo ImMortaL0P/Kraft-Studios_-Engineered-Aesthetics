@@ -40,19 +40,18 @@ function WorkIndex() {
       <section className="site-shell pb-24 lg:pb-36">
         <div className="relative mt-12 flex flex-col gap-8 md:gap-12 pb-24">
           {caseStudies.map((study, i) => (
-            <CaseStudyCard 
-              key={study.slug} 
-              study={study} 
-              index={i} 
-              total={caseStudies.length} 
-            />
+            <CaseStudyCard key={study.slug} study={study} index={i} total={caseStudies.length} />
           ))}
         </div>
 
         <FadeUp delay={0.1}>
           <div className="mt-14 flex flex-wrap items-end justify-between gap-6 border-t border-line pt-10">
             <Eyebrow>Something like these?</Eyebrow>
-            <Magnetic><Link to="/contact" className="pill">Start a project</Link></Magnetic>
+            <Magnetic>
+              <Link to="/contact" className="pill">
+                Start a project
+              </Link>
+            </Magnetic>
           </div>
         </FadeUp>
       </section>
@@ -60,7 +59,15 @@ function WorkIndex() {
   );
 }
 
-function CaseStudyCard({ study, index, total }: { study: CaseStudy; index: number; total: number }) {
+function CaseStudyCard({
+  study,
+  index,
+  total,
+}: {
+  study: CaseStudy;
+  index: number;
+  total: number;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // We track the scroll progress of THIS card in the viewport.
@@ -69,13 +76,13 @@ function CaseStudyCard({ study, index, total }: { study: CaseStudy; index: numbe
   // But because they are stacked, we want to track when the *next* card covers it.
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end start"],
   });
 
   // Calculate dynamic sticky top position so they stack beautifully like Tetrix
   // For mobile, maybe less offset.
   const stickyTop = `calc(90px + ${index * 35}px)`;
-  
+
   // As the user scrolls past the sticky point, scale it down subtly and dim it.
   // It gives the 3D depth effect as new cards slide over it.
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
@@ -110,7 +117,7 @@ function CaseStudyCard({ study, index, total }: { study: CaseStudy; index: numbe
               <p className="mt-6 max-w-[46ch] text-base leading-relaxed text-ink/70">
                 {study.summary}
               </p>
-              
+
               <div className="mt-8 flex flex-wrap gap-2">
                 {study.services.map((s) => (
                   <span
@@ -125,7 +132,8 @@ function CaseStudyCard({ study, index, total }: { study: CaseStudy; index: numbe
 
             <div className="mt-12 flex items-center justify-between border-t border-line/60 pt-6">
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45">
-                {study.architecture.length} layers · {study.stack.length} technologies · {study.year}
+                {study.architecture.length} layers · {study.stack.length} technologies ·{" "}
+                {study.year}
               </p>
               <div className="flex size-10 items-center justify-center rounded-full border border-line transition-transform duration-500 group-hover:bg-reg group-hover:border-reg group-hover:text-paper group-hover:-translate-y-1 group-hover:translate-x-1">
                 <ArrowUpRight className="size-4" />
@@ -142,9 +150,10 @@ function CaseStudyCard({ study, index, total }: { study: CaseStudy; index: numbe
               transition={{ duration: 1.2, ease: "easeOut" }}
               src={study.cover}
               alt={study.coverAlt}
-              loading="lazy" decoding="async"
+              loading="lazy"
+              decoding="async"
               className={`absolute inset-0 h-full w-full ${study.coverFit === "contain" ? "object-contain p-8 md:p-12" : "object-cover"}`}
-              style={study.coverBg ? { backgroundColor: study.coverBg } : undefined}
+              style={study.coverBg ? { backgroundColor: study.coverBg } : {}}
             />
           </div>
         </Link>

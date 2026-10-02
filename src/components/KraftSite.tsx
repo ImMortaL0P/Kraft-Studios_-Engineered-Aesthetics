@@ -51,8 +51,8 @@ export function scrollToId(id: string) {
 
 /** Footer / menu index link: scrolls on the homepage, navigates from elsewhere. */
 function IndexLink({ hash, label, onDone }: { hash: string; label: string; onDone?: () => void }) {
-  const navigate = useNavigate({ from: '/' });
-  
+  const navigate = useNavigate({ from: "/" });
+
   return (
     <a
       href={`/#${hash}`}
@@ -60,12 +60,12 @@ function IndexLink({ hash, label, onDone }: { hash: string; label: string; onDon
       onClick={(e) => {
         e.preventDefault();
         onDone?.();
-        
+
         const target = document.getElementById(hash);
         if (target) {
           scrollToId(hash);
         } else {
-          navigate({ to: '/', hash: hash });
+          navigate({ to: "/", hash: hash });
         }
       }}
     >
@@ -242,7 +242,7 @@ function ThemeToggle() {
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  
+
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -250,7 +250,7 @@ export function SiteHeader() {
     const onScroll = () => {
       const y = window.scrollY;
       setScrolled(y > 24);
-      
+
       lastY = y;
     };
     onScroll();
@@ -275,9 +275,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <header
-        className={`site-header ${scrolled && !open ? "is-scrolled" : ""} `}
-      >
+      <header className={`site-header ${scrolled && !open ? "is-scrolled" : ""} `}>
         <div className="gutter mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-3 sm:gap-6">
           <Link
             to="/"
@@ -358,7 +356,9 @@ export function SiteHeader() {
                         onClick={() => setOpen(false)}
                         className="group flex items-baseline gap-3 py-3 md:gap-5 md:py-4"
                       >
-                        <span className="font-mono text-[10px] text-ink/40 sm:text-xs">0{i + 1}</span>
+                        <span className="font-mono text-[10px] text-ink/40 sm:text-xs">
+                          0{i + 1}
+                        </span>
                         <span className="text-[clamp(2rem,9vw,6.5rem)] font-bold leading-none tracking-[-0.03em] transition-transform duration-500 group-hover:translate-x-4 group-hover:text-reg">
                           {item.label}
                         </span>
@@ -425,12 +425,12 @@ export function PixelWordmark({ word = "KRAFT" }: { word?: string }) {
   const rows = buildBitmap(word);
   const cols = rows[0]?.length ?? 0;
 
-    return (
+  return (
     <div
       ref={ref}
       className={`pixel-grid ${inView ? "is-on" : ""}`}
       style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
-            aria-label={word}
+      aria-label={word}
       role="img"
     >
       {rows.flatMap((row, r) =>
@@ -520,16 +520,18 @@ export function SiteFooter() {
           <span>
             © 2026 Kraft Studios <span className="mx-2 text-ink/20">/</span> Sys. v1.1
           </span>
-          <Magnetic><button
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="group flex items-center gap-2 hover:text-ink"
-          >
-            Back to top
-            <span className="grid size-7 place-items-center rounded-full border border-line transition-colors group-hover:border-reg group-hover:bg-reg group-hover:text-white">
-              <ArrowUp size={12} />
-            </span>
-          </button></Magnetic>
+          <Magnetic>
+            <button
+              type="button"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="group flex items-center gap-2 hover:text-ink"
+            >
+              Back to top
+              <span className="grid size-7 place-items-center rounded-full border border-line transition-colors group-hover:border-reg group-hover:bg-reg group-hover:text-white">
+                <ArrowUp size={12} />
+              </span>
+            </button>
+          </Magnetic>
         </div>
       </div>
     </footer>
@@ -557,7 +559,6 @@ function FooterCol({
 /* Animation primitives                                                */
 /* ------------------------------------------------------------------ */
 
-
 function useSafeInView(ref: React.RefObject<Element | null>, once = true) {
   const [inView, setInView] = useState(false);
   useEffect(() => {
@@ -566,12 +567,16 @@ function useSafeInView(ref: React.RefObject<Element | null>, once = true) {
       setInView(true);
       if (once) return;
     }
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setInView(true);
-        if (once && ref.current) observer.unobserve(ref.current);
-      }
-    }, { threshold: 0.05, rootMargin: "50px 0px -5%" });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry && entry.isIntersecting) {
+          setInView(true);
+          if (once && ref.current) observer.unobserve(ref.current);
+        }
+      },
+      { threshold: 0.05, rootMargin: "50px 0px -5%" },
+    );
     observer.observe(ref.current);
     return () => observer.disconnect();
   }, [ref, once]);
@@ -678,7 +683,13 @@ export function FadeUp({
 /* ------------------------------------------------------------------ */
 /* Sub-page scaffolding                                                */
 /* ------------------------------------------------------------------ */
-export function Magnetic({ children, className = "" }: { children: React.ReactElement, className?: string }) {
+export function Magnetic({
+  children,
+  className = "",
+}: {
+  children: React.ReactElement;
+  className?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -724,7 +735,10 @@ export function PageFrame({ children }: { children: ReactNode }) {
 
     const onDragStart = (event: DragEvent) => {
       const target = event.target as HTMLElement | null;
-      if (target && (target.closest("img") || target.closest("video") || target.closest("canvas"))) {
+      if (
+        target &&
+        (target.closest("img") || target.closest("video") || target.closest("canvas"))
+      ) {
         event.preventDefault();
       }
     };
@@ -745,13 +759,16 @@ export function PageFrame({ children }: { children: ReactNode }) {
         onContextMenu={(event) => event.preventDefault()}
         onDragStart={(event) => {
           const target = event.target as HTMLElement | null;
-          if (target && (target.closest("img") || target.closest("video") || target.closest("canvas"))) {
+          if (
+            target &&
+            (target.closest("img") || target.closest("video") || target.closest("canvas"))
+          ) {
             event.preventDefault();
           }
         }}
       >
         <SiteHeader />
-        
+
         {children}
         <SiteFooter />
       </div>
@@ -847,20 +864,20 @@ function useReveal() {
         },
         { threshold: 0.05, rootMargin: "50px 0px -5%" },
       );
-      
+
       nodes.forEach((node) => {
         if (node.getBoundingClientRect().top < window.innerHeight + 100) {
-           node.classList.add("is-visible");
+          node.classList.add("is-visible");
         } else {
-           observer.observe(node);
+          observer.observe(node);
         }
       });
-      
+
       // Force framer motion's whileInView bindings to resync via global resize/scroll
       window.dispatchEvent(new Event("scroll"));
       window.dispatchEvent(new Event("resize"));
     }, 50);
-    
+
     return () => clearTimeout(t);
   }, []);
 }

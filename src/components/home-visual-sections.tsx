@@ -1,11 +1,5 @@
 import { MaskLines, SectionLabel, FadeUp } from "./KraftSite";
-import {
-  motion,
-  useScroll,
-  useSpring,
-  useTransform,
-  type MotionValue,
-} from "framer-motion";
+import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { useRef } from "react";
 
 const steps = [
@@ -136,7 +130,12 @@ export function ProcessSection() {
           <SectionLabel n="05" label="Process" />
           <MaskLines
             className="mt-6 font-display text-[clamp(2.5rem,4vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.03em] md:mt-8"
-            lines={["From blueprint", <span key="l" className="text-ink/35">to running system.</span>]}
+            lines={[
+              "From blueprint",
+              <span key="l" className="text-ink/35">
+                to running system.
+              </span>,
+            ]}
           />
           <FadeUp delay={0.2}>
             <p className="mt-8 max-w-[34ch] text-[15px] leading-relaxed text-ink/70">

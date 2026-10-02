@@ -154,7 +154,16 @@ export const caseStudies: CaseStudy[] = [
       { figure: "63ms", label: "Live database read latency" },
       { figure: "4", label: "Custom domain emails for authentic communications" },
     ],
-    stack: ["React 19", "TypeScript", "Vite", "Express", "MongoDB Atlas", "Google Drive API", "Twilio", "Tailwind"],
+    stack: [
+      "React 19",
+      "TypeScript",
+      "Vite",
+      "Express",
+      "MongoDB Atlas",
+      "Google Drive API",
+      "Twilio",
+      "Tailwind",
+    ],
   },
 
   /* ---------------------------------------------------------------- 02 */
@@ -166,16 +175,35 @@ export const caseStudies: CaseStudy[] = [
     year: "2025",
     summary:
       "Bookings, guests, rooms, billing and money on one live database, where taking a reservation updates availability, the guest record, the ledger and the P&L in a single action.",
-    live: { label: "hotel-booking-crm-community.vercel.app", href: "https://hotel-booking-crm-community.vercel.app" },
+    live: {
+      label: "hotel-booking-crm-community.vercel.app",
+      href: "https://hotel-booking-crm-community.vercel.app",
+    },
     cover: shardaDashboard,
     coverAlt: "Sharda Palace CRM — Live operating dashboard and availability grid",
     shots: [
-      { src: shardaDashboard, caption: "Live Operating Dashboard — check-ins, check-outs, and financials" },
-      { src: shardaCmd, caption: "The ⌘K global command menu — instant navigation across 13 modules" },
+      {
+        src: shardaDashboard,
+        caption: "Live Operating Dashboard — check-ins, check-outs, and financials",
+      },
+      {
+        src: shardaCmd,
+        caption: "The ⌘K global command menu — instant navigation across 13 modules",
+      },
       { src: shardaGuest, caption: "Lifetime guest value and communication history" },
-      { src: shardaCalendar, caption: "Room availability chart and booking engine synced with OTAs" }
+      {
+        src: shardaCalendar,
+        caption: "Room availability chart and booking engine synced with OTAs",
+      },
     ],
-    services: ["Brand identity", "Collateral system", "Property CRM", "Billing & GST", "Guest messaging", "Channel API Sync"],
+    services: [
+      "Brand identity",
+      "Collateral system",
+      "Property CRM",
+      "Billing & GST",
+      "Guest messaging",
+      "Channel API Sync",
+    ],
     problem:
       "The desk ran on a paper register, a spreadsheet and a calculator. The same booking was written down three times, the room chart and the accounts book disagreed by the end of most weeks, and no one could answer who had changed a rate or waived a balance.",
     approach:
@@ -230,7 +258,15 @@ export const caseStudies: CaseStudy[] = [
       { figure: "1", label: "Database behind every screen" },
       { figure: "3", label: "Tools replaced at the counter" },
     ],
-    stack: ["React 18", "Vite", "Tailwind CSS", "MongoDB Atlas", "Radix UI", "Recharts", "Embla Carousel"],
+    stack: [
+      "React 18",
+      "Vite",
+      "Tailwind CSS",
+      "MongoDB Atlas",
+      "Radix UI",
+      "Recharts",
+      "Embla Carousel",
+    ],
   },
 
   /* ---------------------------------------------------------------- 03 */
@@ -245,7 +281,10 @@ export const caseStudies: CaseStudy[] = [
     cover: eduflowDashboard,
     coverAlt: "EduFlow admissions dashboard — live counters, funnel and enrolment trend",
     shots: [
-      { src: eduflowDashboard, caption: "Dashboard — the day's pulse, funnel position and enrolment trend" },
+      {
+        src: eduflowDashboard,
+        caption: "Dashboard — the day's pulse, funnel position and enrolment trend",
+      },
       { src: eduflowPipeline, caption: "Pipeline — every prospective student by journey stage" },
     ],
     services: ["Product design", "Interface system", "Platform engineering"],
@@ -313,7 +352,13 @@ export const caseStudies: CaseStudy[] = [
       { src: brushCatalogue, caption: "Catalogue — filtering across collections" },
       { src: brushCart, caption: "Cart — framing and size options carried through to checkout" },
     ],
-    services: ["Storefront", "Catalogue & pricing", "Checkout & payments", "Fulfilment operations", "Transactional email"],
+    services: [
+      "Storefront",
+      "Catalogue & pricing",
+      "Checkout & payments",
+      "Fulfilment operations",
+      "Transactional email",
+    ],
     problem:
       "A print business has to agree on a price in three places — the product page, the cart and the invoice — and on a status in three more: the customer's email, the admin queue and the courier. When those live in separate tools they disagree, and every disagreement is a refund conversation.",
     approach:
@@ -322,18 +367,18 @@ export const caseStudies: CaseStudy[] = [
       {
         name: "Client",
         stack: "Vanilla JS / HTML / CSS",
-        role: "Lightweight, highly optimized DOM nodes fetching standard product endpoints with dynamic cart injection."
+        role: "Lightweight, highly optimized DOM nodes fetching standard product endpoints with dynamic cart injection.",
       },
       {
         name: "API & Backend",
         stack: "Node.js, Express, Firebase Admin, PDFKit",
-        role: "Consolidated microservices dealing with invoices (PDFKit), authentication (Firebase), and redundant checkout sessions."
+        role: "Consolidated microservices dealing with invoices (PDFKit), authentication (Firebase), and redundant checkout sessions.",
       },
       {
         name: "Data & Payments",
         stack: "MongoDB Atlas, Cashfree, Razorpay",
-        role: "High-throughput redundant payment gateways mapped directly to catalog orders against NoSQL product models."
-      }
+        role: "High-throughput redundant payment gateways mapped directly to catalog orders against NoSQL product models.",
+      },
     ],
     capabilities: [
       {
@@ -355,7 +400,16 @@ export const caseStudies: CaseStudy[] = [
       { figure: "3", label: "Redundant payment gateways" },
       { figure: "4", label: "Custom APIs for product serving" },
     ],
-    stack: ["Node.js", "Express", "MongoDB Atlas", "Firebase Auth", "Cashfree", "Razorpay", "PDFKit", "Vanilla JS"],
+    stack: [
+      "Node.js",
+      "Express",
+      "MongoDB Atlas",
+      "Firebase Auth",
+      "Cashfree",
+      "Razorpay",
+      "PDFKit",
+      "Vanilla JS",
+    ],
   },
 
   /* ---------------------------------------------------------------- 05 */
@@ -368,17 +422,33 @@ export const caseStudies: CaseStudy[] = [
     summary:
       "Five Chrome tools that turn a live page into the things a designer actually needs from it — the typefaces it renders, the colours it is built from, the files it links to, the people it lists — without a single byte leaving the browser.",
     // Swap this for scrapex.tools once the domain is registered and pointed at Pages.
-    live: { label: "immortal0p.github.io/ScrapeX-Website", href: "https://immortal0p.github.io/ScrapeX-Website/" },
+    live: {
+      label: "immortal0p.github.io/ScrapeX-Website",
+      href: "https://immortal0p.github.io/ScrapeX-Website/",
+    },
     cover: scrapexCover,
-    coverAlt: "Scrape X — the five side panels: Font Scraper, Palette Extractor, Image Sampler, Document Scraper and Email Extractor",
+    coverAlt:
+      "Scrape X — the five side panels: Font Scraper, Palette Extractor, Image Sampler, Document Scraper and Email Extractor",
     coverFit: "contain",
     coverBg: "#E9E6DE",
     shots: [
       { src: scrapexFont, caption: "Font Scraper — live specimens and the exact workbook preview" },
-      { src: scrapexPalette, caption: "Palette Extractor — every painted colour, weighted by the area it covers" },
-      { src: scrapexSampler, caption: "Image Sampler — one image's palette, its type and its tonal numbers" },
-      { src: scrapexDocument, caption: "Document Scraper — every linked file, grouped by kind and checked" },
-      { src: scrapexEmail, caption: "Email Extractor — addresses collected across a browsing session" },
+      {
+        src: scrapexPalette,
+        caption: "Palette Extractor — every painted colour, weighted by the area it covers",
+      },
+      {
+        src: scrapexSampler,
+        caption: "Image Sampler — one image's palette, its type and its tonal numbers",
+      },
+      {
+        src: scrapexDocument,
+        caption: "Document Scraper — every linked file, grouped by kind and checked",
+      },
+      {
+        src: scrapexEmail,
+        caption: "Email Extractor — addresses collected across a browsing session",
+      },
     ],
     services: ["Product design", "Chrome extensions", "Colour science", "Export engineering"],
     problem:
@@ -436,7 +506,14 @@ export const caseStudies: CaseStudy[] = [
       { figure: "171", label: "Style rules shared, written once" },
       { figure: "0", label: "Bytes sent off the machine" },
     ],
-    stack: ["Manifest V3", "Vanilla JS", "OpenXML", "Canvas", "CIE Lab / CIEDE2000", "CompressionStream"],
+    stack: [
+      "Manifest V3",
+      "Vanilla JS",
+      "OpenXML",
+      "Canvas",
+      "CIE Lab / CIEDE2000",
+      "CompressionStream",
+    ],
   },
 
   /* ---------------------------------------------------------------- 06 */
@@ -452,9 +529,19 @@ export const caseStudies: CaseStudy[] = [
     coverAlt: "The Notice Board — discovery and verification pipeline",
     shots: [
       { src: nbHomeV2, caption: "The student-facing feed of verified government notifications" },
-      { src: nbSingle, caption: "Notice Payload — extracted qualification, timeline and recruitment metrics" },
-      { src: nbAdminSources, caption: "Source Configuration — declaring headless browser selectors and scrape intervals directly through the UI" },
-      { src: nbAdminRuns, caption: "Scrape Runs — real-time telemetry and error bounds surfacing scraping anomalies" }
+      {
+        src: nbSingle,
+        caption: "Notice Payload — extracted qualification, timeline and recruitment metrics",
+      },
+      {
+        src: nbAdminSources,
+        caption:
+          "Source Configuration — declaring headless browser selectors and scrape intervals directly through the UI",
+      },
+      {
+        src: nbAdminRuns,
+        caption: "Scrape Runs — real-time telemetry and error bounds surfacing scraping anomalies",
+      },
     ],
     services: ["Platform engineering", "Data pipeline", "AI agents", "Editorial design"],
     problem:
@@ -465,18 +552,18 @@ export const caseStudies: CaseStudy[] = [
       {
         name: "Client",
         stack: "Next.js 15 App Router, React 19, TypeScript, Tailwind, Lenis",
-        role: "The reading surface — notices, calendar, eligibility and profiles — plus the admin review, sources and runs screens."
+        role: "The reading surface — notices, calendar, eligibility and profiles — plus the admin review, sources and runs screens.",
       },
       {
         name: "Workers & Scrapers",
         stack: "Node.js, Node-cron, Duck-Duck-Scrape, Cheerio, PDF-Parse",
-        role: "Standalone discovery engines querying government portals via headless browsers over proxy pools, extracting text from structured PDFs."
+        role: "Standalone discovery engines querying government portals via headless browsers over proxy pools, extracting text from structured PDFs.",
       },
       {
         name: "Data & State",
         stack: "Prisma ORM, MongoDB Atlas",
-        role: "Strictly typed persistence of raw fetched payloads mapped to sanitized notice records. Tracks provenance hashes to detect source amendments."
-      }
+        role: "Strictly typed persistence of raw fetched payloads mapped to sanitized notice records. Tracks provenance hashes to detect source amendments.",
+      },
     ],
     capabilities: [
       {

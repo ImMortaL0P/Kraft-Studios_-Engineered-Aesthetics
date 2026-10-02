@@ -1,5 +1,5 @@
-const fs = require('fs');
-let code = fs.readFileSync('src/routes/about.tsx', 'utf8');
+const fs = require("fs");
+let code = fs.readFileSync("src/routes/about.tsx", "utf8");
 
 const teamSectionJSX = `
         <section className="bg-surface relative border-t border-line py-24 lg:py-40">
@@ -107,7 +107,10 @@ const teamSectionJSX = `
 // Insert teamSectionJSX before the "The ecosystem" section
 code = code.replace(
   '<section className="bg-ink text-paper py-24 lg:py-40 selection:bg-reg selection:text-paper relative overflow-hidden">',
-  !code.includes('The team behind it all') ? teamSectionJSX + '\n\n        <section className="bg-ink text-paper py-24 lg:py-40 selection:bg-reg selection:text-paper relative overflow-hidden">' : '<section className="bg-ink text-paper py-24 lg:py-40 selection:bg-reg selection:text-paper relative overflow-hidden">'
+  !code.includes("The team behind it all")
+    ? teamSectionJSX +
+        '\n\n        <section className="bg-ink text-paper py-24 lg:py-40 selection:bg-reg selection:text-paper relative overflow-hidden">'
+    : '<section className="bg-ink text-paper py-24 lg:py-40 selection:bg-reg selection:text-paper relative overflow-hidden">',
 );
 
-fs.writeFileSync('src/routes/about.tsx', code);
+fs.writeFileSync("src/routes/about.tsx", code);

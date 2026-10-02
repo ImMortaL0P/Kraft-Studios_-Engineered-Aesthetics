@@ -131,7 +131,7 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const lenisRef = useRef<LenisRef>(null);
-  
+
   // Use pathname as a unique key for the route transition
   const match = useRouterState({ select: (s) => s.matches[s.matches.length - 1] });
   const key = match?.pathname || "/";
@@ -150,7 +150,10 @@ function RootComponent() {
     const t2 = setTimeout(() => {
       window.dispatchEvent(new Event("scroll"));
     }, 600);
-    return () => { clearTimeout(t); clearTimeout(t2); };
+    return () => {
+      clearTimeout(t);
+      clearTimeout(t2);
+    };
   }, [key]);
 
   // Expose the Lenis instance so section links and the menu can drive it.

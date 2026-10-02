@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require("fs");
 
 const code = `import { createFileRoute } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, useSpring, useVelocity } from "framer-motion";
@@ -215,4 +215,4 @@ function BrandsPage() {
 }
 `;
 
-fs.writeFileSync('src/routes/services.tsx', code);
+fs.writeFileSync("src/routes/services.tsx", code);

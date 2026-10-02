@@ -1,5 +1,5 @@
-const fs = require('fs');
-let code = fs.readFileSync('src/routes/__root.tsx', 'utf8');
+const fs = require("fs");
+let code = fs.readFileSync("src/routes/__root.tsx", "utf8");
 
 const oldStr = `        <AnimatePresence mode="wait">
           <motion.div
@@ -24,4 +24,4 @@ const newStr = `        <div key={key} className="page-enter transform-gpu will-
 
 code = code.replace(oldStr, newStr);
 
-fs.writeFileSync('src/routes/__root.tsx', code);
+fs.writeFileSync("src/routes/__root.tsx", code);

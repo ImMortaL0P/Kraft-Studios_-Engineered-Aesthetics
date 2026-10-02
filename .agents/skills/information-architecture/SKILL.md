@@ -55,6 +55,7 @@ A hierarchical map of every page or view. Use indentation to show nesting. Inclu
 ## Navigation Model
 
 Describe the navigation system:
+
 - **Primary navigation**: What appears in the main nav? Maximum items.
 - **Secondary navigation**: Sidebar, tabs, or contextual links within sections.
 - **Utility navigation**: Account, settings, help, and anything outside the main content hierarchy.
@@ -65,6 +66,7 @@ Describe the navigation system:
 For each major page or view, define the content priority:
 
 ### [Page Name]
+
 1. [Highest priority content] -- Why this comes first
 2. [Second priority] -- Why this comes second
 3. [Third priority] -- Rationale
@@ -75,6 +77,7 @@ For each major page or view, define the content priority:
 The critical paths through the product. Each flow is a sequence of steps with decision points noted.
 
 ### [Flow Name] (e.g., "New user onboarding" or "Create a project")
+
 1. User lands on [page]
 2. User sees [content/prompt]
 3. User takes action: [action]
@@ -86,17 +89,17 @@ The critical paths through the product. Each flow is a sequence of steps with de
 
 A glossary of terms used in the interface. Consistency matters. Pick one word and use it everywhere.
 
-| Concept | Label in UI | Notes |
-|---------|-------------|-------|
+| Concept | Label in UI       | Notes           |
+| ------- | ----------------- | --------------- |
 | [thing] | [what we call it] | [why this word] |
 
 ## Component Reuse Map
 
 Which structural components (layouts, containers, navigation elements) are shared across pages.
 
-| Component | Used on | Behavior differences |
-|-----------|---------|---------------------|
-| [layout/component] | [pages] | [any variations] |
+| Component          | Used on | Behavior differences |
+| ------------------ | ------- | -------------------- |
+| [layout/component] | [pages] | [any variations]     |
 
 ## Content Growth Plan
 
@@ -105,6 +108,7 @@ Which sections of the site will accumulate content over time and how the IA acco
 ## URL Strategy
 
 Rules for URL construction:
+
 - Pattern: [e.g., `/section/subsection/item-slug`]
 - Dynamic segments: [what is parameterized]
 - Query parameters: [filtering, sorting, pagination]
