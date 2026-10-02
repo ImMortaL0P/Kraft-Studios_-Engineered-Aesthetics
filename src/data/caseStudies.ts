@@ -14,6 +14,14 @@ import type { ReactNode } from "react";
 import umvadlaAbout from "../assets/showcase/umvadla-02-about.jpg";
 import umvadlaHome from "../assets/showcase/umvadla-01-home.jpg";
 import shardaImage from "../assets/showcase-sharda.jpg";
+import umvadlaAcademics from "../assets/showcase/umvadla-03-academics.jpg";
+import umvadlaAdmissions from "../assets/showcase/umvadla-04-admissions.jpg";
+import umvadlaAdminNotices from "../assets/showcase/umvadla-05-admin-notices.jpg";
+import shardaDashboard from "../assets/showcase/sharda-01-dashboard.jpg";
+import shardaGuest from "../assets/showcase/sharda-02-guest.jpg";
+import shardaCalendar from "../assets/showcase/sharda-03-calendar.jpg";
+import shardaInvoice from "../assets/showcase/sharda-04-invoice.jpg";
+import shardaCmd from "../assets/showcase/sharda-05-cmd.jpg";
 import eduflowDashboard from "../assets/showcase/eduflow-01-dashboard.jpg";
 import eduflowPipeline from "../assets/showcase/eduflow-02-pipeline.jpg";
 import brushStore from "../assets/showcase/brush-01-store.jpg";
@@ -90,8 +98,10 @@ export const caseStudies: CaseStudy[] = [
     coverAlt: "UMV Adla school website — about page with community photography",
     shots: [
       { src: umvadlaHome, caption: "umvadla.in — the live landing page" },
-      { src: "https://placehold.co/1600x900/E9E6DE/A19C91?text=Notice+Board+Manager", caption: "Admin Dashboard — Notice Board Management Tool" },
-      { src: "https://placehold.co/1600x900/E9E6DE/A19C91?text=Staff+Directory", caption: "Admin Dashboard — Staff Directory & Media Manager" },
+      { src: umvadlaAbout, caption: "UMV Adla — Institutional principles and leadership" },
+      { src: umvadlaAcademics, caption: "Academics — curriculum and student life" },
+      { src: umvadlaAdmissions, caption: "Admissions — enrollment procedures and queries" },
+      { src: umvadlaAdminNotices, caption: "Admin Dashboard — Notice Board Management Tool" },
     ],
     services: ["Digital identity", "Website", "Bespoke CMS", "Media infrastructure"],
     problem:
@@ -161,10 +171,11 @@ export const caseStudies: CaseStudy[] = [
     coverAlt: "Sharda Palace identity system — folders, cards and stationery",
     shots: [
       { src: shardaImage, caption: "Sharda Palace — identity and collateral system" },
-      { src: "https://placehold.co/1600x900/E9E6DE/A19C91?text=Command+Menu+Interface", caption: "The ⌘K global command menu — instant navigation across 13 modules" },
-      { src: "https://placehold.co/1600x900/E9E6DE/A19C91?text=Booking+Calendar", caption: "Room availability chart and booking engine" },
-      { src: "https://placehold.co/1600x900/E9E6DE/A19C91?text=Guest+Profile", caption: "Lifetime guest value and communication history" },
-      { src: "https://placehold.co/1600x900/E9E6DE/A19C91?text=Invoice+Generation", caption: "One-click GST invoice and checkout screen" }
+      { src: shardaDashboard, caption: "Live Operating Dashboard — check-ins, check-outs, and financials at a glance" },
+      { src: shardaCmd, caption: "The ⌘K global command menu — instant navigation across 13 modules" },
+      { src: shardaCalendar, caption: "Room availability chart and booking engine" },
+      { src: shardaGuest, caption: "Lifetime guest value and communication history" },
+      { src: shardaInvoice, caption: "One-click GST invoice and checkout screen" }
     ],
     services: ["Brand identity", "Collateral system", "Property CRM", "Billing & GST", "Guest messaging"],
     problem:
