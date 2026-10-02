@@ -240,8 +240,6 @@ export const caseStudies: CaseStudy[] = [
     shots: [
       { src: eduflowDashboard, caption: "Dashboard — the day's pulse, funnel position and enrolment trend" },
       { src: eduflowPipeline, caption: "Pipeline — every prospective student by journey stage" },
-      { src: "https://placehold.co/1600x900/E9E6DE/A19C91?text=Lead+360+Record", caption: "Lead 360° Record — journey control, notes, and task history" },
-      { src: "https://placehold.co/1600x900/E9E6DE/A19C91?text=Task+Scheduling", caption: "Automated follow-ups and milestone scheduling" }
     ],
     services: ["Product design", "Interface system", "Platform engineering"],
     problem:
