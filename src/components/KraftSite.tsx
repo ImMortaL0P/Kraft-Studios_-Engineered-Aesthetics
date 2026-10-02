@@ -197,12 +197,12 @@ export function StatBand({
 /* Theme                                                               */
 /* ------------------------------------------------------------------ */
 
-export const themeInitScript = `(function(){try{var t=localStorage.getItem('kraft-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')}catch(e){document.documentElement.setAttribute('data-theme','light')}})();`;
+export const themeInitScript = `(function(){try{var t=localStorage.getItem('kraft-theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light')}else{document.documentElement.setAttribute('data-theme','dark')}}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();`;
 
 function ThemeToggle() {
-  const [theme, setTheme] = useState<"dark" | "light">("light");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
   useEffect(() => {
-    setTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light");
+    setTheme(document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark");
   }, []);
   const toggle = () => {
     const next = theme === "dark" ? "light" : "dark";
@@ -751,7 +751,7 @@ export function PageFrame({ children }: { children: ReactNode }) {
         }}
       >
         <SiteHeader />
-        <div className="h-16" />
+        
         {children}
         <SiteFooter />
       </div>
