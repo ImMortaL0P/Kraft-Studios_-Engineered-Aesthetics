@@ -24,6 +24,19 @@ function ContactPage() {
   const [sent, setSent] = useState(false);
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    fetch("https://formsubmit.co/ajax/admin@kraftstudios.site", {
+      method: "POST",
+      headers: { 
+        'Accept': 'application/json'
+      },
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.log(error));
+
+    event.preventDefault();
     setSent(true);
   };
   return (
@@ -39,8 +52,8 @@ function ContactPage() {
           <div className="site-shell grid grid-cols-12 gap-10 py-20 lg:py-28">
             <Reveal className="col-span-12 lg:col-span-4">
               <Eyebrow>Direct</Eyebrow>
-              <a href="mailto:hello@kraftstudios.in" className="contact-direct mt-5">
-                hello@kraftstudios.in <ArrowUpRight size={18} />
+              <a href="mailto:mangalam@kraftstudios.site" className="contact-direct mt-5">
+                mangalam@kraftstudios.site <ArrowUpRight size={18} />
               </a>
               <p className="mt-8 max-w-[30ch] text-sm leading-relaxed text-ink/60">
                 Based in India. Collaborating with ambitious teams across time zones.

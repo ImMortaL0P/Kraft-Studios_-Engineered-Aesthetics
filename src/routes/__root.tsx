@@ -6,13 +6,17 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  ScrollRestoration,
 } from "@tanstack/react-router";
 import { useEffect, useRef, type ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useRouterState } from "@tanstack/react-router";
 
 import { ReactLenis, type LenisRef } from "lenis/react";
 import appCss from "../styles.css?url";
 import { themeInitScript } from "../components/KraftSite";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { CustomCursor } from "../components/CustomCursor";
 
 function NotFoundComponent() {
   return (
@@ -117,6 +121,7 @@ function RootShell({ children }: { children: ReactNode }) {
       </head>
       <body>
         {children}
+        <ScrollRestoration />
         <Scripts />
       </body>
     </html>
@@ -126,6 +131,27 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const lenisRef = useRef<LenisRef>(null);
+  
+  // Use pathname as a unique key for the route transition
+  const match = useRouterState({ select: (s) => s.matches[s.matches.length - 1] });
+  const key = match?.pathname || "/";
+
+  // Force framer-motion whileInView checks to run after page mount/navigation
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (lenisRef.current?.lenis) {
+      lenisRef.current.lenis.scrollTo(0, { immediate: true });
+    }
+
+    const t = setTimeout(() => {
+      window.dispatchEvent(new Event("scroll"));
+      window.dispatchEvent(new Event("resize"));
+    }, 250); // right after the layout mount animation finishes
+    const t2 = setTimeout(() => {
+      window.dispatchEvent(new Event("scroll"));
+    }, 600);
+    return () => { clearTimeout(t); clearTimeout(t2); };
+  }, [key]);
 
   // Expose the Lenis instance so section links and the menu can drive it.
   useEffect(() => {
@@ -134,7 +160,7 @@ function RootComponent() {
         (window as unknown as { lenis?: unknown }).lenis = lenisRef.current.lenis;
         window.clearInterval(id);
       }
-    }, 100);
+    }, 50);
     return () => window.clearInterval(id);
   }, []);
 
@@ -145,8 +171,10 @@ function RootComponent() {
       options={{ lerp: 0.09, wheelMultiplier: 1, touchMultiplier: 1.6 }}
     >
       <QueryClientProvider client={queryClient}>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
+        <CustomCursor />
+        <div key={key} className="page-enter transform-gpu will-change-transform min-h-screen">
+          <Outlet />
+        </div>
       </QueryClientProvider>
     </ReactLenis>
   );

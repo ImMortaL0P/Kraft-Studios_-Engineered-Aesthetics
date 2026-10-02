@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter, useNavigate } from "@tanstack/react-router";
 import logoWordmark from "../Logos/Kraft Studios Wordmark T.png";
 import logoMonogram from "../Logos/Kraft Studios Monogram T.png";
 import { ArrowUp, ArrowUpRight, Moon, Sun } from "lucide-react";
@@ -20,7 +20,7 @@ export const EASE = [0.22, 1, 0.36, 1] as const;
 
 const navItems = [
   { label: "Work", to: "/work" as const },
-  { label: "Services", to: "/services" as const },
+  { label: "Our Brands", to: "/services" as const },
   { label: "About", to: "/about" as const },
   { label: "Contact", to: "/contact" as const },
 ];
@@ -51,17 +51,22 @@ export function scrollToId(id: string) {
 
 /** Footer / menu index link: scrolls on the homepage, navigates from elsewhere. */
 function IndexLink({ hash, label, onDone }: { hash: string; label: string; onDone?: () => void }) {
+  const navigate = useNavigate({ from: '/' });
+  
   return (
     <a
-      href={`#${hash}`}
+      href={`/#${hash}`}
       className="hover:text-reg"
       onClick={(e) => {
+        e.preventDefault();
+        onDone?.();
+        
         const target = document.getElementById(hash);
         if (target) {
-          e.preventDefault();
           scrollToId(hash);
+        } else {
+          navigate({ to: '/', hash: hash });
         }
-        onDone?.();
       }}
     >
       {label}
@@ -237,7 +242,7 @@ function ThemeToggle() {
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const [hidden, setHidden] = useState(false);
+  
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -245,7 +250,7 @@ export function SiteHeader() {
     const onScroll = () => {
       const y = window.scrollY;
       setScrolled(y > 24);
-      setHidden(y > lastY && y > 160);
+      
       lastY = y;
     };
     onScroll();
@@ -271,12 +276,12 @@ export function SiteHeader() {
   return (
     <>
       <header
-        className={`site-header ${scrolled && !open ? "is-scrolled" : ""} ${hidden && !open ? "is-hidden" : ""}`}
+        className={`site-header ${scrolled && !open ? "is-scrolled" : ""} `}
       >
-        <div className="gutter mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-6">
+        <div className="gutter mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-3 sm:gap-6">
           <Link
             to="/"
-            className="group flex items-center relative z-[2] w-[180px] sm:w-[220px]"
+            className="group relative z-[2] flex w-[130px] items-center sm:w-[180px] lg:w-[220px]"
             aria-label="Kraft Studios home"
             onClick={() => setOpen(false)}
           >
@@ -284,11 +289,11 @@ export function SiteHeader() {
               src={logoWordmark}
               alt="Kraft Studios Logo"
               decoding="async"
-              className="w-full h-auto object-contain opacity-90 transition-opacity duration-300 group-hover:opacity-100"
+              className="h-auto w-full object-contain opacity-90 transition-opacity duration-300 group-hover:opacity-100"
             />
           </Link>
 
-          <div className="relative z-[2] flex items-center gap-5 md:gap-7">
+          <div className="relative z-[2] flex items-center gap-2 sm:gap-5 md:gap-7">
             <nav className="hidden items-center gap-7 lg:flex" aria-label="Main navigation">
               {navItems.map((item) => (
                 <Link key={item.to} to={item.to} className="nav-link">
@@ -300,23 +305,25 @@ export function SiteHeader() {
             <Link to="/contact" className="pill hidden sm:inline-flex">
               Start a project
             </Link>
-            <Magnetic><button
-              type="button"
-              onClick={() => setOpen((v) => !v)}
-              aria-expanded={open}
-              aria-label={open ? "Close menu" : "Open menu"}
-              className="group flex items-center gap-3 font-mono text-[11px] tracking-[0.3em]"
-            >
-              <span className="hidden sm:inline">{open ? "CLOSE" : "MENU"}</span>
-              <span className="relative block h-3 w-6">
-                <span
-                  className={`absolute left-0 h-px w-full bg-ink transition-all duration-500 ${open ? "top-1/2 rotate-45" : "top-0.5 group-hover:w-2/3"}`}
-                />
-                <span
-                  className={`absolute left-0 h-px w-full bg-ink transition-all duration-500 ${open ? "top-1/2 -rotate-45" : "bottom-0.5 top-auto"}`}
-                />
-              </span>
-          </button></Magnetic>
+            <Magnetic>
+              <button
+                type="button"
+                onClick={() => setOpen((v) => !v)}
+                aria-expanded={open}
+                aria-label={open ? "Close menu" : "Open menu"}
+                className="group flex items-center gap-2 font-mono text-[10px] tracking-[0.26em] sm:gap-3 sm:text-[11px]"
+              >
+                <span className="hidden sm:inline">{open ? "CLOSE" : "MENU"}</span>
+                <span className="relative block h-3 w-5 sm:w-6">
+                  <span
+                    className={`absolute left-0 h-px w-full bg-ink transition-all duration-500 ${open ? "top-1/2 rotate-45" : "top-0.5 group-hover:w-2/3"}`}
+                  />
+                  <span
+                    className={`absolute left-0 h-px w-full bg-ink transition-all duration-500 ${open ? "top-1/2 -rotate-45" : "bottom-0.5 top-auto"}`}
+                  />
+                </span>
+              </button>
+            </Magnetic>
           </div>
         </div>
       </header>
@@ -349,10 +356,10 @@ export function SiteHeader() {
                       <Link
                         to={item.to}
                         onClick={() => setOpen(false)}
-                        className="group flex items-baseline gap-5 py-3 md:py-4"
+                        className="group flex items-baseline gap-3 py-3 md:gap-5 md:py-4"
                       >
-                        <span className="font-mono text-xs text-ink/40">0{i + 1}</span>
-                        <span className="text-[clamp(2.6rem,8vw,6.5rem)] font-bold leading-none tracking-[-0.03em] transition-transform duration-500 group-hover:translate-x-4 group-hover:text-reg">
+                        <span className="font-mono text-[10px] text-ink/40 sm:text-xs">0{i + 1}</span>
+                        <span className="text-[clamp(2rem,9vw,6.5rem)] font-bold leading-none tracking-[-0.03em] transition-transform duration-500 group-hover:translate-x-4 group-hover:text-reg">
                           {item.label}
                         </span>
                         <ArrowUpRight className="ml-auto self-center opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -378,8 +385,8 @@ export function SiteHeader() {
                     />
                   ))}
                 </div>
-                <a href="mailto:hello@kraftstudios.in" className="text-ink hover:text-reg">
-                  hello@kraftstudios.in
+                <a href="mailto:mangalam@kraftstudios.site" className="text-ink hover:text-reg">
+                  mangalam@kraftstudios.site
                 </a>
               </motion.div>
             </div>
@@ -502,8 +509,8 @@ export function SiteFooter() {
             ))}
           </FooterCol>
           <FooterCol title="Contact" className="col-span-2 md:col-span-3 md:col-start-10">
-            <a href="mailto:hello@kraftstudios.in" className="break-words hover:text-reg">
-              hello@kraftstudios.in
+            <a href="mailto:mangalam@kraftstudios.site" className="break-words hover:text-reg">
+              mangalam@kraftstudios.site
             </a>
             <span className="text-ink/50">India · Working globally</span>
           </FooterCol>
@@ -550,6 +557,26 @@ function FooterCol({
 /* Animation primitives                                                */
 /* ------------------------------------------------------------------ */
 
+
+function useSafeInView(ref: React.RefObject<Element | null>, once = true) {
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    if (ref.current.getBoundingClientRect().top < window.innerHeight + 100) {
+      setInView(true);
+      if (once) return;
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setInView(true);
+        if (once && ref.current) observer.unobserve(ref.current);
+      }
+    }, { threshold: 0.05, rootMargin: "50px 0px -5%" });
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [ref, once]);
+  return inView;
+}
 /** Headline whose lines rise out of a mask. */
 export function MaskLines({
   lines,
@@ -565,7 +592,7 @@ export function MaskLines({
   as?: "h1" | "h2" | "h3" | "p" | "div";
 }) {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref as RefObject<Element>, { once: true, margin: "0px 0px -12% 0px" });
+  const inView = useSafeInView(ref as RefObject<Element>);
   const show = immediate || inView;
   return (
     <Tag ref={ref as never} className={className}>
@@ -622,20 +649,25 @@ export function FadeUp({
   children,
   className = "",
   delay = 0,
+  immediate = false,
   id,
 }: {
   children: ReactNode;
   className?: string;
   delay?: number;
+  immediate?: boolean;
   id?: string;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useSafeInView(ref);
+  const show = immediate || inView;
   return (
     <motion.div
       id={id}
+      ref={ref}
       className={`${className} will-change-transform transform-gpu`}
       initial={{ opacity: 0, y: 26 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -10% 0px" }}
+      animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 26 }}
       transition={{ duration: 0.9, ease: EASE, delay }}
     >
       {children}
@@ -684,9 +716,40 @@ export function Magnetic({ children, className = "" }: { children: React.ReactEl
 
 export function PageFrame({ children }: { children: ReactNode }) {
   useReveal();
+
+  useEffect(() => {
+    const onContextMenu = (event: MouseEvent) => {
+      event.preventDefault();
+    };
+
+    const onDragStart = (event: DragEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target && (target.closest("img") || target.closest("video") || target.closest("canvas"))) {
+        event.preventDefault();
+      }
+    };
+
+    document.addEventListener("contextmenu", onContextMenu);
+    document.addEventListener("dragstart", onDragStart);
+
+    return () => {
+      document.removeEventListener("contextmenu", onContextMenu);
+      document.removeEventListener("dragstart", onDragStart);
+    };
+  }, []);
+
   return (
     <MotionConfig reducedMotion="user">
-      <div className="page-enter min-h-screen bg-paper text-ink">
+      <div
+        className="min-h-screen bg-paper text-ink"
+        onContextMenu={(event) => event.preventDefault()}
+        onDragStart={(event) => {
+          const target = event.target as HTMLElement | null;
+          if (target && (target.closest("img") || target.closest("video") || target.closest("canvas"))) {
+            event.preventDefault();
+          }
+        }}
+      >
         <SiteHeader />
         <div className="h-16" />
         {children}
@@ -759,7 +822,7 @@ export function PageIntro({
           ]}
           className="mt-6 max-w-[18ch] text-5xl font-bold leading-[0.98] tracking-[-0.035em] sm:text-7xl lg:text-[6.5rem]"
         />
-        <FadeUp delay={0.4}>
+        <FadeUp delay={0.4} immediate>
           <p className="mt-10 max-w-[52ch] border-l-2 border-reg pl-5 text-base leading-relaxed text-ink/65 sm:text-lg">
             {copy}
           </p>
@@ -771,18 +834,33 @@ export function PageIntro({
 
 function useReveal() {
   useEffect(() => {
-    const nodes = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries)
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
+    const t = setTimeout(() => {
+      const nodes = Array.from(document.querySelectorAll<HTMLElement>(".reveal:not(.is-visible)"));
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
           }
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -6%" },
-    );
-    nodes.forEach((node) => observer.observe(node));
-    return () => observer.disconnect();
+        },
+        { threshold: 0.05, rootMargin: "50px 0px -5%" },
+      );
+      
+      nodes.forEach((node) => {
+        if (node.getBoundingClientRect().top < window.innerHeight + 100) {
+           node.classList.add("is-visible");
+        } else {
+           observer.observe(node);
+        }
+      });
+      
+      // Force framer motion's whileInView bindings to resync via global resize/scroll
+      window.dispatchEvent(new Event("scroll"));
+      window.dispatchEvent(new Event("resize"));
+    }, 50);
+    
+    return () => clearTimeout(t);
   }, []);
 }

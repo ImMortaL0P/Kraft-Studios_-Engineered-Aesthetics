@@ -28,7 +28,7 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { useEffect, useRef, useState, type MouseEvent, type RefObject } from "react";
+import { Suspense, lazy, useEffect, useRef, useState, type MouseEvent, type RefObject } from "react";
 
 import heroImage from "../assets/kraft-hero.jpg";
 import umvadlaImage from "../assets/showcase/umvadla-02-about.jpg";
@@ -37,6 +37,13 @@ import shardaImage from "../assets/showcase-sharda.jpg";
 import noticeboardImage from "../assets/project-noticeboard.jpg";
 
 import { caseStudies, type CaseStudy } from "../data/caseStudies";
+
+const LazyProcessSection = lazy(() =>
+  import("../components/home-visual-sections").then((module) => ({ default: module.ProcessSection })),
+);
+const LazyMantraSection = lazy(() =>
+  import("../components/home-visual-sections").then((module) => ({ default: module.MantraSection })),
+);
 
 import clientUmvadla from "../assets/clients/umvadla.png";
 import clientSharda from "../assets/clients/sharda.png";
@@ -389,8 +396,12 @@ function HomePage() {
           <Premise />
           <Blueprint />
           <Work />
-          <Process />
-          <Mantra />
+          <Suspense fallback={<div className="h-[28rem] bg-surface" />}>
+            <LazyProcessSection />
+          </Suspense>
+          <Suspense fallback={<div className="h-[28rem] bg-ink/[0.04]" />}>
+            <LazyMantraSection />
+          </Suspense>
           <ContactBand />
         </div>
       </main>
@@ -500,7 +511,7 @@ function Hero() {
       <div className="blueprint-grid pointer-events-none absolute inset-0" />
 
       <div className="site-shell relative z-[2] flex flex-1 flex-col">
-        <FadeUp className="flex items-start justify-between gap-6 pt-10 font-mono text-[10px] uppercase leading-relaxed tracking-[0.26em] text-ink/50">
+        <FadeUp immediate className="flex flex-col gap-4 pt-10 font-mono text-[10px] uppercase leading-relaxed tracking-[0.26em] text-ink/50 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-center gap-3">
             <img src={logoMonogram} alt="" decoding="async" className="h-8 w-8 object-contain opacity-70" />
             <span>
@@ -509,7 +520,7 @@ function Hero() {
               Est. 2020 · Patna, India
             </span>
           </div>
-          <p className="text-right">
+          <p className="sm:text-right">
             Working globally
             <br />
             <span className="tabular-nums text-ink/35">IST {clock}</span>
@@ -520,8 +531,8 @@ function Hero() {
           </p>
         </FadeUp>
 
-        <div className="flex flex-1 flex-col justify-center py-12 md:py-16">
-          <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
+        <div className="flex flex-1 flex-col justify-center py-10 sm:py-12 md:py-16">
+          <div className="grid gap-8 md:gap-10 lg:grid-cols-12 lg:items-end">
             <motion.div
               variants={textContainerVariants}
               initial="hidden"
@@ -542,7 +553,7 @@ function Hero() {
                 text="Connecting craft with evidence, design with engineering, people with systems. We don't just design digital shells; we build the brandworlds and operational engines that power them." 
                 className="max-w-[44ch] border-l-2 border-reg pl-5 text-[15px] leading-relaxed text-ink/70 md:text-base" 
               />
-              <div className="mt-8 flex flex-wrap items-center gap-5">
+              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
                 <Link to="/contact" className="pill-solid">
                   Start a project <ArrowRight size={16} className="arrow" />
                 </Link>
@@ -554,12 +565,13 @@ function Hero() {
           </div>
         </div>
 
-        <div className="grid border-t border-line md:grid-cols-3">
+        <div className="grid border-t border-line gap-y-2 md:grid-cols-3">
           {heroMeta.map(([k, v], i) => (
             <FadeUp
+              immediate
               key={k}
               delay={0.2 + i * 0.1}
-              className="group flex items-start gap-4 border-line py-6 md:border-r md:pr-8 md:last:border-r-0 md:[&:not(:first-child)]:pl-8"
+              className="group flex items-start gap-4 border-line py-5 md:border-r md:py-6 md:pr-8 md:last:border-r-0 md:[&:not(:first-child)]:pl-8"
             >
               <span className="mt-1 size-1.5 shrink-0 rotate-45 bg-reg transition-transform duration-500 group-hover:rotate-[135deg]" />
               <span>
@@ -629,12 +641,12 @@ function HeroImage() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-black/15" />
         <motion.div
           style={{ y: captionY }}
-          className="site-shell absolute inset-x-0 bottom-10 flex items-end justify-between gap-6 text-white"
+          className="site-shell absolute inset-x-0 bottom-6 flex flex-col items-start justify-between gap-3 text-white sm:bottom-10 sm:flex-row sm:items-end sm:gap-6"
         >
           <p className="max-w-[16ch] font-display text-[clamp(1.5rem,3.4vw,3rem)] font-bold leading-[1.05] tracking-[-0.03em]">
             Hand-aligned. Machine-checked.
           </p>
-          <span className="hidden font-mono text-[10px] uppercase tracking-[0.26em] text-white/70 sm:block">
+          <span className="font-mono text-[10px] uppercase tracking-[0.26em] text-white/70 sm:block">
             Fig. 01 — Craft ⟶ System
           </span>
         </motion.div>
@@ -951,7 +963,7 @@ function Work() {
         </FadeUp>
       </div>
 
-      <div className="mt-16 grid grid-cols-1 gap-x-6 gap-y-16 lg:grid-cols-12 lg:gap-y-24">
+      <div className="mt-12 grid grid-cols-1 gap-x-4 gap-y-12 sm:gap-y-16 lg:mt-16 lg:grid-cols-12 lg:gap-x-6 lg:gap-y-24">
         {caseStudies.map((study, i) => (
           <ProjectCard
             key={study.slug}
@@ -1056,7 +1068,7 @@ function ProjectCard({
         </span>
       </Link>
 
-      <div className="mt-6 flex items-start justify-between gap-6 border-t border-line pt-5">
+      <div className="mt-5 flex flex-col gap-5 border-t border-line pt-5 sm:mt-6 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
         <div>
           <Eyebrow>{study.client}</Eyebrow>
           <h3 className="mt-2 font-display text-2xl font-bold tracking-[-0.025em] transition-colors duration-300 group-hover:text-reg lg:text-[2.1rem]">
@@ -1069,7 +1081,7 @@ function ProjectCard({
             {study.services.slice(0, 3).join(" · ")}
           </p>
         </div>
-        <div className="flex shrink-0 flex-col items-end gap-4">
+        <div className="flex shrink-0 flex-row items-center justify-between gap-4 sm:flex-col sm:items-end">
           <span className="font-mono text-xs text-reg">{study.n}</span>
           <span className="font-mono text-[10px] text-ink/30">{study.year}</span>
           <Link
@@ -1086,200 +1098,6 @@ function ProjectCard({
   );
 }
 
-/* ---------- 05 process ---------- */
-
-function Process() {
-  const containerRef = useRef<HTMLElement>(null);
-  
-  // By omitting offset, it defaults to ["start start", "end end"]
-  // meaning 0 is when the top of the container hits the top of the viewport,
-  // and 1 is when its bottom hits the bottom of the viewport.
-  const { scrollYProgress } = useScroll({ target: containerRef });
-  
-  // We have 4 cards, let's map scroll 0->1 to translate the track 0% -> -75% 
-  // so the last card comes clearly into view.
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-80%"]);
-  // A spring makes the dragging feeling physically weighty and premium
-  const smoothX = useSpring(x, { stiffness: 60, damping: 22, mass: 0.8 });
-
-  return (
-    <section ref={containerRef} id="process" className="relative h-[400vh] bg-surface">
-      {/* Sticky boundary that captures the viewport while the section scrolls through */}
-      <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
-        
-        {/* 
-          Gradient Mask: This layer sits directly behind the text but above the cards. 
-          As cards slide left, they cross into this gradient and softly fade into the background 
-          color, preventing messy overlaps with the copy.
-        */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-full md:w-[600px] bg-gradient-to-r from-surface from-60% via-surface/80 to-transparent" />
-
-        {/* Fixed Title Header */}
-        <div className="absolute top-28 md:top-36 left-4 md:left-14 z-20 w-full md:w-[400px]">
-          <SectionLabel n="05" label="Process" />
-          <MaskLines
-            className="mt-6 md:mt-8 font-display text-[clamp(2.5rem,4vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.03em]"
-            lines={["From blueprint", <span key="l" className="text-ink/35">to running system.</span>]}
-          />
-          <FadeUp delay={0.2}>
-            <p className="mt-8 max-w-[34ch] text-[15px] leading-relaxed text-ink/70">
-              Four stages, short loops. Design, engineering and the business stay in the same
-              conversation from the first audit to the handover.
-            </p>
-          </FadeUp>
-        </div>
-
-        {/* 
-          The horizontal track sliding left across the screen. 
-        */}
-        <motion.div 
-          style={{ x: smoothX }} 
-          className="flex h-max w-max gap-8 md:gap-14 px-4 md:pl-[500px] lg:pl-[600px] will-change-transform transform-gpu"
-        >
-          {steps.map((step, i) => (
-            <motion.div 
-              key={step.k} 
-              whileHover={{ y: -8, scale: 1.01 }}
-              transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              className="group flex w-[85vw] md:w-[50vw] lg:w-[40vw] shrink-0 flex-col justify-between bg-paper p-10 md:p-14 border border-line/75 rounded-2xl shadow-[0_0_0_1px_transparent] hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:border-reg transition-all duration-300"
-            >
-              <div>
-                <div className="flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.24em]">
-                  <span className="text-reg">Step 0{i + 1}</span>
-                  <span className="text-ink/25">/</span>
-                  <span className="text-ink/60">{step.k}</span>
-                </div>
-                <h3 className="mt-8 md:mt-12 max-w-[14ch] font-display text-4xl md:text-5xl font-bold tracking-tight text-ink">
-                  {step.title}
-                </h3>
-              </div>
-              
-              <div className="mt-16 md:mt-24 border-t border-line/50 pt-8">
-                <p className="text-[17px] leading-relaxed text-ink/70">
-                  {step.copy}
-                </p>
-                <div className="mt-8">
-                  <span className="chip text-[11px] font-mono tracking-[0.1em] !px-4 !py-2">Output — {step.out}</span>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-/* ---------- 06 mantra ---------- */
-
-function Mantra() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-
-  const y = useTransform(scrollYProgress, [0, 1], ["-18%", "18%"]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.92, 1, 1]);
-  const blobOpacity = useTransform(scrollYProgress, [0, 0.35], [0, 0.5]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 90]);
-  const ringOpacity = useTransform(scrollYProgress, [0, 0.4], [0, 0.12]);
-  const drift = useTransform(scrollYProgress, [0, 1], [-40, 40]);
-  const italicX = useTransform(scrollYProgress, [0, 1], [0, 26]);
-
-  return (
-    <section
-      id="philosophy"
-      ref={ref}
-      className="group relative overflow-hidden border-y border-line bg-ink/[0.04] py-24 lg:py-36"
-    >
-      <motion.div
-        style={{ y, scale, opacity: blobOpacity }}
-        className="pointer-events-none absolute -right-24 -top-24 h-[22rem] w-[22rem] rounded-full bg-reg/40 blur-[90px] lg:-right-40 lg:h-[34rem] lg:w-[34rem] transform-gpu will-change-transform"
-      />
-      <motion.div
-        style={{ rotate, opacity: ringOpacity }}
-        className="pointer-events-none absolute -bottom-40 left-10 hidden h-[30rem] w-[30rem] rounded-full border border-dashed border-ink lg:block transform-gpu will-change-transform"
-      />
-
-      <div className="site-shell relative z-10 grid grid-cols-12 gap-8 lg:gap-6">
-        <div className="col-span-12 flex flex-col justify-between lg:col-span-3">
-          <SectionLabel n="06" label="The Mantra" />
-          <motion.div
-            style={{ y: drift }}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 0.45 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.4 }}
-            className="mt-auto hidden flex-col gap-2 pb-4 lg:flex"
-          >
-            <div className="flex h-12 items-end gap-1">
-              {[...Array(6)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="w-2 bg-ink"
-                  animate={{ height: ["20%", "80%", "40%", "100%", "30%", "20%"] }}
-                  transition={{
-                    duration: 3 + i * 0.5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    repeatType: "mirror",
-                  }}
-                />
-              ))}
-            </div>
-            <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.22em]">
-              Sys. output // {new Date().getFullYear()}
-            </div>
-          </motion.div>
-        </div>
-
-        <div className="col-span-12 flex flex-col justify-center lg:col-span-9">
-          <h2 className="font-display text-4xl font-bold leading-[0.95] tracking-[-0.035em] sm:text-5xl md:text-7xl lg:text-[7.5rem]">
-            <span className="block">
-              <ScrollRevealText
-                text="Why build ordinary?"
-                progress={scrollYProgress}
-                windowStart={0.18}
-                windowEnd={0.4}
-              />
-            </span>
-            <motion.span style={{ x: italicX }} className="mt-4 block lg:mt-8">
-              <span className="font-serif italic text-ink/55">
-                <ScrollRevealText
-                  text="We design frameworks that leave a legacy."
-                  progress={scrollYProgress}
-                  windowStart={0.4}
-                  windowEnd={0.62}
-                  by="word"
-                />
-              </span>
-            </motion.span>
-          </h2>
-
-          <FadeUp delay={0.2} className="mt-14 grid gap-6 border-t border-line pt-8 sm:grid-cols-3">
-            {[
-              [
-                "Culturally resonant",
-                "We draw from living visual traditions without reducing them to decoration.",
-              ],
-              [
-                "Operationally exact",
-                "Every interface is backed by architecture that holds under real pressure.",
-              ],
-              [
-                "Built to be inherited",
-                "Systems, documentation and rules your team can run without us.",
-              ],
-            ].map(([k, v]) => (
-              <div key={k}>
-                <h3 className="font-display text-base font-bold">{k}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink/55">{v}</p>
-              </div>
-            ))}
-          </FadeUp>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /* ---------- 07 contact ---------- */
 
@@ -1312,8 +1130,8 @@ function ContactBand() {
                 className="max-w-[44ch] text-[15px] leading-relaxed text-paper/60"
               />
               <div className="flex flex-wrap items-center gap-6">
-                <a href="mailto:hello@kraftstudios.in" className="link-line text-paper/80">
-                  hello@kraftstudios.in
+                <a href="mailto:mangalam@kraftstudios.site" className="link-line text-paper/80">
+                  mangalam@kraftstudios.site
                 </a>
                 <Link to="/contact" className="pill-solid pill-invert">
                   Initialize protocol <ArrowRight size={16} className="arrow" />

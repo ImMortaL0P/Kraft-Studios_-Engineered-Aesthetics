@@ -11,7 +11,6 @@
 
 import type { ReactNode } from "react";
 
-import umvadlaAbout from "../assets/showcase/umvadla-02-about.jpg";
 import umvadlaHome from "../assets/showcase/umvadla-01-home.jpg";
 import shardaImage from "../assets/showcase-sharda.jpg";
 import umvadlaAcademics from "../assets/showcase/umvadla-03-academics.jpg";
@@ -27,11 +26,12 @@ import eduflowPipeline from "../assets/showcase/eduflow-02-pipeline.jpg";
 import brushStore from "../assets/showcase/brush-01-store.jpg";
 import brushCatalogue from "../assets/showcase/brush-06-catalogue.jpg";
 import brushCart from "../assets/showcase/brush-09-cart.jpg";
-import toolsSuite from "../assets/showcase/case-tools-01-cover-tight.jpg";
-import toolsFontPanel from "../assets/showcase/case-tools-02-font-panel.jpg";
-import toolsFontExcel from "../assets/showcase/case-tools-03-font-excel.jpg";
-import toolsPalettePanel from "../assets/showcase/case-tools-04-palette-panel.jpg";
-import toolsSamplerPanel from "../assets/showcase/case-tools-07-sampler-panel.jpg";
+import scrapexCover from "../assets/showcase/case-scrapex-01-cover.jpg";
+import scrapexFont from "../assets/showcase/case-scrapex-02-font.jpg";
+import scrapexPalette from "../assets/showcase/case-scrapex-03-palette.jpg";
+import scrapexSampler from "../assets/showcase/case-scrapex-04-sampler.jpg";
+import scrapexDocument from "../assets/showcase/case-scrapex-05-document.jpg";
+import scrapexEmail from "../assets/showcase/case-scrapex-06-email.jpg";
 import noticeboardImage from "../assets/project-noticeboard.jpg";
 import nbHomeV2 from "../assets/showcase/noticeboard-home_v2.jpg";
 import nbCalendar from "../assets/showcase/noticeboard-calendar.jpg";
@@ -94,11 +94,10 @@ export const caseStudies: CaseStudy[] = [
     year: "2025",
     summary:
       "A school website whose every image, notice and staff profile is editable by the people who run the school, with no developer in the loop.",
-    cover: umvadlaAbout,
-    coverAlt: "UMV Adla school website — about page with community photography",
+    cover: umvadlaHome,
+    coverAlt: "UMV Adla school website — the live landing page",
     shots: [
       { src: umvadlaHome, caption: "umvadla.in — the live landing page" },
-      { src: umvadlaAbout, caption: "UMV Adla — Institutional principles and leadership" },
       { src: umvadlaAcademics, caption: "Academics — curriculum and student life" },
       { src: umvadlaAdmissions, caption: "Admissions — enrollment procedures and queries" },
       { src: umvadlaAdminNotices, caption: "Admin Dashboard — Notice Board Management Tool" },
@@ -150,9 +149,10 @@ export const caseStudies: CaseStudy[] = [
       },
     ],
     outcomes: [
-      { figure: "0", label: "Developer involvement to publish" },
-      { figure: "4", label: "Content types under school control" },
+      { figure: "4", label: "Custom built CMS modules" },
       { figure: "100%", label: "Imagery driven from the database" },
+      { figure: "63ms", label: "Live database read latency" },
+      { figure: "4", label: "Custom domain emails for authentic communications" },
     ],
     stack: ["React 19", "TypeScript", "Vite", "Express", "MongoDB Atlas", "Google Drive API", "Twilio", "Tailwind"],
   },
@@ -360,65 +360,83 @@ export const caseStudies: CaseStudy[] = [
 
   /* ---------------------------------------------------------------- 05 */
   {
-    slug: "kraft-tools",
+    slug: "scrape-x",
     n: "05",
-    title: "Data solutions for designers",
-    client: "Kraft Studios · In-house tools",
+    title: "Reading the web as data",
+    client: "Kraft Studios · Scrape X",
     year: "2026",
     summary:
-      "Browser extension suites and Python pipelines that turn any live website or PDF into tabular design data — rendered typefaces to Excel, palettes mapped dynamically.",
-    cover: toolsSuite,
-    coverAlt: "Kraft Studios browser tools — Font Scraper, Palette Extractor and Image Sampler side panels",
+      "Five Chrome tools that turn a live page into the things a designer actually needs from it — the typefaces it renders, the colours it is built from, the files it links to, the people it lists — without a single byte leaving the browser.",
+    // Swap this for scrapex.tools once the domain is registered and pointed at Pages.
+    live: { label: "immortal0p.github.io/ScrapeX-Website", href: "https://immortal0p.github.io/ScrapeX-Website/" },
+    cover: scrapexCover,
+    coverAlt: "Scrape X — the five side panels: Font Scraper, Palette Extractor, Image Sampler, Document Scraper and Email Extractor",
     coverFit: "contain",
     coverBg: "#E9E6DE",
     shots: [
-      { src: toolsFontPanel, caption: "Font Scraper — live specimens and the exact workbook preview" },
-      { src: toolsFontExcel, caption: "Font Scraper — Excel export with specimens, colours and CSS stacks" },
-      { src: toolsPalettePanel, caption: "Palette Extractor — every painted colour, weighted by area" },
-      { src: toolsSamplerPanel, caption: "Image Sampler — palette, swatch roles and the type around the image" },
+      { src: scrapexFont, caption: "Font Scraper — live specimens and the exact workbook preview" },
+      { src: scrapexPalette, caption: "Palette Extractor — every painted colour, weighted by the area it covers" },
+      { src: scrapexSampler, caption: "Image Sampler — one image's palette, its type and its tonal numbers" },
+      { src: scrapexDocument, caption: "Document Scraper — every linked file, grouped by kind and checked" },
+      { src: scrapexEmail, caption: "Email Extractor — addresses collected across a browsing session" },
     ],
-    services: ["Product design", "Chrome extensions", "Python scripting", "Export engineering"],
+    services: ["Product design", "Chrome extensions", "Colour science", "Export engineering"],
     problem:
-      "Auditing a site's design means reading it by hand. A designer opens dev tools, writes down a typeface, eyedroppers a colour, guesses at how much of the page it covers, and repeats that until the brief is due — and the result is a list nobody can check.",
+      "Auditing a site by hand is slow and unverifiable. A designer opens dev tools, notes a typeface, eyedroppers a colour, guesses how much of the page it covers, and hunts the footer for a PDF — then writes it all into a document nobody can check. The alternative is a scraping service, which solves the labour by sending the client's pages to somebody else's server.",
     approach:
-      "Write tools that read the DOM like a document. If a color is painted on a webpage, a script can measure exactly how many pixels it covers. If a typeface loads, a scraper can lift its source and specimen straight to a spreadsheet.",
+      "Read the page where it already is. Each tool injects into the open tab, measures what the browser actually rendered rather than what the CSS asked for, and writes the file locally. No server exists to send anything to, which is what makes the tools usable on a client's staging site or an intranet behind a login.",
     architecture: [
       {
-        name: "Browser Extensions",
-        stack: "Chrome Extension API, Manifest V3",
-        role: "Renderless workers injected into the active tab to extract, eyedrop, and compute typographic boundaries and color frequencies directly off the DOM."
+        name: "Probes",
+        stack: "Manifest V3, chrome.scripting, injected per frame",
+        role: "One script per tool, run in every frame of the active tab. They resolve rendered font faces against canvas measurements, walk painted surfaces for colour, and follow links, embeds, viewer URLs and data attributes to the files behind them.",
       },
       {
-        name: "Offline Pipelines",
-        stack: "Python 3, PDF parsing",
-        role: "Local native scripts bound to file systems processing PDF payloads, scraping vector imagery and stripping color codes away from large corp bundles."
+        name: "Measurement",
+        stack: "sRGB → CIE Lab, CIEDE2000, k-cluster merge, WCAG contrast",
+        role: "Colour is clustered in a perceptual space so shades that look the same to an eye merge into one, then weighted by the area each actually covers rather than by how often it appears in a stylesheet.",
       },
       {
-        name: "Export",
-        stack: "CSV / Excel Generators",
-        role: "Flattens complex relational design trees mapped by the content script into formatted spreadsheets for design auditing."
-      }
+        name: "Readers",
+        stack: "Raw byte parsing — PDF objects, ZIP central directories, DecompressionStream",
+        role: "Documents are read in the panel: page counts and metadata out of PDF structure, sheet names and slide counts out of the XML inside Office files, row and column counts sampled from CSVs.",
+      },
+      {
+        name: "Writers",
+        stack: "OpenXML and ZIP written by hand, CompressionStream, canvas",
+        role: "Workbooks, archives and report images are generated in the browser with no library — the same model drives the live preview and the downloaded file, so the two cannot drift apart.",
+      },
+      {
+        name: "Shell",
+        stack: "Side panel, one shared stylesheet across all five tools",
+        role: "Every tool presents the same way: scan, preview, download only when asked. The common chrome lives in one file so a change lands in all five at once.",
+      },
     ],
     capabilities: [
       {
-        title: "Eyedropping at scale",
-        body: "The palette extractor measures true painted area rather than just counting CSS rules, identifying which grays are foundational and which are outliers.",
+        title: "Rendered, not declared",
+        body: "The font tool compares canvas measurements against fallbacks to find which family the browser actually drew, so a stack that never loads is reported as unresolved instead of being read off the CSS and believed.",
       },
       {
-        title: "Exact typeface telemetry",
-        body: "Font scrapers serialize the precise CSS stack, computed weight, and real render string—dumping the whole spec directly to structured columns.",
+        title: "Colour weighted by area",
+        body: "Each painted surface contributes the area it covers, with the area of anything drawn over it subtracted. A brand colour used once at full width outranks a grey repeated in forty small rules.",
       },
       {
-        title: "Visual payload parsing",
-        body: "Takes raw documents and outputs structured data faster than an agency auditor ever could, leaving the human to decide what looks good, not what color it is.",
+        title: "Files read, not just listed",
+        body: "Every document found is fetched, verified and parsed for what its own format offers — page counts, sheet names, slide counts, archive contents — before anything is downloaded.",
+      },
+      {
+        title: "Nothing leaves the browser",
+        body: "No account, no server, no telemetry. The tools work on pages behind a login precisely because the page is never sent anywhere to be processed.",
       },
     ],
     outcomes: [
-      { figure: "3", label: "Data-gathering extensions built" },
-      { figure: "100%", label: "Manual CSS inspection eliminated" },
-      { figure: "2s", label: "Time to scrape full page typography to spreadsheet" },
+      { figure: "5", label: "Tools on one shared design system" },
+      { figure: "0", label: "Runtime dependencies across the kit" },
+      { figure: "171", label: "Style rules shared, written once" },
+      { figure: "0", label: "Bytes sent off the machine" },
     ],
-    stack: ["Chrome Extension API", "Manifest V3", "Vanilla JS", "Python 3", "HTML Canvas"],
+    stack: ["Manifest V3", "Vanilla JS", "OpenXML", "Canvas", "CIE Lab / CIEDE2000", "CompressionStream"],
   },
 
   /* ---------------------------------------------------------------- 06 */

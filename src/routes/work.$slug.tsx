@@ -85,14 +85,14 @@ function Masthead({ study }: { study: CaseStudy }) {
         className="mt-6 max-w-[20ch] text-4xl font-bold leading-[1.0] tracking-[-0.035em] sm:text-6xl lg:text-[5.25rem]"
       />
 
-      <FadeUp delay={0.35}>
-        <p className="mt-9 max-w-[58ch] border-l-2 border-reg pl-5 text-base leading-relaxed text-ink/70 sm:text-lg">
+      <FadeUp delay={0.35} immediate>
+        <p className="mt-9 max-w-[58ch] border-l-2 border-reg pl-4 text-base leading-relaxed text-ink/70 sm:pl-5 sm:text-lg">
           {study.summary}
         </p>
       </FadeUp>
 
       {/* The scope of work, stated plainly, before any picture of it. */}
-      <FadeUp delay={0.45}>
+      <FadeUp delay={0.45} immediate>
         <div className="mt-12 flex flex-wrap items-center gap-2.5">
           {study.services.map((s) => (
             <span
@@ -200,7 +200,7 @@ function Architecture({ study }: { study: CaseStudy }) {
 
       {/* Layers stack on a phone and run as a row on a desk; the connector rule
           is a pseudo-free border so it never needs its own element. */}
-      <div className="mt-12 grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-12 grid gap-px border border-line bg-line grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {study.architecture.map((layer, i) => (
           <FadeUp
             key={layer.name}
@@ -260,6 +260,46 @@ function Capabilities({ study }: { study: CaseStudy }) {
 
 function Gallery({ study }: { study: CaseStudy }) {
   if (!study.shots.length) return null;
+
+  const isConstrained = study.slug === "scrape-x";
+
+  if (isConstrained) {
+    return (
+      <section className="site-shell py-20 md:py-28">
+        <SectionLabel n="04" label="The product" />
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 md:gap-8">
+          {study.shots.map((shot, i) => {
+            // Masonry layout: first 2 are half width, next 3 are one-third width on large screens
+            const spanClass = i < 2 ? "lg:col-span-3" : "lg:col-span-2";
+
+            return (
+              <FadeUp key={shot.src + i} delay={i * 0.05} className={`${spanClass} flex flex-col h-full`}>
+                <figure data-cursor="view" className="flex flex-col h-full">
+                  <div
+                    className="flex-1 overflow-hidden rounded-md border border-line flex items-center justify-center p-12 lg:p-16"
+                    style={{ backgroundColor: study.coverBg || "var(--surface)" }}
+                  >
+                    <img
+                      src={shot.src}
+                      alt={shot.caption}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full max-w-[320px] object-contain shadow-2xl rounded-sm border border-line/10 transform transition-transform duration-700 hover:scale-[1.02]"
+                    />
+                  </div>
+                  <figcaption className="mt-5 flex items-baseline gap-4 font-mono text-[10px] uppercase leading-[1.8] tracking-[0.18em] text-ink/50 px-2">
+                    <span className="text-reg shrink-0">{String(i + 1).padStart(2, "0")}</span>
+                    <span>{shot.caption}</span>
+                  </figcaption>
+                </figure>
+              </FadeUp>
+            );
+          })}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="site-shell py-20 md:py-28">
       <SectionLabel n="04" label="The product" />
@@ -282,7 +322,7 @@ function Gallery({ study }: { study: CaseStudy }) {
 
           return (
           <FadeUp key={shot.src + i} delay={0.05} className={containerClass}>
-            <figure>
+            <figure data-cursor="view">
               <div className={innerClass}>
                 <img src={shot.src} alt={shot.caption} loading="lazy" decoding="async" className="w-full shadow-sm" />
               </div>

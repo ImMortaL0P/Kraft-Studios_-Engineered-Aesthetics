@@ -85,17 +85,18 @@ function CaseStudyCard({ study, index, total }: { study: CaseStudy; index: numbe
   const isOdd = index % 2 !== 0;
 
   return (
-    <div ref={containerRef} className="h-auto w-full md:h-[600px] lg:h-[700px] mb-8 lg:mb-16">
+    <div ref={containerRef} className="mb-8 h-auto w-full md:mb-16 md:h-[600px] lg:h-[700px]">
       <motion.div
         style={{ top: stickyTop, scale, opacity }}
-        className={`sticky origin-top overflow-hidden rounded-xl border border-line p-6 md:p-10 shadow-lg will-change-transform transform-gpu ${
+        className={`origin-top overflow-hidden rounded-xl border border-line p-5 shadow-lg will-change-transform transform-gpu md:sticky md:p-10 ${
           isOdd ? "bg-surface" : "bg-paper"
         }`}
       >
         <Link
+          data-cursor="explore"
           to="/work/$slug"
           params={{ slug: study.slug }}
-          className="group grid h-full grid-cols-12 gap-8 lg:gap-14"
+          className="group grid h-full grid-cols-1 gap-6 md:grid-cols-12 md:gap-8 lg:gap-14"
         >
           {/* Content Column */}
           <div className="col-span-12 flex h-full flex-col justify-between md:col-span-6 lg:col-span-5">
@@ -133,8 +134,8 @@ function CaseStudyCard({ study, index, total }: { study: CaseStudy; index: numbe
           </div>
 
           {/* Image Column */}
-          <div className="col-span-12 overflow-hidden rounded-lg border border-line md:col-span-6 lg:col-span-7 h-64 md:h-full relative">
-            <div className="absolute inset-0 bg-ink/5 group-hover:bg-transparent transition-colors duration-500 z-10" />
+          <div className="relative col-span-12 h-64 overflow-hidden rounded-lg border border-line md:col-span-6 md:h-full lg:col-span-7">
+            <div className="absolute inset-0 z-10 bg-ink/5 transition-colors duration-500 group-hover:bg-transparent" />
             <motion.img
               // Adding internal subtle motion inside the sticky container is a nice touch, but simple scale handles it!
               whileHover={{ scale: 1.05 }}
@@ -142,7 +143,7 @@ function CaseStudyCard({ study, index, total }: { study: CaseStudy; index: numbe
               src={study.cover}
               alt={study.coverAlt}
               loading="lazy" decoding="async"
-              className="absolute inset-0 h-full w-full object-cover"
+              className={`absolute inset-0 h-full w-full ${study.coverFit === "contain" ? "object-contain p-8 md:p-12" : "object-cover"}`}
               style={study.coverBg ? { backgroundColor: study.coverBg } : undefined}
             />
           </div>
