@@ -2,6 +2,7 @@ import { Link, useRouter, useNavigate } from "@tanstack/react-router";
 import logoWordmark from "../Logos/Kraft Studios Wordmark T.png";
 import logoMonogram from "../Logos/Kraft Studios Monogram T.png";
 import { ArrowUp, ArrowUpRight, Moon, Sun } from "lucide-react";
+import { Kixi } from "./Kixi";
 import {
   AnimatePresence,
   MotionConfig,
@@ -516,8 +517,20 @@ export function SiteFooter() {
           </FooterCol>
         </div>
 
-        <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-line py-6 font-mono text-[11px] uppercase tracking-[0.16em] text-ink/45 sm:flex-row sm:items-center">
-          <span>
+        <div className="relative mt-16 flex flex-col items-start justify-between gap-4 border-t border-line py-6 font-mono text-[11px] uppercase tracking-[0.16em] text-ink/45 sm:flex-row sm:items-center">
+          {/* Kixi sits on the closing rule with its legs over the edge, big
+              enough to be the last thing you look at. It is decoration, so it
+              never eats a click meant for the links underneath it. */}
+          <Kixi
+            pose="footer"
+            reveal
+            lean={-3}
+            pointerParallax
+            delay={0.1}
+            title="Kixi, waving goodbye"
+            className="pointer-events-none absolute -bottom-10 right-0 z-[1] w-[clamp(200px,34vw,520px)] origin-bottom-right translate-x-[14%] sm:-bottom-16 sm:translate-x-[18%]"
+          />
+          <span className="relative z-[2]">
             © 2026 Kraft Studios <span className="mx-2 text-ink/20">/</span> Sys. v1.1
           </span>
           <Magnetic>
@@ -622,13 +635,24 @@ export function SectionLabel({
   n,
   label,
   light = false,
+  mark = false,
 }: {
   n: string;
   label: string;
   light?: boolean;
+  /** Puts Kixi's head beside the label — used sparingly, not on every section. */
+  mark?: boolean;
 }) {
   return (
     <div className="flex items-center gap-4">
+      {mark ? (
+        <Kixi
+          pose="mark"
+          float={false}
+          delay={Number(n) * 0.35}
+          className="kixi--mark -ml-1 shrink-0"
+        />
+      ) : null}
       <motion.span
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}

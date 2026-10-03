@@ -17,11 +17,20 @@ import appCss from "../styles.css?url";
 import { themeInitScript } from "../components/KraftSite";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CustomCursor } from "../components/CustomCursor";
+import { Kixi, KixiBoot } from "../components/Kixi";
 
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
+        {/* Kixi shrugs. The apology is the picture; the copy just confirms it. */}
+        <Kixi
+          pose="shrug"
+          scrollTilt={false}
+          delay={0.2}
+          title="Kixi, shrugging"
+          className="mx-auto mb-8 w-[min(260px,60vw)]"
+        />
         <h1 className="text-7xl font-bold text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
         <p className="mt-2 text-sm text-muted-foreground">
@@ -177,6 +186,8 @@ function RootComponent() {
       options={{ lerp: 0.09, wheelMultiplier: 1, touchMultiplier: 1.6 }}
     >
       <QueryClientProvider client={queryClient}>
+        {/* Outside the keyed page wrapper, so a route change never remounts it. */}
+        <KixiBoot />
         <CustomCursor />
         <div key={key} className="page-enter transform-gpu will-change-transform min-h-screen">
           <Outlet />

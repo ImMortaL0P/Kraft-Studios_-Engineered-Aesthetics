@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Kixi } from "../components/Kixi";
 import {
   ArrowDown,
   ArrowRight,
@@ -573,11 +574,26 @@ function Hero() {
               transition={{ delay: 0.5, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               className="lg:col-span-4"
             >
+              {/* Kixi sits inside the column and the copy flows around its
+                  actual silhouette via shape-outside, rather than hovering in a
+                  gap of its own making. */}
+              <Kixi
+                pose="hero"
+                wrap="right"
+                lean={-4}
+                pointerParallax
+                reveal
+                delay={0.35}
+                title="Kixi, mid-leap"
+                className="-mr-[6%] ml-3 w-[clamp(118px,17vw,210px)] lg:-mr-[14%] lg:w-[clamp(150px,13vw,230px)]"
+              />
               <StaggeredParagraph
                 text="Connecting craft with evidence, design with engineering, people with systems. We don't just design digital shells; we build the brandworlds and operational engines that power them."
-                className="max-w-[44ch] border-l-2 border-reg pl-5 text-[15px] leading-relaxed text-ink/70 md:text-base"
+                className="border-l-2 border-reg pl-5 text-[15px] leading-relaxed text-ink/70 md:text-base"
               />
-              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
+              {/* clear-both matters: a flex row beside a float gets placed
+                  alongside it and squashed, rather than below it. */}
+              <div className="clear-both mt-8 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
                 <Link to="/contact" className="pill-solid">
                   Start a project <ArrowRight size={16} className="arrow" />
                 </Link>
@@ -778,7 +794,7 @@ function Premise() {
       <div className="site-shell grid gap-12 md:grid-cols-12">
         <div className="md:col-span-5">
           <div className="md:sticky md:top-28">
-            <SectionLabel n="02" label="Premise" />
+            <SectionLabel n="02" label="Kixi's Premise" mark />
             <MaskLines
               className="mt-8 font-display text-[clamp(2rem,3.6vw,3.1rem)] font-bold leading-[1.1] tracking-[-0.025em]"
               lines={[
@@ -919,7 +935,7 @@ function Blueprint() {
       />
 
       <div className="site-shell relative z-10">
-        <SectionLabel n="03" label="System Blueprint" light />
+        <SectionLabel n="03" label="Kixi's Blueprint" light mark />
         <div className="mt-8 flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end">
           <MaskLines
             className="max-w-[20ch] font-display text-[clamp(1.9rem,3.8vw,3.4rem)] font-bold leading-[1.06] tracking-[-0.03em]"
@@ -989,7 +1005,7 @@ function Work() {
 
   return (
     <section id="work" className="site-shell relative py-24 lg:py-36">
-      <SectionLabel n="04" label="Selected Work" />
+      <SectionLabel n="04" label="Kixi's Casebook" mark />
       <div className="mt-8 flex flex-wrap items-end justify-between gap-6 border-b border-line pb-10">
         <MaskLines
           className="font-display text-[clamp(2.2rem,5vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.035em]"
@@ -1100,8 +1116,8 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
           src={study.cover}
           alt={study.coverAlt}
           ratio={ratio}
-          fit={study.coverFit}
-          bg={study.coverBg}
+          {...(study.coverFit ? { fit: study.coverFit } : {})}
+          {...(study.coverBg ? { bg: study.coverBg } : {})}
         />
         <span className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full bg-ink/70 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-paper backdrop-blur-sm">
           <ArrowUpRight size={11} />
@@ -1158,7 +1174,7 @@ function ContactBand() {
           <div className="absolute inset-y-0 left-1/2 w-px origin-top scale-y-0 bg-paper/15 transition-transform duration-1000 ease-in-out group-hover:scale-y-100" />
 
           <div className="relative">
-            <SectionLabel n="07" label="Contact" light />
+            <SectionLabel n="07" label="Kixi's Desk" light mark />
             <MaskLines
               className="mt-8 font-display text-[clamp(2.4rem,6vw,5.5rem)] font-bold leading-[1] tracking-[-0.04em]"
               lines={[

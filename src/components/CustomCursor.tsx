@@ -31,7 +31,14 @@ export function CustomCursor() {
 
       if (customCursor) {
         const type = customCursor.getAttribute("data-cursor");
-        setFlavor(type || "view");
+        // data-cursor is author-supplied, so narrow it to the known set rather
+        // than trusting whatever string is on the element.
+        const known = ["link", "text", "view", "drag", "default", "visit", "expand", "explore"] as const;
+        type Flavor = (typeof known)[number];
+        const next: Flavor = (known as readonly string[]).includes(type ?? "")
+          ? (type as Flavor)
+          : "view";
+        setFlavor(next);
       } else if (isInput) {
         setFlavor("text");
       } else if (isView && !isLink) {
