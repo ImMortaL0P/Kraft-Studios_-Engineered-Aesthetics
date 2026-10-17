@@ -24,9 +24,29 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# macOS system and AppleDouble metadata files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+
+# Temporary / scratch / backup files
+*.bak
+*.tmp
+*~
+
+# Raw design sources and asset archives (working files kept locally)
+/Kraft Studios/
+/Kixi/
+/Kixi Designing/
