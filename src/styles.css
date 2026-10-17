@@ -591,9 +591,13 @@ section[id] {
     background 0.3s,
     color 0.3s;
 }
-.contact-form button:hover {
+.contact-form button:hover:not(:disabled) {
   background: var(--reg);
   color: #fff;
+}
+.contact-form button:disabled {
+  cursor: wait;
+  opacity: 0.62;
 }
 
 @media (max-width: 767px) {
@@ -697,8 +701,49 @@ h4 {
   animation-delay: var(--kixi-delay, 0s);
 }
 @keyframes kixi-bob {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50%      { transform: translate3d(0, -1.6%, 0); }
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -1.6%; }
+}
+
+/* Each illustration already carries a different attitude. Give those poses
+   their own idle rhythm instead of making the whole cast bob in unison. */
+.kixi--footer.kixi--float {
+  animation-name: kixi-wave-idle;
+  animation-duration: 4.8s;
+}
+@keyframes kixi-wave-idle {
+  0%, 100% { translate: 0 0; }
+  32%      { translate: 0 -1.1%; }
+  68%      { translate: 0 0.25%; }
+}
+
+.kixi--faq.kixi--float {
+  animation-name: kixi-question-idle;
+  animation-duration: 4.1s;
+}
+@keyframes kixi-question-idle {
+  0%, 100% { translate: 0 0; }
+  38%      { translate: 0 -1.4%; }
+  58%      { translate: 0 -0.6%; }
+}
+
+.kixi--shrug.kixi--float {
+  animation-name: kixi-shrug-idle;
+  animation-duration: 6.2s;
+}
+@keyframes kixi-shrug-idle {
+  0%, 100% { translate: 0 0; }
+  38%      { translate: -0.4% -0.6%; }
+  72%      { translate: 0.4% 0; }
+}
+
+.kixi--slumped.kixi--float {
+  animation-name: kixi-slumped-breath;
+  animation-duration: 7.2s;
+}
+@keyframes kixi-slumped-breath {
+  0%, 100% { translate: 0 0; scale: 1; }
+  52%      { translate: 0 0.35%; scale: 1.006 0.994; }
 }
 
 /* The beads are the only part of the head that came away from the silhouette,
@@ -740,6 +785,10 @@ h4 {
 .kixi--interactive { transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
 .kixi--interactive:hover { transform: translateY(-6px) rotate(-1.5deg); }
 .kixi--interactive:hover [id^="kixi-bead"] { animation-duration: 0.9s; }
+.kixi--footer.kixi--interactive:hover { transform: translateY(-3px) rotate(1deg); }
+.kixi--faq.kixi--interactive:hover { transform: translateY(-4px) rotate(1.4deg); }
+.kixi--shrug.kixi--interactive:hover { transform: translateY(-2px) rotate(-1deg); }
+.kixi--slumped.kixi--interactive:hover { transform: translateY(-1px) rotate(0deg); }
 
 /* The preloader pose is a run, so it gets its own quick two-beat hop with a
    little squash at the bottom — the float curve is far too slow to read as
@@ -804,6 +853,10 @@ h4 {
     animation: none !important;
   }
   .kixi--interactive:hover { transform: none; }
+  .kixi--footer.kixi--interactive:hover,
+  .kixi--faq.kixi--interactive:hover,
+  .kixi--shrug.kixi--interactive:hover,
+  .kixi--slumped.kixi--interactive:hover { transform: none; }
 }
 
 /* ---------- display ticker ---------- */
@@ -953,4 +1006,26 @@ html.lenis body {
 }
 .page-enter {
   animation: pageIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none !important;
+  }
+}
+
+/* Custom architectural scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--paper);
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--ink) 20%, transparent);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--reg) 50%, transparent);
 }

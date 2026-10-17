@@ -14,6 +14,8 @@ import {
   useVelocity,
   useAnimationFrame,
   useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
 } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 
@@ -75,7 +77,7 @@ function IndexLink({ hash, label, onDone }: { hash: string; label: string; onDon
   );
 }
 
-/** Infinite marquee strip. */
+/** Infinite marquee strip with scroll velocity momentum. */
 export function Ticker({
   items,
   className = "",
@@ -85,6 +87,12 @@ export function Ticker({
   className?: string;
   fast?: boolean;
 }) {
+  const { scrollY } = useScroll();
+  const scrollVelocity = useVelocity(scrollY);
+  const smoothVelocity = useSpring(scrollVelocity, { damping: 50, stiffness: 400 });
+  const skew = useTransform(smoothVelocity, [-1200, 0, 1200], [-4.5, 0, 4.5]);
+  const reduceMotion = useReducedMotion();
+
   const set = (key: string, hidden = false) => (
     <div key={key} className="marquee-set" aria-hidden={hidden || undefined}>
       {items.map((item, i) => (
@@ -97,27 +105,19 @@ export function Ticker({
   );
   return (
     <div className={`marquee-mask overflow-hidden ${className}`}>
-      <div className={`marquee-track ${fast ? "fast" : ""}`}>
+      <motion.div
+        style={{ skewX: reduceMotion ? 0 : skew }}
+        className={`marquee-track transform-gpu will-change-transform ${fast ? "fast" : ""}`}
+      >
         {set("a")}
         {set("b", true)}
-      </div>
+      </motion.div>
     </div>
   );
 }
 
 /**
- * The same marquee mechanism as `Ticker`, at display scale.
- *
- * Type is outlined rather than solid so a band of it reads as texture instead
- * of a wall of ink; pointing at the band drops everything to a whisper and
- * brings the one word under the cursor back, filled in the accent. The dimming
- * is a single inherited custom property, so it costs one rule rather than one
- * per item, and the only animated properties are `transform` on the track and
- * `opacity` / `color` on the words — all compositor work.
- *
- * `items` may be plain words or links; a link gets the hover treatment for
- * free and remains reachable by keyboard, which is why the duplicated set is
- * hidden from assistive tech and taken out of the tab order.
+ * The same marquee mechanism as `Ticker`, at display scale, with velocity response.
  */
 export function DisplayTicker({
   items,
@@ -128,6 +128,12 @@ export function DisplayTicker({
   className?: string;
   fast?: boolean;
 }) {
+  const { scrollY } = useScroll();
+  const scrollVelocity = useVelocity(scrollY);
+  const smoothVelocity = useSpring(scrollVelocity, { damping: 50, stiffness: 400 });
+  const skew = useTransform(smoothVelocity, [-1200, 0, 1200], [-5, 0, 5]);
+  const reduceMotion = useReducedMotion();
+
   const set = (key: string, hidden = false) => (
     <div key={key} className="marquee-set" aria-hidden={hidden || undefined}>
       {items.map((item, i) => {
@@ -154,10 +160,13 @@ export function DisplayTicker({
 
   return (
     <div className={`display-marquee marquee-mask overflow-hidden ${className}`}>
-      <div className={`marquee-track ${fast ? "fast" : ""}`}>
+      <motion.div
+        style={{ skewX: reduceMotion ? 0 : skew }}
+        className={`marquee-track transform-gpu will-change-transform ${fast ? "fast" : ""}`}
+      >
         {set("a")}
         {set("b", true)}
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -301,9 +310,11 @@ export function SiteHeader() {
               ))}
             </nav>
             <ThemeToggle />
-            <Link to="/contact" className="pill hidden sm:inline-flex">
-              Start a project
-            </Link>
+            <Magnetic>
+              <Link to="/contact" className="pill hidden sm:inline-flex" data-cursor-text="PROJECT">
+                Start a project
+              </Link>
+            </Magnetic>
             <Magnetic>
               <button
                 type="button"
@@ -331,6 +342,9 @@ export function SiteHeader() {
         {open && (
           <motion.div
             key="menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site Navigation Menu"
             className="fixed inset-0 z-[55] flex flex-col bg-paper"
             initial={{ clipPath: "inset(0 0 100% 0)" }}
             animate={{ clipPath: "inset(0 0 0% 0)" }}
@@ -463,7 +477,7 @@ export function SiteFooter() {
       <div className="gutter relative z-[2] mx-auto max-w-[1600px] pt-20 md:pt-28">
         <div className="relative flex items-center gap-12">
           {/* Animated Monogram */}
-          <motion.div className="w-28 h-28 md:w-40 md:h-40 group relative perspective-1000">
+          <motion.div className="w-28 h-28 md:w-40 md:h-40 group relative perspective-1000" data-cursor-text="KRAFT">
             <motion.div className="absolute inset-0 bg-reg/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
             <motion.img
               src={logoMonogram}
@@ -493,9 +507,11 @@ export function SiteFooter() {
             <p className="max-w-[26ch] text-xl font-bold leading-snug tracking-[-0.01em]">
               Brand, software and operations — designed as one system.
             </p>
-            <Link to="/contact" className="pill-solid mt-8">
-              Start a conversation <ArrowUpRight size={16} className="arrow" />
-            </Link>
+            <Magnetic>
+              <Link to="/contact" className="pill-solid mt-8 inline-flex" data-cursor-text="CONTACT">
+                Start a conversation <ArrowUpRight size={16} className="arrow" />
+              </Link>
+            </Magnetic>
           </div>
           <FooterCol title="Studio" className="md:col-span-2 md:col-start-6">
             {navItems.map((item) => (
@@ -611,14 +627,15 @@ export function MaskLines({
 }) {
   const ref = useRef<HTMLElement>(null);
   const inView = useSafeInView(ref as RefObject<Element>);
-  const show = immediate || inView;
+  const reduceMotion = useReducedMotion();
+  const show = immediate || inView || reduceMotion;
   return (
     <Tag ref={ref as never} className={className}>
       {lines.map((line, i) => (
         <span key={i} className="block overflow-hidden pb-[0.06em]">
           <motion.span
             className="block will-change-transform transform-gpu"
-            initial={{ y: "110%", rotate: 2 }}
+            initial={reduceMotion ? false : { y: "110%", rotate: 2 }}
             animate={show ? { y: "0%", rotate: 0 } : { y: "110%", rotate: 2 }}
             transition={{ duration: 1.05, ease: EASE, delay: delay + i * 0.09 }}
           >
@@ -630,7 +647,221 @@ export function MaskLines({
   );
 }
 
-/** "01 — Label" eyebrow with a hairline that draws itself. */
+const SCRAMBLE_CHARS = "ABCDEF0123456789_#*+<>~-";
+
+/**
+ * Technical alphanumeric decryption effect triggered when entering viewport.
+ * Progressively settles characters from random glyphs to final text.
+ */
+export function ScrambleText({
+  text,
+  className = "",
+  delay = 0,
+  speed = 35,
+}: {
+  text: string;
+  className?: string;
+  delay?: number;
+  speed?: number;
+}) {
+  const [displayText, setDisplayText] = useState(text);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-10% 0px" });
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (reduceMotion || !inView) {
+      setDisplayText(text);
+      return;
+    }
+
+    let frame = 0;
+    const totalFrames = Math.max(12, text.length * 2.5);
+    let timer: NodeJS.Timeout | null = null;
+
+    const timeout = setTimeout(() => {
+      timer = setInterval(() => {
+        frame++;
+        const progress = frame / totalFrames;
+        const revealedCount = Math.floor(progress * text.length);
+
+        const scrambled = text
+          .split("")
+          .map((char, idx) => {
+            if (char === " " || char === "—" || char === "·" || char === "-") return char;
+            if (idx < revealedCount) return char;
+            return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+          })
+          .join("");
+
+        setDisplayText(scrambled);
+
+        if (frame >= totalFrames) {
+          if (timer) clearInterval(timer);
+          setDisplayText(text);
+        }
+      }, speed);
+    }, delay * 1000);
+
+    return () => {
+      clearTimeout(timeout);
+      if (timer) clearInterval(timer);
+    };
+  }, [inView, text, delay, speed, reduceMotion]);
+
+  return (
+    <span ref={ref} className={className}>
+      {displayText}
+    </span>
+  );
+}
+
+/**
+ * Precision Swiss registration reticle marks on corner perimeters.
+ */
+export function CornerMarks({
+  size = 14,
+  stroke = 1.5,
+  className = "text-reg/60 pointer-events-none absolute inset-0",
+  offset = 0,
+}: {
+  size?: number;
+  stroke?: number;
+  className?: string;
+  offset?: number;
+}) {
+  const offsetStyle = offset ? { margin: `-${offset}px` } : undefined;
+
+  return (
+    <div className={className} style={offsetStyle} aria-hidden="true">
+      {/* Top Left */}
+      <motion.svg
+        initial={{ opacity: 0, scale: 0.8 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: EASE }}
+        className="absolute left-0 top-0"
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        fill="none"
+      >
+        <path
+          d={`M 0 ${size} V 0 H ${size}`}
+          stroke="currentColor"
+          strokeWidth={stroke}
+          strokeLinecap="square"
+        />
+      </motion.svg>
+      {/* Top Right */}
+      <motion.svg
+        initial={{ opacity: 0, scale: 0.8 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: EASE, delay: 0.05 }}
+        className="absolute right-0 top-0"
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        fill="none"
+      >
+        <path
+          d={`M 0 0 H ${size} V ${size}`}
+          stroke="currentColor"
+          strokeWidth={stroke}
+          strokeLinecap="square"
+        />
+      </motion.svg>
+      {/* Bottom Left */}
+      <motion.svg
+        initial={{ opacity: 0, scale: 0.8 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
+        className="absolute bottom-0 left-0"
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        fill="none"
+      >
+        <path
+          d={`M 0 0 V ${size} H ${size}`}
+          stroke="currentColor"
+          strokeWidth={stroke}
+          strokeLinecap="square"
+        />
+      </motion.svg>
+      {/* Bottom Right */}
+      <motion.svg
+        initial={{ opacity: 0, scale: 0.8 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: EASE, delay: 0.15 }}
+        className="absolute bottom-0 right-0"
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        fill="none"
+      >
+        <path
+          d={`M 0 ${size} H ${size} V 0`}
+          stroke="currentColor"
+          strokeWidth={stroke}
+          strokeLinecap="square"
+        />
+      </motion.svg>
+    </div>
+  );
+}
+
+/**
+ * Interactive cursor specular spotlight with radial illumination on hover.
+ */
+export function SpotlightCard({
+  children,
+  className = "",
+  radius = 350,
+}: {
+  children: ReactNode;
+  className?: string;
+  radius?: number;
+}) {
+  const divRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({ x: -1000, y: -1000 });
+  const [opacity, setOpacity] = useState(0);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!divRef.current) return;
+    const rect = divRef.current.getBoundingClientRect();
+    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    setOpacity(1);
+  };
+
+  const handleMouseLeave = () => {
+    setOpacity(0);
+  };
+
+  return (
+    <div
+      ref={divRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={`relative overflow-hidden ${className}`}
+    >
+      <div
+        className="pointer-events-none absolute -inset-px transition-opacity duration-300 z-10"
+        style={{
+          opacity,
+          background: `radial-gradient(${radius}px circle at ${position.x}px ${position.y}px, rgba(235, 70, 0, 0.13), transparent 80%)`,
+        }}
+        aria-hidden="true"
+      />
+      {children}
+    </div>
+  );
+}
+
+/** "01 — Label" eyebrow with a hairline that draws itself and technical character scramble. */
 export function SectionLabel({
   n,
   label,
@@ -660,7 +891,7 @@ export function SectionLabel({
         transition={{ duration: 0.8 }}
         className={`eyebrow shrink-0 ${light ? "opacity-60" : "text-ink/55"}`}
       >
-        {n} — {label}
+        <ScrambleText text={`${n} — ${label}`} delay={0.1} />
       </motion.span>
       <motion.span
         initial={{ scaleX: 0 }}
@@ -689,13 +920,14 @@ export function FadeUp({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useSafeInView(ref);
-  const show = immediate || inView;
+  const reduceMotion = useReducedMotion();
+  const show = immediate || inView || reduceMotion;
   return (
     <motion.div
       id={id}
       ref={ref}
       className={`${className} will-change-transform transform-gpu`}
-      initial={{ opacity: 0, y: 26 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 26 }}
       animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 26 }}
       transition={{ duration: 0.9, ease: EASE, delay }}
     >
@@ -749,54 +981,85 @@ export function Magnetic({
   );
 }
 
-export function PageFrame({ children }: { children: ReactNode }) {
-  useReveal();
+/**
+ * Minimal technical HUD readout placed at bottom-left corner of the viewport.
+ * Shows system status, real-time scroll telemetry percentage, and Swiss grid indicator.
+ */
+export function BlueprintHUD() {
+  const { scrollYProgress } = useScroll();
+  const [scrollPct, setScrollPct] = useState(0);
+  const [visible, setVisible] = useState(false);
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    setScrollPct(Math.round(latest * 100));
+  });
 
   useEffect(() => {
-    const onContextMenu = (event: MouseEvent) => {
-      event.preventDefault();
+    const handleScroll = () => {
+      setVisible(window.scrollY > 200);
     };
-
-    const onDragStart = (event: DragEvent) => {
-      const target = event.target as HTMLElement | null;
-      if (
-        target &&
-        (target.closest("img") || target.closest("video") || target.closest("canvas"))
-      ) {
-        event.preventDefault();
-      }
-    };
-
-    document.addEventListener("contextmenu", onContextMenu);
-    document.addEventListener("dragstart", onDragStart);
-
-    return () => {
-      document.removeEventListener("contextmenu", onContextMenu);
-      document.removeEventListener("dragstart", onDragStart);
-    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <MotionConfig reducedMotion="user">
-      <div
-        className="min-h-screen bg-paper text-ink"
-        onContextMenu={(event) => event.preventDefault()}
-        onDragStart={(event) => {
-          const target = event.target as HTMLElement | null;
-          if (
-            target &&
-            (target.closest("img") || target.closest("video") || target.closest("canvas"))
-          ) {
-            event.preventDefault();
-          }
-        }}
-      >
-        <SiteHeader />
+    <div
+      aria-hidden="true"
+      className={`pointer-events-none fixed bottom-6 left-[clamp(1.25rem,4vw,4rem)] z-40 hidden items-center gap-3 rounded-full border border-line bg-paper/80 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.22em] backdrop-blur-md transition-all duration-500 lg:flex ${
+        visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+      }`}
+    >
+      <span className="flex items-center gap-1.5 text-reg">
+        <span className="size-1.5 animate-pulse rounded-full bg-reg" />
+        <span>SYS.OK</span>
+      </span>
+      <span className="text-ink/20">|</span>
+      <span className="tabular-nums text-ink/70">SCRL {String(scrollPct).padStart(2, "0")}%</span>
+      <span className="text-ink/20">|</span>
+      <span className="text-ink/40">GRID 12-COL</span>
+    </div>
+  );
+}
 
+export function PageFrame({ children }: { children: ReactNode }) {
+  useReveal();
+
+  return (
+    <MotionConfig reducedMotion="user">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-reg focus:text-white focus:rounded-sm focus:font-mono focus:text-xs focus:shadow-lg"
+      >
+        Skip to main content
+      </a>
+      <GlobalScrollProgress />
+      <BlueprintHUD />
+      <div className="min-h-screen bg-paper text-ink">
+        <SiteHeader />
+        <div id="main-content" tabIndex={-1} className="outline-none" />
         {children}
         <SiteFooter />
       </div>
     </MotionConfig>
+  );
+}
+
+function GlobalScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const easedProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: 0.001,
+  });
+  const reduceMotion = useReducedMotion();
+
+  return (
+    <motion.div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-x-0 top-0 z-[70] h-[2px] origin-left bg-reg"
+      style={{ scaleX: reduceMotion ? scrollYProgress : easedProgress }}
+    />
   );
 }
 

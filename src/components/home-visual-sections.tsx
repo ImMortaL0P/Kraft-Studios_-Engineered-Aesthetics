@@ -1,5 +1,12 @@
 import { MaskLines, SectionLabel, FadeUp } from "./KraftSite";
-import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+  useReducedMotion,
+  type MotionValue,
+} from "framer-motion";
 import { useRef } from "react";
 
 const steps = [
@@ -34,16 +41,18 @@ function ScrollRevealChar({
   progress,
   range,
   className = "",
+  reduceMotion = false,
 }: {
   char: string;
   progress: MotionValue<number>;
   range: [number, number];
   className?: string;
+  reduceMotion?: boolean;
 }) {
   const opacity = useTransform(progress, range, [0.15, 1]);
   return (
     <motion.span
-      style={{ opacity }}
+      style={{ opacity: reduceMotion ? 1 : opacity }}
       className={`relative inline-block will-change-transform ${className}`}
     >
       {char}
@@ -66,6 +75,7 @@ function ScrollRevealText({
   windowEnd?: number;
   by?: "char" | "word";
 }) {
+  const reduceMotion = useReducedMotion();
   const words = text.split(" ");
 
   if (by === "word") {
@@ -80,6 +90,7 @@ function ScrollRevealText({
               char={word}
               progress={progress}
               range={[localStart, localEnd] as [number, number]}
+              reduceMotion={reduceMotion ?? false}
               className="mr-[0.28em]"
             />
           );
@@ -106,6 +117,7 @@ function ScrollRevealText({
                 char={char}
                 progress={progress}
                 range={[localStart, localEnd] as [number, number]}
+                reduceMotion={reduceMotion ?? false}
               />
             );
           })}
@@ -120,6 +132,7 @@ export function ProcessSection() {
   const { scrollYProgress } = useScroll({ target: containerRef });
   const x = useTransform(scrollYProgress, [0, 1], ["0%", "-80%"]);
   const smoothX = useSpring(x, { stiffness: 60, damping: 22, mass: 0.8 });
+  const reduceMotion = useReducedMotion();
 
   return (
     <section ref={containerRef} id="process" className="relative h-[400vh] bg-surface">
@@ -145,8 +158,19 @@ export function ProcessSection() {
           </FadeUp>
         </div>
 
+        <div className="absolute bottom-10 left-4 z-20 flex items-center gap-3 font-mono text-[10px] tracking-[0.2em] text-ink/40 md:left-14">
+          <span className="text-reg uppercase font-bold">Progress</span>
+          <div className="h-[2px] w-28 md:w-40 overflow-hidden rounded-full bg-line">
+            <motion.div
+              style={{ scaleX: scrollYProgress }}
+              className="h-full bg-reg origin-left"
+            />
+          </div>
+          <span className="text-ink/60">01 / 04</span>
+        </div>
+
         <motion.div
-          style={{ x: smoothX }}
+          style={{ x: reduceMotion ? x : smoothX }}
           className="flex h-max w-max gap-8 px-4 md:gap-14 md:pl-[500px] lg:pl-[600px] will-change-transform transform-gpu"
         >
           {steps.map((step, i) => (
@@ -154,7 +178,8 @@ export function ProcessSection() {
               key={step.k}
               whileHover={{ y: -8, scale: 1.01 }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              className="group flex w-[85vw] shrink-0 flex-col justify-between rounded-2xl border border-line/75 bg-paper p-10 shadow-[0_0_0_1px_transparent] transition-all duration-300 hover:border-reg hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] md:w-[50vw] md:p-14 lg:w-[40vw]"
+              data-cursor-text={step.k.toUpperCase()}
+              className="group flex w-[85vw] shrink-0 flex-col justify-between rounded-2xl border border-line/75 bg-paper p-10 shadow-[0_0_0_1px_transparent] transition-all duration-300 hover:border-reg hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] md:w-[50vw] md:p-14 lg:w-[40vw] cursor-pointer"
             >
               <div>
                 <div className="flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.24em]">
@@ -194,19 +219,25 @@ export function MantraSection() {
   const ringOpacity = useTransform(scrollYProgress, [0, 0.4], [0, 0.12]);
   const drift = useTransform(scrollYProgress, [0, 1], [-40, 40]);
   const italicX = useTransform(scrollYProgress, [0, 1], [0, 26]);
+  const reduceMotion = useReducedMotion();
 
   return (
     <section
       id="philosophy"
       ref={ref}
-      className="group relative overflow-hidden border-y border-line bg-ink/[0.04] py-24 lg:py-36"
+      data-cursor-text="MANTRA"
+      className="group relative overflow-hidden border-y border-line bg-ink/[0.04] py-24 lg:py-36 cursor-default"
     >
       <motion.div
-        style={{ y, scale, opacity: blobOpacity }}
+        style={{
+          y: reduceMotion ? 0 : y,
+          scale: reduceMotion ? 1 : scale,
+          opacity: reduceMotion ? 0.25 : blobOpacity,
+        }}
         className="pointer-events-none absolute -right-24 -top-24 h-[22rem] w-[22rem] rounded-full bg-reg/40 blur-[90px] lg:-right-40 lg:h-[34rem] lg:w-[34rem] transform-gpu will-change-transform"
       />
       <motion.div
-        style={{ rotate, opacity: ringOpacity }}
+        style={{ rotate: reduceMotion ? 0 : rotate, opacity: reduceMotion ? 0.12 : ringOpacity }}
         className="pointer-events-none absolute -bottom-40 left-10 hidden h-[30rem] w-[30rem] rounded-full border border-dashed border-ink lg:block transform-gpu will-change-transform"
       />
 
@@ -214,7 +245,7 @@ export function MantraSection() {
         <div className="col-span-12 flex flex-col justify-between lg:col-span-3">
           <SectionLabel n="06" label="The Mantra" />
           <motion.div
-            style={{ y: drift }}
+            style={{ y: reduceMotion ? 0 : drift }}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 0.45 }}
             viewport={{ once: true }}
@@ -226,7 +257,9 @@ export function MantraSection() {
                 <motion.div
                   key={i}
                   className="w-2 bg-ink"
-                  animate={{ height: ["20%", "80%", "40%", "100%", "30%", "20%"] }}
+                  animate={
+                    reduceMotion ? false : { height: ["20%", "80%", "40%", "100%", "30%", "20%"] }
+                  }
                   transition={{
                     duration: 3 + i * 0.5,
                     repeat: Infinity,
@@ -252,7 +285,7 @@ export function MantraSection() {
                 windowEnd={0.4}
               />
             </span>
-            <motion.span style={{ x: italicX }} className="mt-4 block lg:mt-8">
+            <motion.span style={{ x: reduceMotion ? 0 : italicX }} className="mt-4 block lg:mt-8">
               <span className="font-serif italic text-ink/55">
                 <ScrollRevealText
                   text="We design frameworks that leave a legacy."

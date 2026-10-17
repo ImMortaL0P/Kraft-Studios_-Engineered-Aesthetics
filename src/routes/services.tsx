@@ -1,7 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion, useScroll, useTransform, useSpring, useVelocity } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useVelocity,
+  useReducedMotion,
+} from "framer-motion";
 import { useRef } from "react";
-import { Eyebrow, PageFrame, PageIntro, Reveal, FadeUp } from "../components/KraftSite";
+import { Eyebrow, PageFrame, PageIntro, Reveal, FadeUp, Magnetic, CornerMarks } from "../components/KraftSite";
 import { ArrowUpRight } from "lucide-react";
 
 import brushLogo from "../assets/clients/brush.png";
@@ -28,7 +35,7 @@ const brands = [
     title: "Brush",
     domain: "brush-art.in",
     logo: brushLogo,
-    logoClass: "h-20 md:h-28 lg:h-32 w-auto object-contain object-left block",
+    logoClass: "h-20 md:h-28 lg:h-32 w-auto object-contain object-left block grayscale invert dark:grayscale-0 dark:invert-0",
     copy: "A print and framing infrastructure platform running a unified ecommerce configuration engine allowing artists to scale their fulfilment effortlessly.",
     items: ["Custom Fulfilment", "Redundant Gateways", "Automated PDF Invoicing"],
     stats: [
@@ -104,28 +111,32 @@ function BandwidthBars() {
   const scrollVelocity = useVelocity(scrollYProgress);
   const smoothVelocity = useSpring(scrollVelocity, { damping: 50, stiffness: 400 });
   const velocityY = useTransform(smoothVelocity, [-0.5, 0.5], ["-80%", "80%"]);
+  const reduceMotion = useReducedMotion();
 
   return (
     <div
       ref={ref}
       className="hidden lg:flex mt-12 overflow-hidden w-full max-w-[200px] gap-1 opacity-20 relative h-20 items-end"
     >
-      {[...Array(12)].map((_, i) => (
-        <motion.div
-          key={i}
-          style={{ y: velocityY }}
-          initial={{ height: `${20 + Math.random() * 80}%` }}
-          animate={{ height: [`${20 + Math.random() * 80}%`, `${20 + Math.random() * 80}%`] }}
-          transition={{
-            duration: 1.5 + Math.random(),
-            delay: i * 0.05,
-            repeat: Infinity,
-            repeatType: "mirror",
-            ease: "easeInOut",
-          }}
-          className="w-full bg-paper"
-        />
-      ))}
+      {Array.from({ length: 12 }, (_, i) => {
+        const base = 0.2 + ((i * 37) % 75) / 100;
+        return (
+          <motion.div
+            key={i}
+            style={{ y: reduceMotion ? 0 : velocityY }}
+            initial={{ scaleY: base }}
+            animate={reduceMotion ? false : { scaleY: [base, 1 - base / 2, base] }}
+            transition={{
+              duration: 1.5 + (i % 4) * 0.3,
+              delay: i * 0.05,
+              repeat: Infinity,
+              repeatType: "mirror",
+              ease: "easeInOut",
+            }}
+            className="w-full origin-bottom bg-paper"
+          />
+        );
+      })}
     </div>
   );
 }
@@ -178,7 +189,8 @@ function BrandsPage() {
                         {brand.items.map((item) => (
                           <span
                             key={item}
-                            className="rounded-full border border-line bg-transparent px-4 py-2 font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-ink/65"
+                            data-cursor="link"
+                            className="rounded-full border border-line bg-transparent px-4 py-2 font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-ink/65 hover:border-reg/50 transition-colors duration-300"
                           >
                             {item}
                           </span>
@@ -201,17 +213,20 @@ function BrandsPage() {
 
                   <div className="lg:col-span-5 flex flex-col justify-between">
                     <FadeUp delay={0.2}>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10 border-t border-line pt-10">
-                        {brand.stats.map((s) => (
-                          <div key={s.label}>
-                            <div className="font-display text-4xl lg:text-5xl font-medium tracking-tight text-ink">
-                              {s.figure}
+                      <div className="relative border-t border-line pt-10 pb-6 px-4">
+                        <CornerMarks size={12} stroke={1.5} className="pointer-events-none absolute inset-0 text-reg/40" />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10">
+                          {brand.stats.map((s) => (
+                            <div key={s.label}>
+                              <div className="font-display text-4xl lg:text-5xl font-medium tracking-tight text-ink">
+                                {s.figure}
+                              </div>
+                              <div className="font-mono text-[10.5px] uppercase tracking-[0.22em] leading-relaxed text-ink/50 mt-4 max-w-[15ch]">
+                                {s.label}
+                              </div>
                             </div>
-                            <div className="font-mono text-[10.5px] uppercase tracking-[0.22em] leading-relaxed text-ink/50 mt-4 max-w-[15ch]">
-                              {s.label}
-                            </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
                     </FadeUp>
 
@@ -220,6 +235,7 @@ function BrandsPage() {
                         href={brand.href}
                         target="_blank"
                         rel="noreferrer noopener"
+                        data-cursor-text="VISIT"
                         className="group flex items-center justify-between"
                       >
                         <div>
@@ -230,9 +246,11 @@ function BrandsPage() {
                             {brand.domain}
                           </span>
                         </div>
-                        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-ink text-paper transition-transform duration-500 group-hover:scale-110">
-                          <ArrowUpRight className="size-6 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                        </div>
+                        <Magnetic>
+                          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-ink text-paper transition-transform duration-500 group-hover:scale-110">
+                            <ArrowUpRight className="size-6 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                          </div>
+                        </Magnetic>
                       </a>
                     </FadeUp>
                   </div>
@@ -242,7 +260,7 @@ function BrandsPage() {
           ))}
         </div>
 
-        <section className="bg-ink text-paper selection:bg-reg selection:text-paper relative overflow-hidden">
+        <section className="bg-ink text-paper selection:bg-reg selection:text-paper relative overflow-hidden" data-cursor-text="SYSTEM">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 0.05, scale: 1 }}

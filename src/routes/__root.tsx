@@ -6,7 +6,6 @@ import {
   useRouter,
   HeadContent,
   Scripts,
-  ScrollRestoration,
 } from "@tanstack/react-router";
 import { useEffect, useRef, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -21,27 +20,30 @@ import { Kixi, KixiBoot } from "../components/Kixi";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        {/* Kixi shrugs. The apology is the picture; the copy just confirms it. */}
+    <div className="grain flex min-h-screen items-center justify-center bg-paper text-ink px-4 py-16">
+      <div className="relative max-w-lg rounded-lg border border-line bg-surface/50 p-8 text-center backdrop-blur-md sm:p-12">
         <Kixi
           pose="shrug"
           scrollTilt={false}
           delay={0.2}
           title="Kixi, shrugging"
-          className="mx-auto mb-8 w-[min(260px,60vw)]"
+          className="mx-auto mb-6 w-[min(220px,50vw)]"
         />
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+        <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-reg">
+          Error 404 — Node Not Located
+        </span>
+        <h1 className="mt-4 font-display text-4xl font-bold tracking-tight text-ink sm:text-5xl">
+          Coordinate Void.
+        </h1>
+        <p className="mt-3 text-sm leading-relaxed text-ink/65 sm:text-base">
+          The requested route does not map to any active system node or document in the directory.
         </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <Link to="/" className="pill-solid" data-cursor-text="HOME">
+            Return to Studio
+          </Link>
+          <Link to="/work" className="link-line">
+            View Selected Work
           </Link>
         </div>
       </div>
@@ -57,30 +59,32 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+    <div className="grain flex min-h-screen items-center justify-center bg-paper text-ink px-4 py-16">
+      <div className="relative max-w-lg rounded-lg border border-line bg-surface/50 p-8 text-center backdrop-blur-md sm:p-12">
+        <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-reg">
+          Runtime Exception — Fault Intercepted
+        </span>
+        <h1 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          System Interrupted.
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+        <p className="mt-3 text-sm leading-relaxed text-ink/65">
+          An unhandled state occurred during execution. The error has been logged for telemetry audit.
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <button
+            type="button"
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="pill-solid cursor-pointer"
+            data-cursor-text="RETRY"
           >
-            Try again
+            Re-evaluate Node
           </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
-            Go home
-          </a>
+          <Link to="/" className="link-line">
+            Return to Studio
+          </Link>
         </div>
       </div>
     </div>
@@ -133,7 +137,6 @@ function RootShell({ children }: { children: ReactNode }) {
       </head>
       <body>
         {children}
-        <ScrollRestoration />
         <Scripts />
       </body>
     </html>

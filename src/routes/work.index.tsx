@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-import { Eyebrow, FadeUp, PageFrame, PageIntro, Magnetic } from "../components/KraftSite";
+import { Eyebrow, FadeUp, PageFrame, PageIntro, Magnetic, CornerMarks } from "../components/KraftSite";
 import { caseStudies, type CaseStudy } from "../data/caseStudies";
 
 export const Route = createFileRoute("/work/")({
@@ -100,7 +100,7 @@ function CaseStudyCard({
         }`}
       >
         <Link
-          data-cursor="explore"
+          data-cursor-text="VIEW STUDY"
           to="/work/$slug"
           params={{ slug: study.slug }}
           className="group grid h-full grid-cols-1 gap-6 md:grid-cols-12 md:gap-8 lg:gap-14"
@@ -122,7 +122,8 @@ function CaseStudyCard({
                 {study.services.map((s) => (
                   <span
                     key={s}
-                    className="rounded-full border border-line/70 bg-background/50 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-ink/65"
+                    data-cursor="link"
+                    className="rounded-full border border-line/70 bg-surface/60 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-ink/65 hover:border-reg/50 transition-colors duration-300"
                   >
                     {s}
                   </span>
@@ -135,14 +136,17 @@ function CaseStudyCard({
                 {study.architecture.length} layers · {study.stack.length} technologies ·{" "}
                 {study.year}
               </p>
-              <div className="flex size-10 items-center justify-center rounded-full border border-line transition-transform duration-500 group-hover:bg-reg group-hover:border-reg group-hover:text-paper group-hover:-translate-y-1 group-hover:translate-x-1">
-                <ArrowUpRight className="size-4" />
-              </div>
+              <Magnetic>
+                <div className="flex size-10 items-center justify-center rounded-full border border-line transition-transform duration-500 group-hover:bg-reg group-hover:border-reg group-hover:text-paper group-hover:-translate-y-1 group-hover:translate-x-1">
+                  <ArrowUpRight className="size-4" />
+                </div>
+              </Magnetic>
             </div>
           </div>
 
           {/* Image Column */}
           <div className="relative col-span-12 h-64 overflow-hidden rounded-lg border border-line md:col-span-6 md:h-full lg:col-span-7">
+            <CornerMarks size={16} stroke={1.5} className="pointer-events-none absolute inset-3 z-20 text-white/40 transition-colors duration-500 group-hover:text-white/80" />
             <div className="absolute inset-0 z-10 bg-ink/5 transition-colors duration-500 group-hover:bg-transparent" />
             <motion.img
               // Adding internal subtle motion inside the sticky container is a nice touch, but simple scale handles it!

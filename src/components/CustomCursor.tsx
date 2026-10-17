@@ -4,8 +4,9 @@ import { ArrowUpRight, Plus, ScanLine, GripHorizontal } from "lucide-react";
 
 export function CustomCursor() {
   const [flavor, setFlavor] = useState<
-    "default" | "link" | "text" | "view" | "visit" | "drag" | "expand" | "explore"
+    "default" | "link" | "text" | "view" | "visit" | "drag" | "expand" | "explore" | "badge"
   >("default");
+  const [cursorLabel, setCursorLabel] = useState<string>("");
 
   // Start off-screen
   const cursorX = useMotionValue(-100);
@@ -15,6 +16,10 @@ export function CustomCursor() {
   const springY = useSpring(cursorY, { damping: 30, stiffness: 400, mass: 0.1 });
 
   useEffect(() => {
+    if (typeof window === "undefined" || window.matchMedia("(pointer: coarse)").matches) {
+      return;
+    }
+
     const move = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
@@ -22,6 +27,7 @@ export function CustomCursor() {
       const target = e.target as HTMLElement;
       if (!target) return;
 
+      const textTarget = target.closest("[data-cursor-text]") as HTMLElement | null;
       const customCursor = target.closest("[data-cursor]");
       const isView = target.closest(".case-row, .case-image");
       const isLink = target.closest(
@@ -29,11 +35,25 @@ export function CustomCursor() {
       );
       const isInput = target.closest("input, textarea");
 
-      if (customCursor) {
+      if (textTarget) {
+        const text = textTarget.getAttribute("data-cursor-text") || "";
+        setCursorLabel(text);
+        setFlavor("badge");
+      } else if (customCursor) {
         const type = customCursor.getAttribute("data-cursor");
         // data-cursor is author-supplied, so narrow it to the known set rather
         // than trusting whatever string is on the element.
-        const known = ["link", "text", "view", "drag", "default", "visit", "expand", "explore"] as const;
+        const known = [
+          "link",
+          "text",
+          "view",
+          "drag",
+          "default",
+          "visit",
+          "expand",
+          "explore",
+          "badge",
+        ] as const;
         type Flavor = (typeof known)[number];
         const next: Flavor = (known as readonly string[]).includes(type ?? "")
           ? (type as Flavor)
@@ -136,6 +156,14 @@ export function CustomCursor() {
       border: "1px solid var(--ink)",
       backdropFilter: "blur(4px)",
     },
+    badge: {
+      height: 76,
+      width: 76,
+      opacity: 1,
+      backgroundColor: "var(--ink)",
+      mixBlendMode: "normal",
+      border: "0px solid transparent",
+    },
   };
 
   return (
@@ -163,6 +191,18 @@ export function CustomCursor() {
         transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
       >
         <AnimatePresence mode="wait">
+          {flavor === "badge" && (
+            <motion.span
+              key={`badge-${cursorLabel}`}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.15 }}
+              className="font-mono text-[10px] font-bold tracking-[0.2em] text-[var(--paper)] text-center px-1 max-w-[70px] truncate"
+            >
+              {cursorLabel}
+            </motion.span>
+          )}
           {flavor === "view" && (
             <motion.span
               key="view-text"

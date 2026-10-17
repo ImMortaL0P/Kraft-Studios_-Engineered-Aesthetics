@@ -8,6 +8,7 @@ import {
   PageFrame,
   SectionLabel,
   StatBand,
+  CornerMarks,
 } from "../components/KraftSite";
 import { bySlug, caseStudies, type CaseStudy } from "../data/caseStudies";
 
@@ -151,9 +152,10 @@ function Cover({ study }: { study: CaseStudy }) {
   return (
     <FadeUp className="site-shell">
       <div
-        className="overflow-hidden rounded-md border border-line"
+        className="relative overflow-hidden rounded-md border border-line"
         style={study.coverBg ? { backgroundColor: study.coverBg } : undefined}
       >
+        <CornerMarks size={18} stroke={1.5} className="pointer-events-none absolute inset-3 z-10 text-white/40" />
         <img
           src={study.cover}
           alt={study.coverAlt}
@@ -209,6 +211,7 @@ function Architecture({ study }: { study: CaseStudy }) {
             delay={i * 0.07}
             className="group relative bg-paper p-7 transition-colors duration-500 hover:bg-surface md:p-9"
           >
+            <CornerMarks size={10} stroke={1} className="pointer-events-none absolute inset-2 text-reg/20 transition-colors duration-500 group-hover:text-reg/60" />
             <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-reg">
               Layer {String(i + 1).padStart(2, "0")}
             </span>
@@ -374,6 +377,7 @@ function NextStudy({ next }: { next: CaseStudy }) {
       <Link
         to="/work/$slug"
         params={{ slug: next.slug }}
+        data-cursor-text="NEXT STUDY"
         className="group block border-t border-line pt-10"
       >
         <Eyebrow>Next case study</Eyebrow>

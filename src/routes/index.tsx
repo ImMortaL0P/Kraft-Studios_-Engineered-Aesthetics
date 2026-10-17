@@ -18,7 +18,10 @@ import {
   DisplayTicker,
   StatBand,
   Ticker,
+  Magnetic,
   scrollToId,
+  CornerMarks,
+  SpotlightCard,
 } from "../components/KraftSite";
 import {
   AnimatePresence,
@@ -28,6 +31,7 @@ import {
   useSpring,
   useTransform,
   type MotionValue,
+  useReducedMotion,
 } from "framer-motion";
 import {
   Suspense,
@@ -39,7 +43,7 @@ import {
   type RefObject,
 } from "react";
 
-import heroImage from "../assets/kraft-hero.jpg";
+import heroImage from "../assets/kraft-craft-system.webp";
 import umvadlaImage from "../assets/showcase/umvadla-02-about.jpg";
 import umvadlaHome from "../assets/showcase/umvadla-01-home.jpg";
 import shardaImage from "../assets/showcase-sharda.jpg";
@@ -392,15 +396,8 @@ export function StaggeredParagraph({ text, className = "" }: { text: string; cla
 }
 
 function HomePage() {
-  const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
-
   return (
     <PageFrame>
-      <motion.div
-        className="fixed inset-x-0 top-0 z-[70] h-[2px] origin-left bg-reg"
-        style={{ scaleX: progress }}
-      />
       <SectionCounter />
       <main className="relative">
         <div className="sticky bottom-0 z-0">
@@ -562,7 +559,8 @@ function Hero() {
               variants={textContainerVariants}
               initial="hidden"
               animate="visible"
-              className="flex flex-col font-display text-[clamp(2.6rem,9vw,8.5rem)] font-bold uppercase leading-[0.88] tracking-[-0.04em] lg:col-span-8"
+              data-cursor-text="ENGINEERED"
+              className="flex flex-col font-display text-[clamp(2.6rem,9vw,8.5rem)] font-bold uppercase leading-[0.88] tracking-[-0.04em] lg:col-span-8 cursor-default"
             >
               <StaggeredText text="Engineered" />
               <StaggeredText text="Aesthetics." className="text-reg" />
@@ -594,9 +592,11 @@ function Hero() {
               {/* clear-both matters: a flex row beside a float gets placed
                   alongside it and squashed, rather than below it. */}
               <div className="clear-both mt-8 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
-                <Link to="/contact" className="pill-solid">
-                  Start a project <ArrowRight size={16} className="arrow" />
-                </Link>
+                <Magnetic>
+                  <Link to="/contact" className="pill-solid" data-cursor-text="START">
+                    Start a project <ArrowRight size={16} className="arrow" />
+                  </Link>
+                </Magnetic>
                 <Link to="/about" className="link-line">
                   Read the manifesto <ArrowUpRight size={14} />
                 </Link>
@@ -634,21 +634,24 @@ function Hero() {
         />
       </div>
 
-      <button
-        type="button"
-        onClick={() => scrollToId("premise")}
-        aria-label="Scroll to the next section"
-        className="group absolute bottom-28 right-[clamp(1.25rem,4vw,4rem)] z-[3] hidden flex-col items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-ink/60 hover:text-ink lg:flex"
-      >
-        <span className="[writing-mode:vertical-rl]">Scroll</span>
-        <span className="relative block h-12 w-px overflow-hidden bg-line">
-          <span className="scroll-hint absolute inset-x-0 top-0 h-4 bg-reg" />
-        </span>
-        <ArrowDown
-          size={12}
-          className="transition-transform duration-500 group-hover:translate-y-1"
-        />
-      </button>
+      <Magnetic>
+        <button
+          type="button"
+          onClick={() => scrollToId("premise")}
+          aria-label="Scroll to the next section"
+          data-cursor-text="EXPLORE"
+          className="group absolute bottom-28 right-[clamp(1.25rem,4vw,4rem)] z-[3] hidden flex-col items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-ink/60 hover:text-ink lg:flex"
+        >
+          <span className="[writing-mode:vertical-rl]">Scroll</span>
+          <span className="relative block h-12 w-px overflow-hidden bg-line">
+            <span className="scroll-hint absolute inset-x-0 top-0 h-4 bg-reg" />
+          </span>
+          <ArrowDown
+            size={12}
+            className="transition-transform duration-500 group-hover:translate-y-1"
+          />
+        </button>
+      </Magnetic>
     </section>
   );
 }
@@ -663,24 +666,25 @@ function HeroImage() {
   );
   const scale = useTransform(scrollYProgress, [0, 1], [1.22, 1]);
   const captionY = useTransform(scrollYProgress, [0, 1], ["40%", "-40%"]);
+  const reduceMotion = useReducedMotion();
 
   return (
-    <div ref={ref} className="relative h-[60vh] md:h-[88vh]">
+    <div ref={ref} className="relative h-[60vh] md:h-[88vh]" data-cursor-text="CRAFT ⟶ SYSTEM">
       <motion.div
         className="absolute inset-0 overflow-hidden bg-surface"
-        style={{ clipPath: clip }}
+        style={{ clipPath: reduceMotion ? "inset(0% 0% 0% 0%)" : clip }}
       >
         <motion.img
           src={heroImage}
-          alt="A designer aligning registration marks by hand with a steel rule"
-          className="h-full w-full object-cover grayscale transform-gpu will-change-transform"
+          alt="A digital systems architect calibrating modular design system component hierarchies, Swiss layout grids, and wireframe schemas on an illuminated studio display"
+          className="h-full w-full object-cover grayscale-[0.2] contrast-[1.05] brightness-95 transform-gpu will-change-transform transition-all duration-700 hover:grayscale-0"
           decoding="async"
           fetchPriority="high"
-          style={{ scale }}
+          style={{ scale: reduceMotion ? 1 : scale }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-black/15" />
         <motion.div
-          style={{ y: captionY }}
+          style={{ y: reduceMotion ? 0 : captionY }}
           className="site-shell absolute inset-x-0 bottom-6 flex flex-col items-start justify-between gap-3 text-white sm:bottom-10 sm:flex-row sm:items-end sm:gap-6"
         >
           <p className="max-w-[16ch] font-display text-[clamp(1.5rem,3.4vw,3rem)] font-bold leading-[1.05] tracking-[-0.03em]">
@@ -690,8 +694,11 @@ function HeroImage() {
             Fig. 01 — Craft ⟶ System
           </span>
         </motion.div>
-        <span className="absolute left-6 top-6 size-5 border-l border-t border-white/70" />
-        <span className="absolute right-6 top-6 size-5 border-r border-t border-white/70" />
+        <CornerMarks
+          size={24}
+          stroke={1.5}
+          className="pointer-events-none absolute inset-5 sm:inset-8 text-white/70"
+        />
       </motion.div>
     </div>
   );
@@ -718,8 +725,10 @@ function Partners() {
           <FadeUp
             key={c.name}
             delay={i * 0.07}
-            className="group flex min-h-[8.5rem] flex-col items-center justify-center gap-3 bg-paper px-4 py-8 transition-colors duration-500 hover:bg-surface"
+            className="group flex min-h-[8.5rem] flex-col items-center justify-center gap-3 bg-paper px-4 py-8 transition-colors duration-500 hover:bg-surface cursor-pointer"
+            id={`partner-${i}`}
           >
+            <div data-cursor-text="CLIENT" className="flex flex-col items-center justify-center gap-3 w-full">
             {c.logo === null ? (
               <span className="font-quest text-center text-[1.9rem] leading-none text-ink/70 transition-colors duration-500 group-hover:text-ink md:text-[2.2rem]">
                 {c.name}
@@ -742,6 +751,7 @@ function Partners() {
             <span className="max-w-[24ch] text-balance text-center font-mono text-[9px] uppercase leading-[1.7] tracking-[0.18em] text-ink/35 transition-colors duration-500 group-hover:text-reg">
               {c.note}
             </span>
+            </div>
           </FadeUp>
         ))}
       </div>
@@ -822,7 +832,8 @@ function Premise() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "0px 0px -10% 0px" }}
               transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: i * 0.06 }}
-              className="group relative flex gap-6 border-t border-line py-8 last:border-b md:gap-10"
+              data-cursor-text={`SEAM 0${i + 1}`}
+              className="group relative flex gap-6 border-t border-line py-8 last:border-b md:gap-10 cursor-default"
             >
               <span className="absolute left-0 top-[-1px] h-px w-full origin-left scale-x-0 bg-reg transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100" />
               <span className="w-10 shrink-0 font-display text-3xl font-light tabular-nums text-ink/25 transition-colors duration-500 group-hover:text-reg">
@@ -852,6 +863,7 @@ function BlueprintLine() {
   });
   const pathLength = useSpring(scrollYProgress, { stiffness: 40, damping: 20 });
   const opacity = useTransform(scrollYProgress, [0, 0.4], [0, 1]);
+  const reduceMotion = useReducedMotion();
 
   return (
     <motion.svg
@@ -860,7 +872,7 @@ function BlueprintLine() {
       fill="none"
       className="pointer-events-none absolute inset-x-0 top-0 hidden h-40 w-full text-reg/25 md:block"
       preserveAspectRatio="none"
-      style={{ opacity }}
+      style={{ opacity: reduceMotion ? 0.35 : opacity }}
       aria-hidden="true"
     >
       <motion.path
@@ -868,7 +880,7 @@ function BlueprintLine() {
         stroke="currentColor"
         strokeWidth="2"
         strokeDasharray="6 8"
-        style={{ pathLength }}
+        style={{ pathLength: reduceMotion ? 1 : pathLength }}
       />
     </motion.svg>
   );
@@ -877,48 +889,52 @@ function BlueprintLine() {
 function ServiceCard({ service, index }: { service: (typeof services)[number]; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["0 1", "0.75 1"] });
-  const clipPath = useTransform(scrollYProgress, [0, 1], ["inset(100% 0 0 0)", "inset(0% 0 0 0)"]);
   const opacity = useTransform(scrollYProgress, [0, 0.6], [0, 1]);
   const y = useSpring(useTransform(scrollYProgress, [0, 1], [40, 0]), {
     stiffness: 70,
     damping: 20,
   });
+  const reduceMotion = useReducedMotion();
 
   return (
     <motion.article
       ref={ref}
-      style={{ opacity, y }}
-      className="group relative flex h-full flex-col"
+      data-cursor-text="SYSTEM"
+      style={{ opacity: reduceMotion ? 1 : opacity, y: reduceMotion ? 0 : y }}
+      className="group relative flex h-full flex-col cursor-pointer"
     >
-      <motion.div
-        style={{ clipPath }}
-        className="pointer-events-none absolute inset-0 z-0 rounded border border-paper/12 bg-paper/[0.04] transition-colors duration-500 group-hover:border-reg/50 group-hover:bg-paper/[0.07]"
-      />
-      <div className="relative z-10 flex h-full flex-col p-8 md:p-9">
-        <div className="flex items-center justify-between font-mono text-xs tracking-[0.2em] text-reg">
-          <span>{service.n} —</span>
-          <span className="text-paper/25 transition-colors duration-500 group-hover:text-paper/60">
-            0{index + 1}/03
-          </span>
-        </div>
-        <h3 className="mt-5 font-display text-2xl font-bold tracking-[-0.02em] lg:text-[1.75rem]">
-          {service.title}
-        </h3>
-        <p className="mt-4 text-[15px] leading-relaxed text-paper/60">{service.copy}</p>
-        <div className="mt-6 flex flex-wrap gap-2">
-          {service.chips.map((c) => (
-            <span
-              key={c}
-              className="chip border-paper/15 text-paper/60 group-hover:border-paper/30"
-            >
-              {c}
+      <SpotlightCard className="relative flex h-full flex-col rounded border border-paper/12 bg-paper/[0.04] transition-colors duration-500 group-hover:border-reg/50 group-hover:bg-paper/[0.07]">
+        <CornerMarks
+          size={14}
+          stroke={1.5}
+          className="pointer-events-none absolute inset-2 text-paper/20 transition-colors duration-500 group-hover:text-reg/60"
+        />
+        <div className="relative z-10 flex h-full flex-col p-8 md:p-9">
+          <div className="flex items-center justify-between font-mono text-xs tracking-[0.2em] text-reg">
+            <span>{service.n} —</span>
+            <span className="text-paper/25 transition-colors duration-500 group-hover:text-paper/60">
+              0{index + 1}/03
             </span>
-          ))}
+          </div>
+          <h3 className="mt-5 font-display text-2xl font-bold tracking-[-0.02em] lg:text-[1.75rem]">
+            {service.title}
+          </h3>
+          <p className="mt-4 text-[15px] leading-relaxed text-paper/60">{service.copy}</p>
+          <div className="mt-6 flex flex-wrap gap-2">
+            {service.chips.map((c) => (
+              <span
+                key={c}
+                className="chip border-paper/15 text-paper/60 group-hover:border-paper/30"
+              >
+                {c}
+              </span>
+            ))}
+          </div>
+          <Link to="/services" className="link-line mt-auto pt-8 text-paper/80">
+            About this service <ArrowUpRight size={14} />
+          </Link>
         </div>
-        <Link to="/services" className="link-line mt-auto pt-8 text-paper/80">
-          About this service <ArrowUpRight size={14} />
-        </Link>
-      </div>
+      </SpotlightCard>
     </motion.article>
   );
 }
@@ -1055,6 +1071,7 @@ function ParallaxImg({
   // Continuous Scroll Parallax & Scaling for Portfolio Thumbnails
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1]);
+  const reduceMotion = useReducedMotion();
 
   return (
     <div
@@ -1066,7 +1083,7 @@ function ParallaxImg({
         src={src}
         alt={alt}
         className={`h-full w-full will-change-transform transform-gpu ${fit === "contain" ? "object-contain" : "object-cover"}`}
-        style={{ scale }}
+        style={{ scale: reduceMotion ? 1 : scale }}
         loading="lazy"
         decoding="async"
       />
@@ -1085,6 +1102,7 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
     stiffness: 60,
     damping: 20,
   });
+  const reduceMotion = useReducedMotion();
   const cursor = useRef<HTMLSpanElement>(null);
 
   const onMove = (e: MouseEvent<HTMLAnchorElement>) => {
@@ -1102,7 +1120,7 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
   return (
     <motion.div
       ref={ref}
-      style={{ opacity, y }}
+      style={{ opacity: reduceMotion ? 1 : opacity, y: reduceMotion ? 0 : y }}
       className={"group flex flex-col will-change-transform transform-gpu " + cls}
     >
       <Link
@@ -1118,6 +1136,11 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
           ratio={ratio}
           {...(study.coverFit ? { fit: study.coverFit } : {})}
           {...(study.coverBg ? { bg: study.coverBg } : {})}
+        />
+        <CornerMarks
+          size={16}
+          stroke={1.5}
+          className="pointer-events-none absolute inset-3 z-10 text-white/35 transition-colors duration-500 group-hover:text-white/80"
         />
         <span className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full bg-ink/70 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-paper backdrop-blur-sm">
           <ArrowUpRight size={11} />
@@ -1193,12 +1216,14 @@ function ContactBand() {
                 className="max-w-[44ch] text-[15px] leading-relaxed text-paper/60"
               />
               <div className="flex flex-wrap items-center gap-6">
-                <a href="mailto:mangalam@kraftstudios.site" className="link-line text-paper/80">
+                <a href="mailto:mangalam@kraftstudios.site" className="link-line text-paper/80" data-cursor-text="EMAIL">
                   mangalam@kraftstudios.site
                 </a>
-                <Link to="/contact" className="pill-solid pill-invert">
-                  Initialize protocol <ArrowRight size={16} className="arrow" />
-                </Link>
+                <Magnetic>
+                  <Link to="/contact" className="pill-solid pill-invert" data-cursor-text="PROTOCOL">
+                    Initialize protocol <ArrowRight size={16} className="arrow" />
+                  </Link>
+                </Magnetic>
               </div>
             </div>
           </div>
