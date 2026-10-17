@@ -321,7 +321,7 @@ export function SiteHeader() {
                 onClick={() => setOpen((v) => !v)}
                 aria-expanded={open}
                 aria-label={open ? "Close menu" : "Open menu"}
-                className="group flex items-center gap-2 font-mono text-[10px] tracking-[0.26em] sm:gap-3 sm:text-[11px]"
+                className="group flex min-h-[44px] min-w-[44px] items-center justify-center gap-2 font-mono text-[10px] tracking-[0.26em] sm:gap-3 sm:text-[11px]"
               >
                 <span className="hidden sm:inline">{open ? "CLOSE" : "MENU"}</span>
                 <span className="relative block h-3 w-5 sm:w-6">
@@ -345,14 +345,14 @@ export function SiteHeader() {
             role="dialog"
             aria-modal="true"
             aria-label="Site Navigation Menu"
-            className="fixed inset-0 z-[55] flex flex-col bg-paper"
+            className="fixed inset-0 z-[55] flex flex-col bg-paper overflow-y-auto overscroll-contain"
             initial={{ clipPath: "inset(0 0 100% 0)" }}
             animate={{ clipPath: "inset(0 0 0% 0)" }}
             exit={{ clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.8, ease: EASE }}
           >
             <div className="blueprint-grid pointer-events-none absolute inset-0 opacity-60" />
-            <div className="gutter relative mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-between pb-10 pt-28">
+            <div className="gutter relative mx-auto flex w-full max-w-[1600px] min-h-full flex-1 flex-col justify-between pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(6rem,env(safe-area-inset-top))]">
               <nav className="flex flex-col" aria-label="Menu">
                 {navItems.map((item, i) => (
                   <div key={item.to} className="overflow-hidden border-b border-line">
@@ -831,6 +831,7 @@ export function SpotlightCard({
   const [opacity, setOpacity] = useState(0);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return;
     if (!divRef.current) return;
     const rect = divRef.current.getBoundingClientRect();
     setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
@@ -954,6 +955,7 @@ export function Magnetic({
   const springY = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
 
   const handleMouse = (e: React.MouseEvent) => {
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return;
     if (!ref.current) return;
     const { clientX, clientY } = e;
     const { height, width, left, top } = ref.current.getBoundingClientRect();

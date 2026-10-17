@@ -174,10 +174,18 @@ export function CustomCursor() {
             cursor: none !important;
           }
         }
+        @media (pointer: coarse) {
+          body, a, button, input, textarea, select, .cursor-pointer {
+            cursor: auto !important;
+          }
+          .custom-cursor-node {
+            display: none !important;
+          }
+        }
       `}</style>
 
       <motion.div
-        className="pointer-events-none fixed left-0 top-0 z-[99999] hidden flex-col items-center justify-center transform-gpu will-change-transform md:flex"
+        className="custom-cursor-node pointer-events-none fixed left-0 top-0 z-[99999] hidden flex-col items-center justify-center transform-gpu will-change-transform md:flex"
         style={{
           x: springX,
           y: springY,

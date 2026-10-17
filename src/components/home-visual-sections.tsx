@@ -137,12 +137,12 @@ export function ProcessSection() {
   return (
     <section ref={containerRef} id="process" className="relative h-[400vh] bg-surface">
       <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-full md:w-[600px] bg-gradient-to-r from-surface from-60% via-surface/80 to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 hidden md:block md:w-[600px] bg-gradient-to-r from-surface from-60% via-surface/80 to-transparent" />
 
-        <div className="absolute left-4 top-28 z-20 w-full md:left-14 md:top-36 md:w-[400px]">
+        <div className="absolute left-4 top-20 z-20 w-[calc(100%-2rem)] md:left-14 md:top-36 md:w-[400px]">
           <SectionLabel n="05" label="Process" />
           <MaskLines
-            className="mt-6 font-display text-[clamp(2.5rem,4vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.03em] md:mt-8"
+            className="mt-6 font-display text-[clamp(2.2rem,4vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.03em] md:mt-8"
             lines={[
               "From blueprint",
               <span key="l" className="text-ink/35">
@@ -151,16 +151,16 @@ export function ProcessSection() {
             ]}
           />
           <FadeUp delay={0.2}>
-            <p className="mt-8 max-w-[34ch] text-[15px] leading-relaxed text-ink/70">
+            <p className="mt-6 max-w-[34ch] text-[14px] leading-relaxed text-ink/70 sm:mt-8 sm:text-[15px]">
               Four stages, short loops. Design, engineering and the business stay in the same
               conversation from the first audit to the handover.
             </p>
           </FadeUp>
         </div>
 
-        <div className="absolute bottom-10 left-4 z-20 flex items-center gap-3 font-mono text-[10px] tracking-[0.2em] text-ink/40 md:left-14">
+        <div className="absolute bottom-8 left-4 z-20 flex items-center gap-3 font-mono text-[10px] tracking-[0.2em] text-ink/40 md:bottom-10 md:left-14">
           <span className="text-reg uppercase font-bold">Progress</span>
-          <div className="h-[2px] w-28 md:w-40 overflow-hidden rounded-full bg-line">
+          <div className="h-[2px] w-24 md:w-40 overflow-hidden rounded-full bg-line">
             <motion.div
               style={{ scaleX: scrollYProgress }}
               className="h-full bg-reg origin-left"
@@ -171,7 +171,7 @@ export function ProcessSection() {
 
         <motion.div
           style={{ x: reduceMotion ? x : smoothX }}
-          className="flex h-max w-max gap-8 px-4 md:gap-14 md:pl-[500px] lg:pl-[600px] will-change-transform transform-gpu"
+          className="flex h-max w-max gap-6 px-4 pl-[88vw] md:gap-14 md:pl-[500px] lg:pl-[600px] will-change-transform transform-gpu"
         >
           {steps.map((step, i) => (
             <motion.div
@@ -179,7 +179,7 @@ export function ProcessSection() {
               whileHover={{ y: -8, scale: 1.01 }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
               data-cursor-text={step.k.toUpperCase()}
-              className="group flex w-[85vw] shrink-0 flex-col justify-between rounded-2xl border border-line/75 bg-paper p-10 shadow-[0_0_0_1px_transparent] transition-all duration-300 hover:border-reg hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] md:w-[50vw] md:p-14 lg:w-[40vw] cursor-pointer"
+              className="group flex w-[85vw] shrink-0 flex-col justify-between rounded-2xl border border-line/75 bg-paper p-7 sm:p-10 md:p-14 shadow-[0_0_0_1px_transparent] transition-all duration-300 hover:border-reg hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] md:w-[50vw] lg:w-[40vw] cursor-pointer"
             >
               <div>
                 <div className="flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.24em]">
@@ -187,15 +187,15 @@ export function ProcessSection() {
                   <span className="text-ink/25">/</span>
                   <span className="text-ink/60">{step.k}</span>
                 </div>
-                <h3 className="mt-8 max-w-[14ch] font-display text-4xl font-bold tracking-tight text-ink md:mt-12 md:text-5xl">
+                <h3 className="mt-6 max-w-[14ch] font-display text-2xl font-bold tracking-tight text-ink sm:mt-8 sm:text-3xl md:mt-12 md:text-5xl">
                   {step.title}
                 </h3>
               </div>
 
-              <div className="mt-16 border-t border-line/50 pt-8 md:mt-24">
-                <p className="text-[17px] leading-relaxed text-ink/70">{step.copy}</p>
-                <div className="mt-8">
-                  <span className="chip !px-4 !py-2 text-[11px] font-mono tracking-[0.1em]">
+              <div className="mt-8 border-t border-line/50 pt-6 sm:mt-14 sm:pt-8 md:mt-24">
+                <p className="text-[15px] leading-relaxed text-ink/70 sm:text-[17px]">{step.copy}</p>
+                <div className="mt-6 sm:mt-8">
+                  <span className="chip !px-4 !py-2 text-[10px] sm:text-[11px] font-mono tracking-[0.1em]">
                     Output — {step.out}
                   </span>
                 </div>

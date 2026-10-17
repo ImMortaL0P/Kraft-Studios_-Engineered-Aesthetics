@@ -665,7 +665,7 @@ function HeroImage() {
     ["inset(0% 12% 0% 12%)", "inset(0% 0% 0% 0%)"],
   );
   const scale = useTransform(scrollYProgress, [0, 1], [1.22, 1]);
-  const captionY = useTransform(scrollYProgress, [0, 1], ["40%", "-40%"]);
+  const captionY = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
   const reduceMotion = useReducedMotion();
 
   return (

@@ -138,6 +138,7 @@ function TeamPhoto({
   const [coords, setCoords] = useState({ x: 0.5, y: 0.5, active: false });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return;
     if (!photoRef.current) return;
     const rect = photoRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width;
