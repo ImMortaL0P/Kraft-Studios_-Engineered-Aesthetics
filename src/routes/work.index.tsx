@@ -3,7 +3,14 @@ import { ArrowUpRight } from "lucide-react";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-import { Eyebrow, FadeUp, PageFrame, PageIntro, Magnetic, CornerMarks } from "../components/KraftSite";
+import {
+  Eyebrow,
+  FadeUp,
+  PageFrame,
+  PageIntro,
+  Magnetic,
+  CornerMarks,
+} from "../components/KraftSite";
 import { caseStudies, type CaseStudy } from "../data/caseStudies";
 
 export const Route = createFileRoute("/work/")({
@@ -95,7 +102,7 @@ function CaseStudyCard({
     <div ref={containerRef} className="mb-8 h-auto w-full md:mb-16 md:h-[600px] lg:h-[700px]">
       <motion.div
         style={{ top: stickyTop, scale, opacity }}
-        className={`origin-top overflow-hidden rounded-xl border border-line p-5 shadow-lg will-change-transform transform-gpu md:sticky md:p-10 ${
+        className={`origin-top overflow-hidden rounded-xl border border-line p-5 shadow-lg md:sticky md:p-10 ${
           isOdd ? "bg-surface" : "bg-paper"
         }`}
       >
@@ -146,7 +153,11 @@ function CaseStudyCard({
 
           {/* Image Column */}
           <div className="relative col-span-12 h-64 overflow-hidden rounded-lg border border-line md:col-span-6 md:h-full lg:col-span-7">
-            <CornerMarks size={16} stroke={1.5} className="pointer-events-none absolute inset-3 z-20 text-white/40 transition-colors duration-500 group-hover:text-white/80" />
+            <CornerMarks
+              size={16}
+              stroke={1.5}
+              className="pointer-events-none absolute inset-3 z-20 text-white/40 transition-colors duration-500 group-hover:text-white/80"
+            />
             <div className="absolute inset-0 z-10 bg-ink/5 transition-colors duration-500 group-hover:bg-transparent" />
             <motion.img
               // Adding internal subtle motion inside the sticky container is a nice touch, but simple scale handles it!

@@ -135,8 +135,66 @@ export function ProcessSection() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section ref={containerRef} id="process" className="relative h-[400vh] bg-surface">
-      <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
+    <section ref={containerRef} id="process" className="relative bg-surface md:h-[400vh]">
+      {/* Mobile Process: Natural vertical page flow with native horizontal snap swipe */}
+      <div className="md:hidden py-20 bg-surface">
+        <div className="site-shell">
+          <SectionLabel n="05" label="Process" />
+          <MaskLines
+            className="mt-6 font-display text-[clamp(2rem,7vw,3rem)] font-bold leading-[1.08] tracking-[-0.03em]"
+            lines={[
+              "From blueprint",
+              <span key="l" className="text-ink/35">
+                to running system.
+              </span>,
+            ]}
+          />
+          <FadeUp delay={0.2}>
+            <p className="mt-4 max-w-[34ch] text-[14px] leading-relaxed text-ink/70">
+              Four stages, short loops. Design, engineering and the business stay in the same
+              conversation from the first audit to the handover.
+            </p>
+          </FadeUp>
+
+          <div className="mt-8 flex items-center justify-between font-mono text-[10px] tracking-[0.2em] text-ink/40 border-b border-line pb-4">
+            <span className="text-reg uppercase font-bold">4 Operating Stages</span>
+            <span>Swipe ⟶</span>
+          </div>
+        </div>
+
+        {/* Swipeable snap carousel on mobile */}
+        <div className="mt-6 flex w-full gap-4 overflow-x-auto px-4 pb-6 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-webkit-overflow-scrolling:touch]">
+          {steps.map((step, i) => (
+            <div
+              key={step.k}
+              className="flex w-[82vw] max-w-[340px] shrink-0 snap-center flex-col justify-between rounded-2xl border border-line/75 bg-paper p-6 shadow-sm"
+            >
+              <div>
+                <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.22em]">
+                  <span className="text-reg">Step 0{i + 1}</span>
+                  <span className="text-ink/25">/</span>
+                  <span className="text-ink/60">{step.k}</span>
+                </div>
+                <h3 className="mt-4 font-display text-2xl font-bold tracking-tight text-ink">
+                  {step.title}
+                </h3>
+              </div>
+
+              <div className="mt-6 border-t border-line/50 pt-5">
+                <p className="text-[14px] leading-relaxed text-ink/70">{step.copy}</p>
+                <div className="mt-4">
+                  <span className="chip !px-3 !py-1 text-[10px] font-mono tracking-[0.08em]">
+                    Output — {step.out}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop Process: Pinned 400vh horizontal parallax track */}
+      <div className="hidden md:flex sticky top-0 h-screen w-full items-center overflow-hidden">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 hidden md:block md:w-[600px] bg-gradient-to-r from-surface from-60% via-surface/80 to-transparent" />
 
         <div className="absolute left-4 top-20 z-20 w-[calc(100%-2rem)] md:left-14 md:top-36 md:w-[400px]">
@@ -161,17 +219,14 @@ export function ProcessSection() {
         <div className="absolute bottom-8 left-4 z-20 flex items-center gap-3 font-mono text-[10px] tracking-[0.2em] text-ink/40 md:bottom-10 md:left-14">
           <span className="text-reg uppercase font-bold">Progress</span>
           <div className="h-[2px] w-24 md:w-40 overflow-hidden rounded-full bg-line">
-            <motion.div
-              style={{ scaleX: scrollYProgress }}
-              className="h-full bg-reg origin-left"
-            />
+            <motion.div style={{ scaleX: scrollYProgress }} className="h-full bg-reg origin-left" />
           </div>
           <span className="text-ink/60">01 / 04</span>
         </div>
 
         <motion.div
           style={{ x: reduceMotion ? x : smoothX }}
-          className="flex h-max w-max gap-6 px-4 pl-[88vw] md:gap-14 md:pl-[500px] lg:pl-[600px] will-change-transform transform-gpu"
+          className="flex h-max w-max gap-6 px-4 pl-[88vw] md:gap-14 md:pl-[500px] lg:pl-[600px]"
         >
           {steps.map((step, i) => (
             <motion.div
@@ -193,7 +248,9 @@ export function ProcessSection() {
               </div>
 
               <div className="mt-8 border-t border-line/50 pt-6 sm:mt-14 sm:pt-8 md:mt-24">
-                <p className="text-[15px] leading-relaxed text-ink/70 sm:text-[17px]">{step.copy}</p>
+                <p className="text-[15px] leading-relaxed text-ink/70 sm:text-[17px]">
+                  {step.copy}
+                </p>
                 <div className="mt-6 sm:mt-8">
                   <span className="chip !px-4 !py-2 text-[10px] sm:text-[11px] font-mono tracking-[0.1em]">
                     Output — {step.out}

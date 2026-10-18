@@ -280,7 +280,11 @@ export function SiteHeader() {
     }
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      document.documentElement.style.overflow = "";
+      if (typeof lenis?.start === "function") lenis.start();
+      window.removeEventListener("keydown", onKey);
+    };
   }, [open]);
 
   return (
@@ -473,11 +477,14 @@ export function PixelWordmark({ word = "KRAFT" }: { word?: string }) {
 
 export function SiteFooter() {
   return (
-    <footer className="grain relative border-t border-line bg-paper">
+    <footer className="grain relative border-t border-line bg-paper overflow-hidden">
       <div className="gutter relative z-[2] mx-auto max-w-[1600px] pt-20 md:pt-28">
-        <div className="relative flex items-center gap-12">
+        <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-8 md:gap-12">
           {/* Animated Monogram */}
-          <motion.div className="w-28 h-28 md:w-40 md:h-40 group relative perspective-1000" data-cursor-text="KRAFT">
+          <motion.div
+            className="w-20 h-20 sm:w-28 sm:h-28 md:w-40 md:h-40 group relative perspective-1000 shrink-0"
+            data-cursor-text="KRAFT"
+          >
             <motion.div className="absolute inset-0 bg-reg/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
             <motion.img
               src={logoMonogram}
@@ -493,7 +500,7 @@ export function SiteFooter() {
             />
           </motion.div>
 
-          <div className="flex-1">
+          <div className="flex-1 w-full overflow-hidden">
             <PixelWordmark />
           </div>
         </div>
@@ -508,7 +515,11 @@ export function SiteFooter() {
               Brand, software and operations — designed as one system.
             </p>
             <Magnetic>
-              <Link to="/contact" className="pill-solid mt-8 inline-flex" data-cursor-text="CONTACT">
+              <Link
+                to="/contact"
+                className="pill-solid mt-8 inline-flex"
+                data-cursor-text="CONTACT"
+              >
                 Start a conversation <ArrowUpRight size={16} className="arrow" />
               </Link>
             </Magnetic>

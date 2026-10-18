@@ -68,7 +68,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           System Interrupted.
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-ink/65">
-          An unhandled state occurred during execution. The error has been logged for telemetry audit.
+          An unhandled state occurred during execution. The error has been logged for telemetry
+          audit.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <button
@@ -120,7 +121,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     scripts: [
       { children: themeInitScript },
-      { children: `if (typeof window !== "undefined" && window.location.protocol === "http:" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") { window.location.href = window.location.href.replace("http:", "https:"); }` }
+      {
+        children: `if (typeof window !== "undefined" && window.location.protocol === "http:" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") { window.location.href = window.location.href.replace("http:", "https:"); }`,
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -156,14 +159,17 @@ function RootComponent() {
     window.scrollTo(0, 0);
     if (lenisRef.current?.lenis) {
       lenisRef.current.lenis.scrollTo(0, { immediate: true });
+      lenisRef.current.lenis.resize();
     }
 
     const t = setTimeout(() => {
       window.dispatchEvent(new Event("scroll"));
       window.dispatchEvent(new Event("resize"));
+      lenisRef.current?.lenis?.resize();
     }, 250); // right after the layout mount animation finishes
     const t2 = setTimeout(() => {
       window.dispatchEvent(new Event("scroll"));
+      lenisRef.current?.lenis?.resize();
     }, 600);
     return () => {
       clearTimeout(t);
@@ -186,13 +192,19 @@ function RootComponent() {
     <ReactLenis
       root
       ref={lenisRef}
-      options={{ lerp: 0.09, wheelMultiplier: 1, touchMultiplier: 1.6 }}
+      options={{
+        lerp: 0.09,
+        wheelMultiplier: 1,
+        smoothWheel: true,
+        syncTouch: false,
+        autoResize: true,
+      }}
     >
       <QueryClientProvider client={queryClient}>
         {/* Outside the keyed page wrapper, so a route change never remounts it. */}
         <KixiBoot />
         <CustomCursor />
-        <div key={key} className="page-enter transform-gpu will-change-transform min-h-screen">
+        <div key={key} className="page-enter min-h-screen">
           <Outlet />
         </div>
       </QueryClientProvider>

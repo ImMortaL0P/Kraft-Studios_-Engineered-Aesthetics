@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, useMotionValue, useScroll, useSpring, useTransform, useVelocity } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+  useVelocity,
+} from "framer-motion";
 
 /**
  * Kixi — the studio mascot.
@@ -34,14 +41,7 @@ import shrugUrl from "../assets/kixi/kixi-05-404-shrug.svg?url";
 import slumpedUrl from "../assets/kixi/kixi-05b-404-slumped.svg?url";
 import markUrl from "../assets/kixi/kixi-06-mark.svg?url";
 
-export type KixiPose =
-  | "hero"
-  | "preloader"
-  | "footer"
-  | "faq"
-  | "shrug"
-  | "slumped"
-  | "mark";
+export type KixiPose = "hero" | "preloader" | "footer" | "faq" | "shrug" | "slumped" | "mark";
 
 const ART: Record<KixiPose, string> = {
   hero: heroSvg,
@@ -273,7 +273,8 @@ export function KixiBoot() {
 
   // Hold the page still underneath, and hand scrolling back the moment it goes.
   useEffect(() => {
-    const lenis = (window as unknown as { lenis?: { stop?: () => void; start?: () => void } }).lenis;
+    const lenis = (window as unknown as { lenis?: { stop?: () => void; start?: () => void } })
+      .lenis;
     if (booting) {
       document.documentElement.style.overflow = "hidden";
       lenis?.stop?.();
@@ -283,6 +284,7 @@ export function KixiBoot() {
     }
     return () => {
       document.documentElement.style.overflow = "";
+      lenis?.start?.();
     };
   }, [booting]);
 

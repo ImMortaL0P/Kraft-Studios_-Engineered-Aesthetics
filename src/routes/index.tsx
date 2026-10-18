@@ -400,7 +400,7 @@ function HomePage() {
     <PageFrame>
       <SectionCounter />
       <main className="relative">
-        <div className="sticky bottom-0 z-0">
+        <div className="relative md:sticky md:bottom-0 md:z-0">
           <Hero />
           <HeroImage />
         </div>
@@ -728,29 +728,32 @@ function Partners() {
             className="group flex min-h-[8.5rem] flex-col items-center justify-center gap-3 bg-paper px-4 py-8 transition-colors duration-500 hover:bg-surface cursor-pointer"
             id={`partner-${i}`}
           >
-            <div data-cursor-text="CLIENT" className="flex flex-col items-center justify-center gap-3 w-full">
-            {c.logo === null ? (
-              <span className="font-quest text-center text-[1.9rem] leading-none text-ink/70 transition-colors duration-500 group-hover:text-ink md:text-[2.2rem]">
-                {c.name}
+            <div
+              data-cursor-text="CLIENT"
+              className="flex flex-col items-center justify-center gap-3 w-full"
+            >
+              {c.logo === null ? (
+                <span className="font-quest text-center text-[1.9rem] leading-none text-ink/70 transition-colors duration-500 group-hover:text-ink md:text-[2.2rem]">
+                  {c.name}
+                </span>
+              ) : (
+                <img
+                  src={c.logo}
+                  alt={c.name}
+                  loading="lazy"
+                  decoding="async"
+                  className={`${c.h} w-auto max-w-[75%] object-contain opacity-70 transition-all duration-700 group-hover:opacity-100 ${
+                    c.light
+                      ? // white artwork: invert it on paper, leave it alone in the dark theme
+                        "grayscale invert dark:grayscale-0 dark:invert-0"
+                      : // dark artwork: true colour on paper, inverted (and kept neutral) in the dark theme
+                        "grayscale group-hover:grayscale-0 dark:invert dark:grayscale dark:group-hover:grayscale"
+                  }`}
+                />
+              )}
+              <span className="max-w-[24ch] text-balance text-center font-mono text-[9px] uppercase leading-[1.7] tracking-[0.18em] text-ink/35 transition-colors duration-500 group-hover:text-reg">
+                {c.note}
               </span>
-            ) : (
-              <img
-                src={c.logo}
-                alt={c.name}
-                loading="lazy"
-                decoding="async"
-                className={`${c.h} w-auto max-w-[75%] object-contain opacity-70 transition-all duration-700 group-hover:opacity-100 ${
-                  c.light
-                    ? // white artwork: invert it on paper, leave it alone in the dark theme
-                      "grayscale invert dark:grayscale-0 dark:invert-0"
-                    : // dark artwork: true colour on paper, inverted (and kept neutral) in the dark theme
-                      "grayscale group-hover:grayscale-0 dark:invert dark:grayscale dark:group-hover:grayscale"
-                }`}
-              />
-            )}
-            <span className="max-w-[24ch] text-balance text-center font-mono text-[9px] uppercase leading-[1.7] tracking-[0.18em] text-ink/35 transition-colors duration-500 group-hover:text-reg">
-              {c.note}
-            </span>
             </div>
           </FadeUp>
         ))}
@@ -1082,7 +1085,7 @@ function ParallaxImg({
       <motion.img
         src={src}
         alt={alt}
-        className={`h-full w-full will-change-transform transform-gpu ${fit === "contain" ? "object-contain" : "object-cover"}`}
+        className={`h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"}`}
         style={{ scale: reduceMotion ? 1 : scale }}
         loading="lazy"
         decoding="async"
@@ -1121,7 +1124,7 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
     <motion.div
       ref={ref}
       style={{ opacity: reduceMotion ? 1 : opacity, y: reduceMotion ? 0 : y }}
-      className={"group flex flex-col will-change-transform transform-gpu " + cls}
+      className={"group flex flex-col " + cls}
     >
       <Link
         to="/work/$slug"
@@ -1216,11 +1219,19 @@ function ContactBand() {
                 className="max-w-[44ch] text-[15px] leading-relaxed text-paper/60"
               />
               <div className="flex flex-wrap items-center gap-6">
-                <a href="mailto:mangalam@kraftstudios.site" className="link-line text-paper/80" data-cursor-text="EMAIL">
+                <a
+                  href="mailto:mangalam@kraftstudios.site"
+                  className="link-line text-paper/80"
+                  data-cursor-text="EMAIL"
+                >
                   mangalam@kraftstudios.site
                 </a>
                 <Magnetic>
-                  <Link to="/contact" className="pill-solid pill-invert" data-cursor-text="PROTOCOL">
+                  <Link
+                    to="/contact"
+                    className="pill-solid pill-invert"
+                    data-cursor-text="PROTOCOL"
+                  >
                     Initialize protocol <ArrowRight size={16} className="arrow" />
                   </Link>
                 </Magnetic>
