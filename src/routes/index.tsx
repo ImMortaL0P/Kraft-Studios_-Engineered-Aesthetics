@@ -580,17 +580,21 @@ function Hero() {
           immediate
           className="flex flex-col gap-4 pt-10 font-mono text-[10px] uppercase leading-relaxed tracking-[0.26em] text-ink/50 sm:flex-row sm:items-start sm:justify-between"
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-start gap-3">
             <img
               src={logoMonogram}
               alt=""
               decoding="async"
-              className="h-8 w-8 object-contain opacity-70"
+              className="mt-0.5 h-8 w-8 object-contain opacity-70"
             />
             <span>
               01 — Studio
               <br />
-              Est. 2020 · Patna, India
+              Established in 2026 · Patna, India
+              <br />
+              <span className="text-[9px] tracking-[0.18em] text-ink/40">
+                Registered creative agency under MSME &amp; GST Act
+              </span>
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-4 sm:gap-6 sm:justify-end sm:text-right">
