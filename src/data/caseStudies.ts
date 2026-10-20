@@ -37,6 +37,9 @@ import brushStore from "../assets/showcase/brush-01-store.jpg";
 import brushBuilder from "../assets/showcase/brush-03-builder.jpg";
 import brushCatalogue from "../assets/showcase/brush-06-catalogue.jpg";
 import brushCart from "../assets/showcase/brush-09-cart.jpg";
+import brushCheckout from "../assets/showcase/brush-10-checkout.jpg";
+import brushAdminOrders from "../assets/showcase/brush-04-admin-orders.jpg";
+import brushAdminInventory from "../assets/showcase/brush-05-admin-inventory.jpg";
 import scrapexCover from "../assets/showcase/case-scrapex-01-cover.jpg";
 import scrapexFont from "../assets/showcase/case-scrapex-02-font.jpg";
 import scrapexPalette from "../assets/showcase/case-scrapex-03-palette.jpg";
@@ -471,7 +474,19 @@ export const caseStudies: CaseStudy[] = [
       },
       {
         src: brushCart,
-        caption: "Cart & Checkout Flow — instant slide-out drawer, discounts and pan-India shipping",
+        caption: "Slide-Out Cart Drawer — instant line item breakdown, sticker sheet upsells and live total pricing",
+      },
+      {
+        src: brushCheckout,
+        caption: "Multi-Step Checkout — authenticated customer flow with real-time pincode validation and payment gateways",
+      },
+      {
+        src: brushAdminOrders,
+        caption: "Admin Operations Cockpit — live order tracking, fulfilment state machine and automated PDF invoices",
+      },
+      {
+        src: brushAdminInventory,
+        caption: "Inventory & Catalog Console — real-time SKU stock levels, tax pricing and storefront feature toggles",
       },
     ],
     services: [
