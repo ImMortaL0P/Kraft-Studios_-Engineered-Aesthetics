@@ -15,7 +15,7 @@ import { bySlug, caseStudies, type CaseStudy } from "../data/caseStudies";
 export const Route = createFileRoute("/work/$slug")({
   loader: ({ params }) => {
     const study = bySlug(params.slug);
-    if (!study || study.inPipeline) throw notFound();
+    if (!study || (study.inPipeline && !study.isMvp)) throw notFound();
     return study;
   },
   head: ({ loaderData }) => {
@@ -27,19 +27,21 @@ export const Route = createFileRoute("/work/$slug")({
         : `https://kraftstudios.site${s.cover.startsWith("/") ? "" : "/"}${s.cover}`
       : "https://kraftstudios.site/og-image.png";
 
+    const titlePrefix = s.isMvp ? `${s.client} (MVP)` : s.client;
+
     return {
       meta: [
-        { title: `${s.client} — ${s.title} | Kraft Studios` },
+        { title: `${titlePrefix} — ${s.title} | Kraft Studios` },
         { name: "description", content: s.summary },
-        { property: "og:title", content: `${s.client} — ${s.title}` },
+        { property: "og:title", content: `${titlePrefix} — ${s.title}` },
         { property: "og:description", content: s.summary },
         { property: "og:type", content: "article" },
         { property: "og:url", content: `https://kraftstudios.site/work/${s.slug}` },
         { property: "og:image", content: imageUrl },
         { property: "og:image:secure_url", content: imageUrl },
-        { property: "og:image:alt", content: `${s.client} — ${s.title}` },
+        { property: "og:image:alt", content: `${titlePrefix} — ${s.title}` },
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:title", content: `${s.client} — ${s.title}` },
+        { name: "twitter:title", content: `${titlePrefix} — ${s.title}` },
         { name: "twitter:description", content: s.summary },
         { name: "twitter:image", content: imageUrl },
       ],
@@ -53,7 +55,7 @@ export const Route = createFileRoute("/work/$slug")({
 function CaseStudyPage() {
   const study = Route.useLoaderData() as CaseStudy;
   if (!study) return null;
-  const liveStudies = caseStudies.filter((c) => !c.inPipeline);
+  const liveStudies = caseStudies.filter((c) => !c.inPipeline || c.isMvp);
   const index = liveStudies.findIndex((c) => c.slug === study.slug);
   const next = liveStudies[(index + 1) % liveStudies.length];
   if (!next) return null;
@@ -85,8 +87,14 @@ function Masthead({ study }: { study: CaseStudy }) {
         All work
       </Link>
 
-      <div className="mt-10">
+      <div className="mt-10 flex flex-wrap items-center gap-3">
         <SectionLabel n={study.n} label={study.client} />
+        {study.isMvp && (
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/35 bg-amber-500/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-amber-600 dark:text-amber-400">
+            <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
+            Under Pipeline // Active MVP
+          </span>
+        )}
       </div>
 
       <MaskLines
@@ -108,6 +116,29 @@ function Masthead({ study }: { study: CaseStudy }) {
         </p>
       </FadeUp>
 
+      {study.isMvp && (
+        <FadeUp delay={0.4} immediate>
+          <div className="mt-8 rounded-lg border border-amber-500/30 bg-amber-500/[0.06] p-5 backdrop-blur-sm sm:p-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
+              <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                <span className="size-2 rounded-full bg-amber-500 animate-pulse" />
+              </div>
+              <div>
+                <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-amber-600 dark:text-amber-400 font-semibold">
+                  Minimum Viable Product // Operational Pipeline
+                </span>
+                <p className="mt-1 text-sm leading-relaxed text-ink/80">
+                  {study.client} is currently deployed and operating in its{" "}
+                  <strong>MVP stage</strong> within our production pipeline. Continuous scraping
+                  discovery, extraction engines, and human-in-the-loop verification queues are
+                  actively running and undergoing iterative validation.
+                </p>
+              </div>
+            </div>
+          </div>
+        </FadeUp>
+      )}
+
       {/* The scope of work, stated plainly, before any picture of it. */}
       <FadeUp delay={0.45} immediate>
         <div className="mt-12 flex flex-wrap items-center gap-2.5">
@@ -126,7 +157,19 @@ function Masthead({ study }: { study: CaseStudy }) {
         <dl className="mt-12 grid grid-cols-2 gap-x-6 gap-y-7 border-t border-line pt-7 sm:grid-cols-4">
           <Meta term="Client" value={study.client} />
           <Meta term="Year" value={study.year} />
-          <Meta term="Disciplines" value={String(study.services.length)} />
+          <Meta
+            term="Status"
+            value={
+              study.isMvp ? (
+                <span className="inline-flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-medium">
+                  <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
+                  Active MVP
+                </span>
+              ) : (
+                "Production"
+              )
+            }
+          />
           <Meta
             term="Live"
             value={
@@ -140,6 +183,8 @@ function Masthead({ study }: { study: CaseStudy }) {
                   <span className="break-all">{study.live.label}</span>
                   <ArrowUpRight className="mt-0.5 size-3 shrink-0 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </a>
+              ) : study.isMvp ? (
+                "Private MVP evaluation"
               ) : (
                 "Private deployment"
               )
@@ -174,6 +219,12 @@ function Cover({ study }: { study: CaseStudy }) {
           stroke={1.5}
           className="pointer-events-none absolute inset-3 z-10 text-white/40"
         />
+        {study.isMvp && (
+          <span className="absolute left-4 top-4 z-20 flex items-center gap-1.5 rounded-full border border-amber-500/35 bg-black/60 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-amber-400 backdrop-blur-md">
+            <span className="size-1.5 rounded-full bg-amber-400 animate-pulse" />
+            MVP Surface Feed
+          </span>
+        )}
         <img
           src={study.cover}
           alt={study.coverAlt}

@@ -1272,7 +1272,7 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
       style={{ opacity: reduceMotion ? 1 : opacity, y: reduceMotion ? 0 : y }}
       className={"group flex flex-col " + cls}
     >
-      {study.inPipeline ? (
+      {study.inPipeline && !study.isMvp ? (
         <div
           className="relative block w-full cursor-default overflow-hidden rounded-sm text-left select-none"
           aria-label={study.title + " (In Pipeline)"}
@@ -1330,7 +1330,7 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
           params={{ slug: study.slug }}
           onMouseMove={onMove}
           className="relative block w-full cursor-none overflow-hidden rounded-sm text-left"
-          aria-label={"Read the " + study.title + " case study"}
+          aria-label={"Read the " + study.title + (study.isMvp ? " MVP" : " case study")}
         >
           {study.logo ? (
             <div
@@ -1338,6 +1338,9 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
             >
               <div className="flex w-full items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45 z-10">
                 <span>SYS // {study.n}</span>
+                {study.isMvp && (
+                  <span className="text-amber-600 dark:text-amber-400 font-medium">ACTIVE MVP</span>
+                )}
               </div>
               <div className="flex flex-1 items-center justify-center w-full py-4 z-10">
                 <img
@@ -1359,10 +1362,17 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
               </div>
               <div className="flex w-full items-center justify-between font-mono text-[9px] uppercase tracking-[0.22em] text-ink/45 z-10">
                 <span className="truncate">{study.client}</span>
-                <span className="flex items-center gap-1.5 text-reg font-medium">
-                  <span className="inline-block size-1.5 rounded-full bg-reg animate-pulse" />
-                  {study.year} · CASE STUDY
-                </span>
+                {study.isMvp ? (
+                  <span className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-medium">
+                    <span className="inline-block size-1.5 rounded-full bg-amber-500 animate-pulse" />
+                    {study.year} · PIPELINE · MVP
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1.5 text-reg font-medium">
+                    <span className="inline-block size-1.5 rounded-full bg-reg animate-pulse" />
+                    {study.year} · CASE STUDY
+                  </span>
+                )}
               </div>
             </div>
           ) : (
@@ -1378,21 +1388,30 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
             size={16}
             stroke={1.5}
             className={`pointer-events-none absolute inset-3 z-10 transition-colors duration-500 ${
-              study.logo
-                ? "text-ink/25 group-hover:text-reg"
-                : "text-white/35 group-hover:text-white/80"
+              study.isMvp
+                ? "text-amber-500/30 group-hover:text-amber-500"
+                : study.logo
+                  ? "text-ink/25 group-hover:text-reg"
+                  : "text-white/35 group-hover:text-white/80"
             }`}
           />
-          <span className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] backdrop-blur-sm transition-colors duration-300 bg-ink/75 text-paper">
-            <ArrowUpRight size={11} />
-            View Case Study
-          </span>
+          {study.isMvp ? (
+            <span className="absolute right-4 top-4 z-10 flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] backdrop-blur-sm transition-colors duration-300 border border-amber-500/30 bg-amber-500/20 text-amber-600 dark:text-amber-400 shadow-sm">
+              <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
+              Under Pipeline · MVP
+            </span>
+          ) : (
+            <span className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] backdrop-blur-sm transition-colors duration-300 bg-ink/75 text-paper">
+              <ArrowUpRight size={11} />
+              View Case Study
+            </span>
+          )}
           <span
             ref={cursor}
-            className="view-bubble pointer-events-none absolute left-0 top-0 grid size-24 place-items-center rounded-full bg-reg font-mono text-[10px] uppercase tracking-[0.2em] text-white"
+            className={`view-bubble pointer-events-none absolute left-0 top-0 grid size-24 place-items-center rounded-full font-mono text-[10px] uppercase tracking-[0.2em] ${study.isMvp ? "bg-amber-500 text-black font-semibold" : "bg-reg text-white"}`}
             style={{ transform: "translate(-300px,-300px)" }}
           >
-            Read
+            {study.isMvp ? "MVP" : "Read"}
           </span>
         </Link>
       )}
@@ -1404,12 +1423,12 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
             {study.inPipeline && (
               <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.16em] text-amber-600 dark:text-amber-400">
                 <span className="size-1 rounded-full bg-amber-500 animate-pulse" />
-                Under Pipeline
+                {study.isMvp ? "Under Pipeline — MVP" : "Under Pipeline"}
               </span>
             )}
           </div>
           <h2
-            className={`mt-2 font-display text-2xl font-bold tracking-[-0.025em] transition-colors duration-300 ${!study.inPipeline ? "group-hover:text-reg" : ""} lg:text-[2.1rem]`}
+            className={`mt-2 font-display text-2xl font-bold tracking-[-0.025em] transition-colors duration-300 ${study.isMvp ? "group-hover:text-amber-500" : !study.inPipeline ? "group-hover:text-reg" : ""} lg:text-[2.1rem]`}
           >
             {study.title}
           </h2>
@@ -1423,7 +1442,7 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
         <div className="flex shrink-0 flex-row items-center justify-between gap-4 sm:flex-col sm:items-end">
           <span className="font-mono text-xs text-reg">{study.n}</span>
           <span className="font-mono text-[10px] text-ink/30">{study.year}</span>
-          {study.inPipeline ? (
+          {study.inPipeline && !study.isMvp ? (
             <div
               className="grid size-10 place-items-center rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 cursor-default"
               title="Under Pipeline"
@@ -1434,8 +1453,8 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
             <Link
               to="/work/$slug"
               params={{ slug: study.slug }}
-              aria-label={"Read the " + study.title + " case study"}
-              className="grid size-10 place-items-center rounded-full border border-line transition-all duration-500 group-hover:rotate-45 group-hover:border-reg group-hover:bg-reg group-hover:text-white"
+              aria-label={"Read the " + study.title + (study.isMvp ? " MVP" : " case study")}
+              className={`grid size-10 place-items-center rounded-full border border-line transition-all duration-500 ${study.isMvp ? "group-hover:rotate-45 group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-black" : "group-hover:rotate-45 group-hover:border-reg group-hover:bg-reg group-hover:text-white"}`}
             >
               <ArrowUpRight size={15} />
             </Link>

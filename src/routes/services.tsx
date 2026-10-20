@@ -83,6 +83,7 @@ const brands = [
     title: "The Notice Board",
     domain: "thenoticeboard.in",
     logo: noticeboardLogo,
+    isMvp: true,
     copy: "A verified government exam and recruitment notification pipeline holding strict provenance rules, preventing students from falling prey to unverified or aggregated misinformation.",
     items: ["AI Verification Agents", "Provenance Tracking", "Next.js App Router"],
     stats: [
@@ -217,6 +218,12 @@ function BrandsPage() {
 
                     <div className="flex flex-col gap-4 justify-end md:text-right">
                       <div className="flex flex-wrap md:justify-end items-center gap-3">
+                        {brand.isMvp && (
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-amber-600 dark:text-amber-400">
+                            <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
+                            Pipeline // MVP
+                          </span>
+                        )}
                         {brand.items.map((item) => (
                           <span
                             key={item}
@@ -275,7 +282,7 @@ function BrandsPage() {
                       >
                         <div>
                           <span className="block font-medium text-ink transition-colors group-hover:text-reg text-xl">
-                            Visit Platform
+                            {brand.isMvp ? "Explore MVP Platform" : "Visit Platform"}
                           </span>
                           <span className="block font-mono text-[11px] uppercase tracking-[0.22em] text-ink/45 mt-2">
                             {brand.domain}

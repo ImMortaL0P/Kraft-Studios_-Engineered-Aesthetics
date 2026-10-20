@@ -102,6 +102,8 @@ export type CaseStudy = {
   logoClass?: string;
   /** Flag for projects currently in active development or upcoming pipeline */
   inPipeline?: boolean;
+  /** Flag for active Minimum Viable Product (MVP) operating in pipeline */
+  isMvp?: boolean;
   shots: Shot[];
   /** Disciplines, as they would appear on a scope of work. */
   services: string[];
@@ -225,7 +227,8 @@ export const caseStudies: CaseStudy[] = [
     shots: [
       {
         src: shardaPortalHero,
-        caption: "Public Booking Engine — direct reservations, temple proximity & 20% advance token",
+        caption:
+          "Public Booking Engine — direct reservations, temple proximity & 20% advance token",
       },
       {
         src: shardaPortalRooms,
@@ -233,7 +236,8 @@ export const caseStudies: CaseStudy[] = [
       },
       {
         src: shardaBookings,
-        caption: "Master Bookings Ledger — 319 live reservations with guest verification and status",
+        caption:
+          "Master Bookings Ledger — 319 live reservations with guest verification and status",
       },
       {
         src: shardaCalendar,
@@ -341,38 +345,46 @@ export const caseStudies: CaseStudy[] = [
       href: "https://eduflow-by-kraft.vercel.app",
     },
     cover: eduflowCover,
-    coverAlt: "TrajectX Student Journey Manager — Institutional intelligence and admissions pipeline",
+    coverAlt:
+      "TrajectX Student Journey Manager — Institutional intelligence and admissions pipeline",
     logo: logoTrajectx,
     logoDark: logoTrajectxDark,
     logoClass: "h-14 sm:h-18 md:h-22 lg:h-26 w-auto max-w-[78%]",
     shots: [
       {
         src: eduflowDashboard,
-        caption: "Institutional Intelligence & Pipeline Funnel — live MongoDB analytics with dual stage charts",
+        caption:
+          "Institutional Intelligence & Pipeline Funnel — live MongoDB analytics with dual stage charts",
       },
       {
         src: eduflowJourney,
-        caption: "9-Phase Journey Kanban — linear lifecycle progression from lead to verified admit",
+        caption:
+          "9-Phase Journey Kanban — linear lifecycle progression from lead to verified admit",
       },
       {
         src: eduflowLeads,
-        caption: "Admissions CRM & Leads — multi-channel enquiry capture, SLA routing & pipeline triage",
+        caption:
+          "Admissions CRM & Leads — multi-channel enquiry capture, SLA routing & pipeline triage",
       },
       {
         src: eduflowStudents,
-        caption: "Student Directory & Cohort Management — CAT & GMAT track rosters and mentor assignments",
+        caption:
+          "Student Directory & Cohort Management — CAT & GMAT track rosters and mentor assignments",
       },
       {
         src: eduflowTests,
-        caption: "Mock Test Performance & Diagnostics — proctored scoring, accuracy percentiles & negative mark audits",
+        caption:
+          "Mock Test Performance & Diagnostics — proctored scoring, accuracy percentiles & negative mark audits",
       },
       {
         src: eduflowFees,
-        caption: "Instalment Fee Ledgers — automated payment schedules, receipts & balance tracking in INR",
+        caption:
+          "Instalment Fee Ledgers — automated payment schedules, receipts & balance tracking in INR",
       },
       {
         src: eduflowApps,
-        caption: "B-School Application Tracker — IIM composite score calculators, GD/PI prep & call letters",
+        caption:
+          "B-School Application Tracker — IIM composite score calculators, GD/PI prep & call letters",
       },
     ],
     services: [
@@ -474,19 +486,23 @@ export const caseStudies: CaseStudy[] = [
       },
       {
         src: brushCart,
-        caption: "Slide-Out Cart Drawer — instant line item breakdown, sticker sheet upsells and live total pricing",
+        caption:
+          "Slide-Out Cart Drawer — instant line item breakdown, sticker sheet upsells and live total pricing",
       },
       {
         src: brushCheckout,
-        caption: "Multi-Step Checkout — authenticated customer flow with real-time pincode validation and payment gateways",
+        caption:
+          "Multi-Step Checkout — authenticated customer flow with real-time pincode validation and payment gateways",
       },
       {
         src: brushAdminOrders,
-        caption: "Admin Operations Cockpit — live order tracking, fulfilment state machine and automated PDF invoices",
+        caption:
+          "Admin Operations Cockpit — live order tracking, fulfilment state machine and automated PDF invoices",
       },
       {
         src: brushAdminInventory,
-        caption: "Inventory & Catalog Console — real-time SKU stock levels, tax pricing and storefront feature toggles",
+        caption:
+          "Inventory & Catalog Console — real-time SKU stock levels, tax pricing and storefront feature toggles",
       },
     ],
     services: [
@@ -669,7 +685,10 @@ export const caseStudies: CaseStudy[] = [
     coverAlt: "The Notice Board — discovery and verification pipeline",
     logo: logoNoticeboard,
     logoDark: logoNoticeboardDark,
-    logoClass: "w-[82%] sm:w-[78%] md:w-[75%] max-w-[420px] h-auto max-h-20 sm:max-h-24 md:max-h-28",
+    logoClass:
+      "w-[82%] sm:w-[78%] md:w-[75%] max-w-[420px] h-auto max-h-20 sm:max-h-24 md:max-h-28",
+    inPipeline: true,
+    isMvp: true,
     shots: [
       { src: nbHomeV2, caption: "The student-facing feed of verified government notifications" },
       {
@@ -794,7 +813,16 @@ export const caseStudies: CaseStudy[] = [
       { figure: "80%", label: "Average file size reduction" },
       { figure: "0 B", label: "Persistent server storage" },
     ],
-    stack: ["Rust", "WebAssembly", "Sharp", "Libvips", "Poppler", "TypeScript", "React 19", "Tailwind CSS"],
+    stack: [
+      "Rust",
+      "WebAssembly",
+      "Sharp",
+      "Libvips",
+      "Poppler",
+      "TypeScript",
+      "React 19",
+      "Tailwind CSS",
+    ],
   },
 ];
 

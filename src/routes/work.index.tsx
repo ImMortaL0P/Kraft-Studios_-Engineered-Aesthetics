@@ -119,7 +119,7 @@ function CaseStudyCard({
           isOdd ? "bg-surface" : "bg-paper"
         }`}
       >
-        {study.inPipeline ? (
+        {study.inPipeline && !study.isMvp ? (
           <div className="group grid h-full grid-cols-1 gap-6 md:grid-cols-12 md:gap-8 lg:gap-14 cursor-default select-none">
             {/* Content Column */}
             <div className="col-span-12 flex h-full flex-col justify-between md:col-span-6 lg:col-span-5">
@@ -210,7 +210,7 @@ function CaseStudyCard({
           </div>
         ) : (
           <Link
-            data-cursor-text="VIEW STUDY"
+            data-cursor-text={study.isMvp ? "EXPLORE MVP" : "VIEW STUDY"}
             to="/work/$slug"
             params={{ slug: study.slug }}
             className="group grid h-full grid-cols-1 gap-6 md:grid-cols-12 md:gap-8 lg:gap-14"
@@ -218,10 +218,20 @@ function CaseStudyCard({
             {/* Content Column */}
             <div className="col-span-12 flex h-full flex-col justify-between md:col-span-6 lg:col-span-5">
               <div>
-                <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-reg">
-                  {study.n} — {study.client}
-                </span>
-                <h2 className="mt-4 font-display text-[2.5rem] font-bold leading-[1.05] tracking-tight transition-colors duration-500 group-hover:text-reg md:text-5xl lg:text-[4rem]">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-reg">
+                    {study.n} — {study.client}
+                  </span>
+                  {study.isMvp && (
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-amber-600 dark:text-amber-400">
+                      <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
+                      Under Pipeline · MVP
+                    </span>
+                  )}
+                </div>
+                <h2
+                  className={`mt-4 font-display text-[2.5rem] font-bold leading-[1.05] tracking-tight transition-colors duration-500 ${study.isMvp ? "group-hover:text-amber-500" : "group-hover:text-reg"} md:text-5xl lg:text-[4rem]`}
+                >
                   {study.title}
                 </h2>
                 <p className="mt-6 max-w-[46ch] text-base leading-relaxed text-ink/70">
@@ -246,11 +256,21 @@ function CaseStudyCard({
                   {study.architecture.length} layers · {study.stack.length} technologies ·{" "}
                   {study.year}
                 </p>
-                <Magnetic>
-                  <div className="flex size-10 items-center justify-center rounded-full border border-line transition-transform duration-500 group-hover:bg-reg group-hover:border-reg group-hover:text-paper group-hover:-translate-y-1 group-hover:translate-x-1">
-                    <ArrowUpRight className="size-4" />
-                  </div>
-                </Magnetic>
+                <div className="flex items-center gap-3">
+                  {study.isMvp && (
+                    <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-amber-600 dark:text-amber-400">
+                      <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
+                      Explore MVP
+                    </span>
+                  )}
+                  <Magnetic>
+                    <div
+                      className={`flex size-10 items-center justify-center rounded-full border border-line transition-transform duration-500 ${study.isMvp ? "group-hover:bg-amber-500 group-hover:border-amber-500 group-hover:text-black" : "group-hover:bg-reg group-hover:border-reg group-hover:text-paper"} group-hover:-translate-y-1 group-hover:translate-x-1`}
+                    >
+                      <ArrowUpRight className="size-4" />
+                    </div>
+                  </Magnetic>
+                </div>
               </div>
             </div>
 
@@ -259,7 +279,11 @@ function CaseStudyCard({
               <CornerMarks
                 size={16}
                 stroke={1.5}
-                className="pointer-events-none absolute inset-3 z-20 text-ink/25 transition-colors duration-500 group-hover:text-reg"
+                className={`pointer-events-none absolute inset-3 z-20 transition-colors duration-500 ${
+                  study.isMvp
+                    ? "text-amber-500/30 group-hover:text-amber-500"
+                    : "text-ink/25 group-hover:text-reg"
+                }`}
               />
               {study.logo ? (
                 <div className="relative flex h-full w-full flex-col items-center justify-between p-6 sm:p-8 md:p-10 select-none bg-[radial-gradient(var(--line)_1px,transparent_1px)] [background-size:20px_20px]">
@@ -287,17 +311,29 @@ function CaseStudyCard({
                   </div>
                   <div className="flex w-full items-center justify-between font-mono text-[9px] uppercase tracking-[0.22em] text-ink/45 z-10">
                     <span className="truncate">{study.client}</span>
-                    <span className="flex items-center gap-1.5 text-reg font-medium">
-                      <span className="inline-block size-1.5 rounded-full bg-reg animate-pulse" />
-                      CASE STUDY
-                    </span>
+                    {study.isMvp ? (
+                      <span className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-medium">
+                        <span className="inline-block size-1.5 rounded-full bg-amber-500 animate-pulse" />
+                        {study.year} · PIPELINE · MVP
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1.5 text-reg font-medium">
+                        <span className="inline-block size-1.5 rounded-full bg-reg animate-pulse" />
+                        {study.year} · CASE STUDY
+                      </span>
+                    )}
                   </div>
                 </div>
               ) : (
                 <>
                   <div className="absolute inset-0 z-10 bg-ink/5 transition-colors duration-500 group-hover:bg-transparent" />
+                  {study.isMvp && (
+                    <span className="absolute left-4 top-4 z-20 flex items-center gap-1.5 rounded-full border border-amber-500/35 bg-black/60 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-amber-400 backdrop-blur-md">
+                      <span className="size-1.5 rounded-full bg-amber-400 animate-pulse" />
+                      Under Pipeline · MVP
+                    </span>
+                  )}
                   <motion.img
-                    // Adding internal subtle motion inside the sticky container is a nice touch, but simple scale handles it!
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 1.2, ease: "easeOut" }}
                     src={study.cover}
