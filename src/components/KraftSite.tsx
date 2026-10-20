@@ -21,6 +21,122 @@ import { useEffect, useRef, useState, type ReactNode, type RefObject } from "rea
 
 export const EASE = [0.22, 1, 0.36, 1] as const;
 
+/**
+ * Web Audio tactile feedback synthesizer (MK·78 inspired).
+ * Pure browser audio synthesis — zero external files, instantaneous, lightweight.
+ */
+class TactileAudioEngine {
+  private ctx: AudioContext | null = null;
+  private enabled: boolean = false;
+  private listeners: Set<(enabled: boolean) => void> = new Set();
+
+  private getCtx() {
+    if (typeof window === "undefined") return null;
+    if (!this.ctx) {
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (AudioCtx) this.ctx = new AudioCtx();
+    }
+    if (this.ctx && this.ctx.state === "suspended") {
+      this.ctx.resume().catch(() => {});
+    }
+    return this.ctx;
+  }
+
+  public isEnabled() {
+    return this.enabled;
+  }
+
+  public toggle(): boolean {
+    this.enabled = !this.enabled;
+    if (this.enabled) {
+      this.getCtx();
+      this.play("thock");
+    }
+    this.listeners.forEach((l) => l(this.enabled));
+    return this.enabled;
+  }
+
+  public subscribe(fn: (enabled: boolean) => void) {
+    this.listeners.add(fn);
+    return () => {
+      this.listeners.delete(fn);
+    };
+  }
+
+  public play(type: "thock" | "tick" | "snap" = "thock") {
+    if (!this.enabled) return;
+    const ctx = this.getCtx();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+
+    if (type === "thock") {
+      // Warm, deep mechanical switch thock (180Hz -> 80Hz)
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(1200, now);
+      filter.frequency.exponentialRampToValueAtTime(140, now + 0.04);
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(280, now);
+      osc.frequency.exponentialRampToValueAtTime(70, now + 0.045);
+
+      gain.gain.setValueAtTime(0.25, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.05);
+    } else if (type === "snap") {
+      // Crisp tactile snap
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.exponentialRampToValueAtTime(110, now + 0.025);
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.03);
+    } else {
+      // Subtle micro-tick
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(800, now);
+      osc.frequency.exponentialRampToValueAtTime(300, now + 0.015);
+      gain.gain.setValueAtTime(0.1, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.018);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.018);
+    }
+  }
+}
+
+export const tactileAudio = new TactileAudioEngine();
+
+export function useTactileAudio() {
+  const [enabled, setEnabled] = useState(tactileAudio.isEnabled());
+  useEffect(() => {
+    return tactileAudio.subscribe(setEnabled);
+  }, []);
+  return {
+    enabled,
+    toggle: () => tactileAudio.toggle(),
+    play: (type?: "thock" | "tick" | "snap") => tactileAudio.play(type),
+  };
+}
+
 const navItems = [
   { label: "Work", to: "/work" as const },
   { label: "Our Brands", to: "/services" as const },
@@ -171,6 +287,38 @@ export function DisplayTicker({
   );
 }
 
+function KineticNumber({ value }: { value: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-10% 0px" });
+  const num = parseInt(value, 10);
+  const isNumeric = !isNaN(num);
+  const reduceMotion = useReducedMotion();
+
+  const motionVal = useMotionValue(0);
+  const springVal = useSpring(motionVal, { stiffness: 50, damping: 18 });
+  const [display, setDisplay] = useState(isNumeric && !reduceMotion ? "0" : value);
+
+  useEffect(() => {
+    if (inView && isNumeric && !reduceMotion) {
+      motionVal.set(num);
+    }
+  }, [inView, isNumeric, num, motionVal, reduceMotion]);
+
+  useEffect(() => {
+    if (!isNumeric || reduceMotion) return;
+    const unsub = springVal.on("change", (latest) => {
+      setDisplay(Math.round(latest).toString());
+    });
+    return () => unsub();
+  }, [springVal, isNumeric, reduceMotion]);
+
+  return (
+    <span ref={ref} className="stat-figure tabular-nums inline-block">
+      {display}
+    </span>
+  );
+}
+
 /**
  * Four figures, each one read off the site's own data rather than typed in, so
  * the band cannot drift out of step with the work it is counting.
@@ -190,7 +338,7 @@ export function StatBand({
           delay={i * 0.08}
           className="bg-paper px-5 py-9 md:px-7 md:py-11 text-center flex flex-col items-center"
         >
-          <p className="stat-figure">{s.figure}</p>
+          <KineticNumber value={s.figure} />
           <p className="mt-3 text-sm font-bold leading-tight">{s.label}</p>
           {s.note ? (
             <p className="mt-1.5 font-mono text-[10px] uppercase leading-[1.7] tracking-[0.18em] text-ink/40">
@@ -826,39 +974,65 @@ export function CornerMarks({
 }
 
 /**
- * Interactive cursor specular spotlight with radial illumination on hover.
+ * Interactive cursor specular spotlight with 3D magnetic perspective tilt on hover (Oblo style).
  */
 export function SpotlightCard({
   children,
   className = "",
   radius = 350,
+  tilt = true,
 }: {
   children: ReactNode;
   className?: string;
   radius?: number;
+  tilt?: boolean;
 }) {
   const divRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: -1000, y: -1000 });
   const [opacity, setOpacity] = useState(0);
+  const reduceMotion = useReducedMotion();
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springX = useSpring(mouseX, { stiffness: 220, damping: 25 });
+  const springY = useSpring(mouseY, { stiffness: 220, damping: 25 });
+
+  const rotateX = useTransform(springY, [-180, 180], [6, -6]);
+  const rotateY = useTransform(springX, [-180, 180], [-6, 6]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return;
     if (!divRef.current) return;
     const rect = divRef.current.getBoundingClientRect();
-    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    const relX = e.clientX - rect.left;
+    const relY = e.clientY - rect.top;
+    setPosition({ x: relX, y: relY });
     setOpacity(1);
+
+    if (tilt && !reduceMotion) {
+      mouseX.set(relX - rect.width / 2);
+      mouseY.set(relY - rect.height / 2);
+    }
   };
 
   const handleMouseLeave = () => {
     setOpacity(0);
+    mouseX.set(0);
+    mouseY.set(0);
   };
 
   return (
-    <div
+    <motion.div
       ref={divRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`relative overflow-hidden ${className}`}
+      style={{
+        rotateX: tilt && !reduceMotion ? rotateX : 0,
+        rotateY: tilt && !reduceMotion ? rotateY : 0,
+        transformPerspective: 1000,
+        transformStyle: "preserve-3d",
+      }}
+      className={`relative overflow-hidden transform-gpu will-change-transform ${className}`}
     >
       <div
         className="pointer-events-none absolute -inset-px transition-opacity duration-300 z-10"
@@ -869,7 +1043,7 @@ export function SpotlightCard({
         aria-hidden="true"
       />
       {children}
-    </div>
+    </motion.div>
   );
 }
 
@@ -923,12 +1097,14 @@ export function FadeUp({
   delay = 0,
   immediate = false,
   id,
+  onClick,
 }: {
   children: ReactNode;
   className?: string;
   delay?: number;
   immediate?: boolean;
   id?: string;
+  onClick?: () => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useSafeInView(ref);
@@ -938,6 +1114,7 @@ export function FadeUp({
     <motion.div
       id={id}
       ref={ref}
+      onClick={onClick}
       className={`${className} will-change-transform transform-gpu`}
       initial={reduceMotion ? false : { opacity: 0, y: 26 }}
       animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 26 }}

@@ -106,72 +106,196 @@ function CaseStudyCard({
           isOdd ? "bg-surface" : "bg-paper"
         }`}
       >
-        <Link
-          data-cursor-text="VIEW STUDY"
-          to="/work/$slug"
-          params={{ slug: study.slug }}
-          className="group grid h-full grid-cols-1 gap-6 md:grid-cols-12 md:gap-8 lg:gap-14"
-        >
-          {/* Content Column */}
-          <div className="col-span-12 flex h-full flex-col justify-between md:col-span-6 lg:col-span-5">
-            <div>
-              <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-reg">
-                {study.n} — {study.client}
-              </span>
-              <h2 className="mt-4 font-display text-[2.5rem] font-bold leading-[1.05] tracking-tight transition-colors duration-500 group-hover:text-reg md:text-5xl lg:text-[4rem]">
-                {study.title}
-              </h2>
-              <p className="mt-6 max-w-[46ch] text-base leading-relaxed text-ink/70">
-                {study.summary}
-              </p>
-
-              <div className="mt-8 flex flex-wrap gap-2">
-                {study.services.map((s) => (
-                  <span
-                    key={s}
-                    data-cursor="link"
-                    className="rounded-full border border-line/70 bg-surface/60 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-ink/65 hover:border-reg/50 transition-colors duration-300"
-                  >
-                    {s}
+        {study.inPipeline ? (
+          <div className="group grid h-full grid-cols-1 gap-6 md:grid-cols-12 md:gap-8 lg:gap-14 cursor-default select-none">
+            {/* Content Column */}
+            <div className="col-span-12 flex h-full flex-col justify-between md:col-span-6 lg:col-span-5">
+              <div>
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-reg">
+                    {study.n} — {study.client}
                   </span>
-                ))}
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-amber-600 dark:text-amber-400">
+                    <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
+                    Under Pipeline
+                  </span>
+                </div>
+                <h2 className="mt-4 font-display text-[2.5rem] font-bold leading-[1.05] tracking-tight text-ink md:text-5xl lg:text-[4rem]">
+                  {study.title}
+                </h2>
+                <p className="mt-6 max-w-[46ch] text-base leading-relaxed text-ink/70">
+                  {study.summary}
+                </p>
+
+                <div className="mt-8 flex flex-wrap gap-2">
+                  {study.services.map((s) => (
+                    <span
+                      key={s}
+                      className="rounded-full border border-line/70 bg-surface/60 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-ink/65"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-12 flex items-center justify-between border-t border-line/60 pt-6">
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45">
+                  {study.architecture.length} layers · {study.stack.length} technologies · {study.year}
+                </p>
+                <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-amber-600 dark:text-amber-400">
+                  <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
+                  In Pipeline
+                </div>
               </div>
             </div>
 
-            <div className="mt-12 flex items-center justify-between border-t border-line/60 pt-6">
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45">
-                {study.architecture.length} layers · {study.stack.length} technologies ·{" "}
-                {study.year}
-              </p>
-              <Magnetic>
-                <div className="flex size-10 items-center justify-center rounded-full border border-line transition-transform duration-500 group-hover:bg-reg group-hover:border-reg group-hover:text-paper group-hover:-translate-y-1 group-hover:translate-x-1">
-                  <ArrowUpRight className="size-4" />
+            {/* Cover Media Column */}
+            <div className="relative col-span-12 h-80 sm:h-96 md:h-full min-h-[360px] md:min-h-[450px] overflow-hidden rounded-lg border border-line bg-surface transition-colors duration-500 md:col-span-6 lg:col-span-7">
+              <CornerMarks
+                size={16}
+                stroke={1.5}
+                className="pointer-events-none absolute inset-3 z-20 text-amber-500/30"
+              />
+              {study.logo ? (
+                <div className="relative flex h-full w-full flex-col items-center justify-between p-6 sm:p-8 md:p-10 select-none bg-[radial-gradient(var(--line)_1px,transparent_1px)] [background-size:20px_20px]">
+                  <div className="flex w-full items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45 z-10">
+                    <span>SYS // {study.n}</span>
+                    <span className="text-amber-600 dark:text-amber-400 font-medium">IN THE PIPELINE</span>
+                  </div>
+                  <div className="flex flex-1 items-center justify-center w-full py-4 z-10">
+                    <img
+                      src={study.logo}
+                      alt={study.client}
+                      className={`${study.logoClass || "max-h-24 w-auto max-w-[70%]"} object-contain ${study.logoDark ? "dark:hidden" : ""}`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    {study.logoDark && (
+                      <img
+                        src={study.logoDark}
+                        alt={study.client}
+                        className={`${study.logoClass || "max-h-24 w-auto max-w-[70%]"} object-contain hidden dark:block`}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    )}
+                  </div>
+                  <div className="flex w-full items-center justify-between font-mono text-[9px] uppercase tracking-[0.22em] text-ink/45 z-10">
+                    <span className="truncate">{study.client}</span>
+                    <span className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-medium">
+                      <span className="inline-block size-1.5 rounded-full bg-amber-500 animate-pulse" />
+                      UNDER PIPELINE
+                    </span>
+                  </div>
                 </div>
-              </Magnetic>
+              ) : null}
             </div>
           </div>
+        ) : (
+          <Link
+            data-cursor-text="VIEW STUDY"
+            to="/work/$slug"
+            params={{ slug: study.slug }}
+            className="group grid h-full grid-cols-1 gap-6 md:grid-cols-12 md:gap-8 lg:gap-14"
+          >
+            {/* Content Column */}
+            <div className="col-span-12 flex h-full flex-col justify-between md:col-span-6 lg:col-span-5">
+              <div>
+                <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-reg">
+                  {study.n} — {study.client}
+                </span>
+                <h2 className="mt-4 font-display text-[2.5rem] font-bold leading-[1.05] tracking-tight transition-colors duration-500 group-hover:text-reg md:text-5xl lg:text-[4rem]">
+                  {study.title}
+                </h2>
+                <p className="mt-6 max-w-[46ch] text-base leading-relaxed text-ink/70">
+                  {study.summary}
+                </p>
 
-          {/* Image Column */}
-          <div className="relative col-span-12 h-64 overflow-hidden rounded-lg border border-line md:col-span-6 md:h-full lg:col-span-7">
-            <CornerMarks
-              size={16}
-              stroke={1.5}
-              className="pointer-events-none absolute inset-3 z-20 text-white/40 transition-colors duration-500 group-hover:text-white/80"
-            />
-            <div className="absolute inset-0 z-10 bg-ink/5 transition-colors duration-500 group-hover:bg-transparent" />
-            <motion.img
-              // Adding internal subtle motion inside the sticky container is a nice touch, but simple scale handles it!
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-              src={study.cover}
-              alt={study.coverAlt}
-              loading="lazy"
-              decoding="async"
-              className={`absolute inset-0 h-full w-full ${study.coverFit === "contain" ? "object-contain p-8 md:p-12" : "object-cover"}`}
-              style={study.coverBg ? { backgroundColor: study.coverBg } : {}}
-            />
-          </div>
-        </Link>
+                <div className="mt-8 flex flex-wrap gap-2">
+                  {study.services.map((s) => (
+                    <span
+                      key={s}
+                      data-cursor="link"
+                      className="rounded-full border border-line/70 bg-surface/60 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-ink/65 hover:border-reg/50 transition-colors duration-300"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-12 flex items-center justify-between border-t border-line/60 pt-6">
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45">
+                  {study.architecture.length} layers · {study.stack.length} technologies ·{" "}
+                  {study.year}
+                </p>
+                <Magnetic>
+                  <div className="flex size-10 items-center justify-center rounded-full border border-line transition-transform duration-500 group-hover:bg-reg group-hover:border-reg group-hover:text-paper group-hover:-translate-y-1 group-hover:translate-x-1">
+                    <ArrowUpRight className="size-4" />
+                  </div>
+                </Magnetic>
+              </div>
+            </div>
+
+            {/* Cover Media Column */}
+            <div className="relative col-span-12 h-80 sm:h-96 md:h-full min-h-[360px] md:min-h-[450px] overflow-hidden rounded-lg border border-line bg-surface transition-colors duration-500 md:col-span-6 lg:col-span-7">
+              <CornerMarks
+                size={16}
+                stroke={1.5}
+                className="pointer-events-none absolute inset-3 z-20 text-ink/25 transition-colors duration-500 group-hover:text-reg"
+              />
+              {study.logo ? (
+                <div className="relative flex h-full w-full flex-col items-center justify-between p-6 sm:p-8 md:p-10 select-none bg-[radial-gradient(var(--line)_1px,transparent_1px)] [background-size:20px_20px]">
+                  <div className="flex w-full items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45 z-10">
+                    <span>SYS // {study.n}</span>
+                    <span>{study.year} · SPEC</span>
+                  </div>
+                  <div className="flex flex-1 items-center justify-center w-full py-4 z-10">
+                    <motion.img
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      src={study.logo}
+                      alt={study.client}
+                      className={`${study.logoClass || "max-h-24 w-auto max-w-[70%]"} object-contain transition-transform duration-500 ${study.logoDark ? "dark:hidden" : ""}`}
+                    />
+                    {study.logoDark && (
+                      <motion.img
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                        src={study.logoDark}
+                        alt={study.client}
+                        className={`${study.logoClass || "max-h-24 w-auto max-w-[70%]"} object-contain transition-transform duration-500 hidden dark:block`}
+                      />
+                    )}
+                  </div>
+                  <div className="flex w-full items-center justify-between font-mono text-[9px] uppercase tracking-[0.22em] text-ink/45 z-10">
+                    <span className="truncate">{study.client}</span>
+                    <span className="flex items-center gap-1.5 text-reg font-medium">
+                      <span className="inline-block size-1.5 rounded-full bg-reg animate-pulse" />
+                      CASE STUDY
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="absolute inset-0 z-10 bg-ink/5 transition-colors duration-500 group-hover:bg-transparent" />
+                  <motion.img
+                    // Adding internal subtle motion inside the sticky container is a nice touch, but simple scale handles it!
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    src={study.cover}
+                    alt={study.coverAlt}
+                    loading="lazy"
+                    decoding="async"
+                    className={`absolute inset-0 h-full w-full ${study.coverFit === "contain" ? "object-contain p-8 md:p-12" : "object-cover"}`}
+                    style={study.coverBg ? { backgroundColor: study.coverBg } : {}}
+                  />
+                </>
+              )}
+            </div>
+          </Link>
+        )}
       </motion.div>
     </div>
   );

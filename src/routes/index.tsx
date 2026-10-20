@@ -22,6 +22,8 @@ import {
   scrollToId,
   CornerMarks,
   SpotlightCard,
+  useTactileAudio,
+  tactileAudio,
 } from "../components/KraftSite";
 import {
   AnimatePresence,
@@ -96,9 +98,9 @@ export const Route = createFileRoute("/")({
 /* ------------------------------------------------------------------ */
 
 const heroMeta = [
-  ["Brand systems", "Identity that survives contact with production"],
-  ["Custom software", "Platforms, CMS and internal tools"],
-  ["Operational layer", "Automation, data and dashboards"],
+  ["Brand systems", "Identity that survives contact with production", "OKLCH // TOKENS AAA"],
+  ["Custom software", "Platforms, CMS and internal tools", "STRICT SSR // <6MS"],
+  ["Operational layer", "Automation, data and dashboards", "EVENT BUS // REALTIME"],
 ];
 
 const premise = [
@@ -248,6 +250,8 @@ const textItemVariants = {
 };
 
 function StaggeredText({ text, className = "" }: { text: string; className?: string }) {
+  const reduceMotion = useReducedMotion();
+
   return (
     <span className={`inline-flex flex-wrap ${className}`}>
       {text.split(" ").map((word, wIdx) => (
@@ -256,7 +260,18 @@ function StaggeredText({ text, className = "" }: { text: string; className?: str
             <motion.span
               key={index}
               variants={textItemVariants}
-              className="inline-block origin-bottom-left will-change-transform"
+              {...(!reduceMotion
+                ? {
+                    whileHover: {
+                      y: -6,
+                      rotateZ: index % 2 === 0 ? -3 : 3,
+                      color: "var(--reg)",
+                      transition: { type: "spring", stiffness: 450, damping: 15 },
+                    },
+                  }
+                : {})}
+              onMouseEnter={() => tactileAudio.play("tick")}
+              className="inline-block origin-bottom-left will-change-transform cursor-pointer transition-colors duration-200"
             >
               {char}
             </motion.span>
@@ -428,6 +443,7 @@ function HomePage() {
 function SectionCounter() {
   const [active, setActive] = useState(0);
   const [visible, setVisible] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -465,24 +481,58 @@ function SectionCounter() {
 
   return (
     <div
-      className={`pointer-events-none fixed bottom-6 right-[clamp(1.25rem,4vw,4rem)] z-50 hidden items-center gap-3 rounded-full border border-line bg-paper/80 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.22em] backdrop-blur-md transition-all duration-500 lg:flex ${
-        visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`fixed bottom-6 right-[clamp(1.25rem,4vw,4rem)] z-50 hidden items-center gap-3 rounded-full border border-line bg-paper/90 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.22em] backdrop-blur-md shadow-lg transition-all duration-500 lg:flex ${
+        visible
+          ? "translate-y-0 opacity-100 pointer-events-auto"
+          : "translate-y-4 opacity-0 pointer-events-none"
       }`}
     >
-      <span className="size-1.5 rounded-full bg-reg" />
+      <span className="size-1.5 rounded-full bg-reg animate-pulse" />
       <span className="tabular-nums text-ink">{current.n}</span>
       <span className="text-ink/30">/ {last.n}</span>
-      <span className="relative block h-3 w-20 overflow-hidden text-ink/60">
-        <motion.span
-          key={current.id}
-          initial={{ y: "100%" }}
-          animate={{ y: 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute inset-0"
-        >
-          {current.label}
-        </motion.span>
-      </span>
+
+      <AnimatePresence mode="wait">
+        {isHovered ? (
+          <motion.div
+            key="scrubber"
+            initial={{ opacity: 0, width: 0 }}
+            animate={{ opacity: 1, width: "auto" }}
+            exit={{ opacity: 0, width: 0 }}
+            className="flex items-center gap-1.5 overflow-hidden pl-1"
+          >
+            {sectionIndex.map((s, idx) => (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => {
+                  scrollToId(s.id);
+                  tactileAudio.play("thock");
+                }}
+                className={`flex size-4 items-center justify-center rounded-full transition-colors ${
+                  active === idx ? "bg-reg text-white" : "hover:bg-ink/10 text-ink/40"
+                }`}
+                title={`Jump to ${s.label}`}
+              >
+                <span className="text-[8px] font-bold">{idx + 1}</span>
+              </button>
+            ))}
+          </motion.div>
+        ) : (
+          <span className="relative block h-3 w-20 overflow-hidden text-ink/60">
+            <motion.span
+              key={current.id}
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute inset-0"
+            >
+              {current.label}
+            </motion.span>
+          </span>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -492,6 +542,7 @@ function SectionCounter() {
 function Hero() {
   const coords = useRef<HTMLSpanElement>(null);
   const [clock, setClock] = useState("");
+  const { enabled: audioEnabled, toggle: toggleAudio, play: playAudio } = useTactileAudio();
 
   useEffect(() => {
     const tick = () =>
@@ -542,15 +593,33 @@ function Hero() {
               Est. 2020 · Patna, India
             </span>
           </div>
-          <p className="sm:text-right">
-            Working globally
-            <br />
-            <span className="tabular-nums text-ink/35">IST {clock}</span>
-            <br />
-            <span ref={coords} className="hidden tabular-nums text-ink/25 md:inline">
-              X 0000 · Y 0000
-            </span>
-          </p>
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6 sm:justify-end sm:text-right">
+            <button
+              type="button"
+              onClick={toggleAudio}
+              data-cursor-text="AUDIO"
+              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[9px] uppercase tracking-[0.22em] transition-all duration-300 ${
+                audioEnabled
+                  ? "border-reg bg-reg/10 text-reg"
+                  : "border-line bg-surface/40 text-ink/45 hover:border-ink/30 hover:text-ink"
+              }`}
+              title="Toggle MK·78 tactile audio feedback"
+            >
+              <span
+                className={`size-1.5 rounded-full ${audioEnabled ? "animate-pulse bg-reg shadow-[0_0_6px_var(--reg)]" : "bg-ink/30"}`}
+              />
+              <span>MK·AUDIO {audioEnabled ? "ON" : "OFF"}</span>
+            </button>
+            <p>
+              Working globally
+              <br />
+              <span className="tabular-nums text-ink/35">IST {clock}</span>
+              <br />
+              <span ref={coords} className="hidden tabular-nums text-ink/25 md:inline">
+                X 0000 · Y 0000
+              </span>
+            </p>
+          </div>
         </FadeUp>
 
         <div className="flex flex-1 flex-col justify-center py-10 sm:py-12 md:py-16">
@@ -606,18 +675,26 @@ function Hero() {
         </div>
 
         <div className="grid border-t border-line gap-y-2 md:grid-cols-3">
-          {heroMeta.map(([k, v], i) => (
+          {heroMeta.map(([k, v, tag], i) => (
             <FadeUp
               immediate
               key={k}
               delay={0.2 + i * 0.1}
-              className="group flex items-start gap-4 border-line py-5 md:border-r md:py-6 md:pr-8 md:last:border-r-0 md:[&:not(:first-child)]:pl-8"
+              className="group flex flex-col justify-between border-line py-5 md:border-r md:py-6 md:pr-8 md:last:border-r-0 md:[&:not(:first-child)]:pl-8 transition-colors duration-300 hover:bg-surface/30 cursor-pointer"
+              onClick={() => playAudio("tick")}
             >
-              <span className="mt-1 size-1.5 shrink-0 rotate-45 bg-reg transition-transform duration-500 group-hover:rotate-[135deg]" />
-              <span>
-                <span className="block text-sm font-bold">{k}</span>
-                <span className="mt-1 block text-[13px] leading-relaxed text-ink/55">{v}</span>
-              </span>
+              <div className="flex items-start gap-4">
+                <span className="mt-1 size-1.5 shrink-0 rotate-45 bg-reg transition-transform duration-500 group-hover:rotate-[135deg]" />
+                <div className="flex-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="block text-sm font-bold">{k}</span>
+                    <span className="font-mono text-[8px] uppercase tracking-[0.16em] text-reg opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      {tag}
+                    </span>
+                  </div>
+                  <span className="mt-1 block text-[13px] leading-relaxed text-ink/55">{v}</span>
+                </div>
+              </div>
             </FadeUp>
           ))}
         </div>
@@ -725,12 +802,18 @@ function Partners() {
           <FadeUp
             key={c.name}
             delay={i * 0.07}
-            className="group flex min-h-[8.5rem] flex-col items-center justify-center gap-3 bg-paper px-4 py-8 transition-colors duration-500 hover:bg-surface cursor-pointer"
+            className="group relative flex min-h-[8.5rem] flex-col items-center justify-center gap-3 bg-paper px-4 py-8 transition-colors duration-500 hover:bg-surface cursor-pointer select-none"
             id={`partner-${i}`}
+            onClick={() => tactileAudio.play("tick")}
           >
+            <CornerMarks
+              size={8}
+              stroke={1}
+              className="pointer-events-none absolute inset-2 text-reg/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            />
             <div
               data-cursor-text="CLIENT"
-              className="flex flex-col items-center justify-center gap-3 w-full"
+              className="flex flex-col items-center justify-center gap-3 w-full transition-transform duration-300 group-hover:-translate-y-1"
             >
               {c.logo === null ? (
                 <span className="font-quest text-center text-[1.9rem] leading-none text-ink/70 transition-colors duration-500 group-hover:text-ink md:text-[2.2rem]">
@@ -765,7 +848,7 @@ function Partners() {
         <StatBand
           stats={[
             {
-              figure: String(caseStudies.length),
+              figure: String(caseStudies.filter((c) => !c.inPipeline).length),
               label: "Case studies shipped",
               note: "Identity, platform and product",
             },
@@ -842,10 +925,15 @@ function Premise() {
               <span className="w-10 shrink-0 font-display text-3xl font-light tabular-nums text-ink/25 transition-colors duration-500 group-hover:text-reg">
                 0{i + 1}
               </span>
-              <div className="transition-transform duration-500 group-hover:translate-x-1">
-                <h3 className="font-display text-xl font-bold tracking-[-0.01em] md:text-2xl">
-                  {title}
-                </h3>
+              <div className="flex-1 transition-transform duration-500 group-hover:translate-x-1">
+                <div className="flex items-baseline justify-between gap-4">
+                  <h3 className="font-display text-xl font-bold tracking-[-0.01em] md:text-2xl">
+                    {title}
+                  </h3>
+                  <span className="hidden font-mono text-[9px] uppercase tracking-[0.2em] text-reg opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:inline">
+                    CALIPER Δ 0.{i + 1}mm // SPEC
+                  </span>
+                </div>
                 <p className="mt-2 text-[15px] leading-relaxed text-ink/55">{copy}</p>
               </div>
             </motion.li>
@@ -858,6 +946,12 @@ function Premise() {
 
 /* ---------- 03 blueprint ---------- */
 
+const serviceTelemetry = [
+  "SYS_CORE // 100% TYPED",
+  "IDENTITY // OKLCH SYSTEM",
+  "KINEMATICS // 60FPS SPRING",
+];
+
 function BlueprintLine() {
   const ref = useRef<SVGSVGElement>(null);
   const { scrollYProgress } = useScroll({
@@ -867,6 +961,9 @@ function BlueprintLine() {
   const pathLength = useSpring(scrollYProgress, { stiffness: 40, damping: 20 });
   const opacity = useTransform(scrollYProgress, [0, 0.4], [0, 1]);
   const reduceMotion = useReducedMotion();
+
+  const d =
+    "M 0 100 C 200 100, 200 170, 400 170 C 600 170, 600 30, 800 30 C 1000 30, 1000 100, 1200 100";
 
   return (
     <motion.svg
@@ -879,12 +976,24 @@ function BlueprintLine() {
       aria-hidden="true"
     >
       <motion.path
-        d="M 0 100 C 200 100, 200 170, 400 170 C 600 170, 600 30, 800 30 C 1000 30, 1000 100, 1200 100"
+        d={d}
         stroke="currentColor"
         strokeWidth="2"
         strokeDasharray="6 8"
         style={{ pathLength: reduceMotion ? 1 : pathLength }}
       />
+      {/* Kinetic Signal Transmission Pulse (MK·78 Inspired) */}
+      {!reduceMotion && (
+        <motion.path
+          d={d}
+          stroke="var(--reg)"
+          strokeWidth="3"
+          strokeDasharray="24 360"
+          animate={{ strokeDashoffset: [384, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+          className="opacity-75 drop-shadow-[0_0_8px_var(--reg)]"
+        />
+      )}
     </motion.svg>
   );
 }
@@ -898,6 +1007,7 @@ function ServiceCard({ service, index }: { service: (typeof services)[number]; i
     damping: 20,
   });
   const reduceMotion = useReducedMotion();
+  const [activeTelemetry, setActiveTelemetry] = useState(false);
 
   return (
     <motion.article
@@ -905,6 +1015,10 @@ function ServiceCard({ service, index }: { service: (typeof services)[number]; i
       data-cursor-text="SYSTEM"
       style={{ opacity: reduceMotion ? 1 : opacity, y: reduceMotion ? 0 : y }}
       className="group relative flex h-full flex-col cursor-pointer"
+      onClick={() => {
+        setActiveTelemetry(!activeTelemetry);
+        tactileAudio.play("thock");
+      }}
     >
       <SpotlightCard className="relative flex h-full flex-col rounded border border-paper/12 bg-paper/[0.04] transition-colors duration-500 group-hover:border-reg/50 group-hover:bg-paper/[0.07]">
         <CornerMarks
@@ -915,6 +1029,16 @@ function ServiceCard({ service, index }: { service: (typeof services)[number]; i
         <div className="relative z-10 flex h-full flex-col p-8 md:p-9">
           <div className="flex items-center justify-between font-mono text-xs tracking-[0.2em] text-reg">
             <span>{service.n} —</span>
+            <span className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.16em] text-paper/35 transition-colors duration-500 group-hover:text-reg">
+              <span
+                className={`size-1.5 rounded-full transition-all ${
+                  activeTelemetry
+                    ? "bg-reg shadow-[0_0_6px_var(--reg)]"
+                    : "bg-paper/20 group-hover:bg-reg/60"
+                }`}
+              />
+              {activeTelemetry ? "STATE: TELEMETRY ACTIVE // 0ms" : serviceTelemetry[index]}
+            </span>
             <span className="text-paper/25 transition-colors duration-500 group-hover:text-paper/60">
               0{index + 1}/03
             </span>
@@ -927,13 +1051,24 @@ function ServiceCard({ service, index }: { service: (typeof services)[number]; i
             {service.chips.map((c) => (
               <span
                 key={c}
-                className="chip border-paper/15 text-paper/60 group-hover:border-paper/30"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  tactileAudio.play("tick");
+                }}
+                className="chip border-paper/15 text-paper/60 group-hover:border-paper/30 transition-all duration-300 hover:scale-105 hover:border-reg hover:text-paper"
               >
                 {c}
               </span>
             ))}
           </div>
-          <Link to="/services" className="link-line mt-auto pt-8 text-paper/80">
+          <Link
+            to="/services"
+            className="link-line mt-auto pt-8 text-paper/80"
+            onClick={(e) => {
+              e.stopPropagation();
+              tactileAudio.play("snap");
+            }}
+          >
             About this service <ArrowUpRight size={14} />
           </Link>
         </div>
@@ -1010,16 +1145,12 @@ function Work() {
     "lg:col-span-5",
     "lg:col-span-5",
     "lg:col-span-7",
-    "lg:col-span-12",
-    "lg:col-span-12",
+    "lg:col-span-7",
+    "lg:col-span-5",
+    "lg:col-span-6 lg:col-start-4",
   ];
   const ratios = [
     "aspect-[4/3] lg:aspect-[16/10]",
-    "aspect-[4/3] lg:aspect-[16/10]",
-    "aspect-[4/3] lg:aspect-[16/10]",
-    "aspect-[4/3] lg:aspect-[16/10]",
-    "aspect-[4/3] lg:aspect-[21/9]",
-    "aspect-[4/3] lg:aspect-[21/9]",
   ];
 
   return (
@@ -1126,44 +1257,145 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
       style={{ opacity: reduceMotion ? 1 : opacity, y: reduceMotion ? 0 : y }}
       className={"group flex flex-col " + cls}
     >
-      <Link
-        to="/work/$slug"
-        params={{ slug: study.slug }}
-        onMouseMove={onMove}
-        className="relative block w-full cursor-none overflow-hidden rounded-sm text-left"
-        aria-label={"Read the " + study.title + " case study"}
-      >
-        <ParallaxImg
-          src={study.cover}
-          alt={study.coverAlt}
-          ratio={ratio}
-          {...(study.coverFit ? { fit: study.coverFit } : {})}
-          {...(study.coverBg ? { bg: study.coverBg } : {})}
-        />
-        <CornerMarks
-          size={16}
-          stroke={1.5}
-          className="pointer-events-none absolute inset-3 z-10 text-white/35 transition-colors duration-500 group-hover:text-white/80"
-        />
-        <span className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full bg-ink/70 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-paper backdrop-blur-sm">
-          <ArrowUpRight size={11} />
-          View Case Study
-        </span>
-        <span
-          ref={cursor}
-          className="view-bubble pointer-events-none absolute left-0 top-0 grid size-24 place-items-center rounded-full bg-reg font-mono text-[10px] uppercase tracking-[0.2em] text-white"
-          style={{ transform: "translate(-300px,-300px)" }}
+      {study.inPipeline ? (
+        <div
+          className="relative block w-full cursor-default overflow-hidden rounded-sm text-left select-none"
+          aria-label={study.title + " (In Pipeline)"}
         >
-          Read
-        </span>
-      </Link>
+          {study.logo ? (
+            <div
+              className={`relative overflow-hidden w-full ${ratio} flex flex-col items-center justify-between p-6 sm:p-8 select-none transition-colors duration-500 border border-line bg-surface bg-[radial-gradient(var(--line)_1px,transparent_1px)] [background-size:20px_20px]`}
+            >
+              <div className="flex w-full items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45 z-10">
+                <span>SYS // {study.n}</span>
+                <span className="text-amber-600 dark:text-amber-400 font-medium">IN THE PIPELINE</span>
+              </div>
+              <div className="flex flex-1 items-center justify-center w-full py-4 z-10">
+                <img
+                  src={study.logo}
+                  alt={study.client}
+                  className={`${study.logoClass || "max-h-24 w-auto max-w-[70%]"} object-contain ${study.logoDark ? "dark:hidden" : ""}`}
+                  loading="lazy"
+                  decoding="async"
+                />
+                {study.logoDark && (
+                  <img
+                    src={study.logoDark}
+                    alt={study.client}
+                    className={`${study.logoClass || "max-h-24 w-auto max-w-[70%]"} object-contain hidden dark:block`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+              </div>
+              <div className="flex w-full items-center justify-between font-mono text-[9px] uppercase tracking-[0.22em] text-ink/45 z-10">
+                <span className="truncate">{study.client}</span>
+                <span className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-medium">
+                  <span className="inline-block size-1.5 rounded-full bg-amber-500 animate-pulse" />
+                  PIPELINE · SPEC
+                </span>
+              </div>
+            </div>
+          ) : null}
+          <CornerMarks
+            size={16}
+            stroke={1.5}
+            className="pointer-events-none absolute inset-3 z-10 text-amber-500/30"
+          />
+          <span className="absolute right-4 top-4 z-10 flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] backdrop-blur-sm transition-colors duration-300 border border-amber-500/30 bg-amber-500/15 text-amber-600 dark:text-amber-400 shadow-sm">
+            <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
+            Under Pipeline
+          </span>
+        </div>
+      ) : (
+        <Link
+          to="/work/$slug"
+          params={{ slug: study.slug }}
+          onMouseMove={onMove}
+          className="relative block w-full cursor-none overflow-hidden rounded-sm text-left"
+          aria-label={"Read the " + study.title + " case study"}
+        >
+          {study.logo ? (
+            <div
+              className={`relative overflow-hidden w-full ${ratio} flex flex-col items-center justify-between p-6 sm:p-8 select-none transition-colors duration-500 border border-line bg-surface bg-[radial-gradient(var(--line)_1px,transparent_1px)] [background-size:20px_20px]`}
+            >
+              <div className="flex w-full items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45 z-10">
+                <span>SYS // {study.n}</span>
+              </div>
+              <div className="flex flex-1 items-center justify-center w-full py-4 z-10">
+                <img
+                  src={study.logo}
+                  alt={study.client}
+                  className={`${study.logoClass || "max-h-24 w-auto max-w-[70%]"} object-contain transition-transform duration-500 group-hover:scale-105 ${study.logoDark ? "dark:hidden" : ""}`}
+                  loading="lazy"
+                  decoding="async"
+                />
+                {study.logoDark && (
+                  <img
+                    src={study.logoDark}
+                    alt={study.client}
+                    className={`${study.logoClass || "max-h-24 w-auto max-w-[70%]"} object-contain transition-transform duration-500 group-hover:scale-105 hidden dark:block`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+              </div>
+              <div className="flex w-full items-center justify-between font-mono text-[9px] uppercase tracking-[0.22em] text-ink/45 z-10">
+                <span className="truncate">{study.client}</span>
+                <span className="flex items-center gap-1.5 text-reg font-medium">
+                  <span className="inline-block size-1.5 rounded-full bg-reg animate-pulse" />
+                  {study.year} · CASE STUDY
+                </span>
+              </div>
+            </div>
+          ) : (
+            <ParallaxImg
+              src={study.cover}
+              alt={study.coverAlt}
+              ratio={ratio}
+              {...(study.coverFit ? { fit: study.coverFit } : {})}
+              {...(study.coverBg ? { bg: study.coverBg } : {})}
+            />
+          )}
+          <CornerMarks
+            size={16}
+            stroke={1.5}
+            className={`pointer-events-none absolute inset-3 z-10 transition-colors duration-500 ${
+              study.logo
+                ? "text-ink/25 group-hover:text-reg"
+                : "text-white/35 group-hover:text-white/80"
+            }`}
+          />
+          <span
+            className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] backdrop-blur-sm transition-colors duration-300 bg-ink/75 text-paper"
+          >
+            <ArrowUpRight size={11} />
+            View Case Study
+          </span>
+          <span
+            ref={cursor}
+            className="view-bubble pointer-events-none absolute left-0 top-0 grid size-24 place-items-center rounded-full bg-reg font-mono text-[10px] uppercase tracking-[0.2em] text-white"
+            style={{ transform: "translate(-300px,-300px)" }}
+          >
+            Read
+          </span>
+        </Link>
+      )}
 
       <div className="mt-5 flex flex-col gap-5 border-t border-line pt-5 sm:mt-6 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
         <div>
-          <Eyebrow>{study.client}</Eyebrow>
-          <h3 className="mt-2 font-display text-2xl font-bold tracking-[-0.025em] transition-colors duration-300 group-hover:text-reg lg:text-[2.1rem]">
+          <div className="flex flex-wrap items-center gap-2">
+            <Eyebrow>{study.client}</Eyebrow>
+            {study.inPipeline && (
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.16em] text-amber-600 dark:text-amber-400">
+                <span className="size-1 rounded-full bg-amber-500 animate-pulse" />
+                Under Pipeline
+              </span>
+            )}
+          </div>
+          <h2 className={`mt-2 font-display text-2xl font-bold tracking-[-0.025em] transition-colors duration-300 ${!study.inPipeline ? "group-hover:text-reg" : ""} lg:text-[2.1rem]`}>
             {study.title}
-          </h3>
+          </h2>
           <p className="mt-3 max-w-[44ch] text-[15px] leading-relaxed text-ink/60">
             {study.summary}
           </p>
@@ -1174,14 +1406,23 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
         <div className="flex shrink-0 flex-row items-center justify-between gap-4 sm:flex-col sm:items-end">
           <span className="font-mono text-xs text-reg">{study.n}</span>
           <span className="font-mono text-[10px] text-ink/30">{study.year}</span>
-          <Link
-            to="/work/$slug"
-            params={{ slug: study.slug }}
-            aria-label={"Read the " + study.title + " case study"}
-            className="grid size-10 place-items-center rounded-full border border-line transition-all duration-500 group-hover:rotate-45 group-hover:border-reg group-hover:bg-reg group-hover:text-white"
-          >
-            <ArrowUpRight size={15} />
-          </Link>
+          {study.inPipeline ? (
+            <div
+              className="grid size-10 place-items-center rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 cursor-default"
+              title="Under Pipeline"
+            >
+              <span className="size-2 rounded-full bg-amber-500 animate-pulse" />
+            </div>
+          ) : (
+            <Link
+              to="/work/$slug"
+              params={{ slug: study.slug }}
+              aria-label={"Read the " + study.title + " case study"}
+              className="grid size-10 place-items-center rounded-full border border-line transition-all duration-500 group-hover:rotate-45 group-hover:border-reg group-hover:bg-reg group-hover:text-white"
+            >
+              <ArrowUpRight size={15} />
+            </Link>
+          )}
         </div>
       </div>
     </motion.div>

@@ -1,4 +1,4 @@
-import { MaskLines, SectionLabel, FadeUp } from "./KraftSite";
+import { MaskLines, SectionLabel, FadeUp, tactileAudio } from "./KraftSite";
 import {
   motion,
   useScroll,
@@ -167,7 +167,8 @@ export function ProcessSection() {
           {steps.map((step, i) => (
             <div
               key={step.k}
-              className="flex w-[82vw] max-w-[340px] shrink-0 snap-center flex-col justify-between rounded-2xl border border-line/75 bg-paper p-6 shadow-sm"
+              onClick={() => tactileAudio.play("thock")}
+              className="flex w-[82vw] max-w-[340px] shrink-0 snap-center flex-col justify-between rounded-2xl border border-line/75 bg-paper p-6 shadow-sm cursor-pointer select-none active:scale-[0.98] transition-transform"
             >
               <div>
                 <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.22em]">
@@ -234,6 +235,7 @@ export function ProcessSection() {
               whileHover={{ y: -8, scale: 1.01 }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
               data-cursor-text={step.k.toUpperCase()}
+              onClick={() => tactileAudio.play("thock")}
               className="group flex w-[85vw] shrink-0 flex-col justify-between rounded-2xl border border-line/75 bg-paper p-7 sm:p-10 md:p-14 shadow-[0_0_0_1px_transparent] transition-all duration-300 hover:border-reg hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] md:w-[50vw] lg:w-[40vw] cursor-pointer"
             >
               <div>
@@ -309,11 +311,16 @@ export function MantraSection() {
             transition={{ duration: 1, delay: 0.4 }}
             className="mt-auto hidden flex-col gap-2 pb-4 lg:flex"
           >
-            <div className="flex h-12 items-end gap-1">
+            <div
+              className="flex h-12 items-end gap-1 cursor-pointer py-1"
+              data-cursor-text="AUDIO"
+              onMouseEnter={() => tactileAudio.play("tick")}
+            >
               {[...Array(6)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="w-2 bg-ink"
+                  className="w-2 rounded-t-[1px] bg-ink transition-colors duration-200 hover:bg-reg"
+                  whileHover={{ height: "100%", backgroundColor: "var(--reg)" }}
                   animate={
                     reduceMotion ? false : { height: ["20%", "80%", "40%", "100%", "30%", "20%"] }
                   }

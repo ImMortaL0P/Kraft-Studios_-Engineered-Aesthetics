@@ -16,14 +16,25 @@ import shardaImage from "../assets/showcase-sharda.jpg";
 import umvadlaAcademics from "../assets/showcase/umvadla-03-academics.jpg";
 import umvadlaAdmissions from "../assets/showcase/umvadla-04-admissions.jpg";
 import umvadlaAdminNotices from "../assets/showcase/umvadla-05-admin-notices.jpg";
+import shardaCover from "../assets/showcase/sharda-00-cover.jpg";
 import shardaDashboard from "../assets/showcase/sharda-01-dashboard.jpg";
+import shardaBookings from "../assets/showcase/sharda-02-bookings.jpg";
+import shardaPortalHero from "../assets/showcase/sharda-06-portal-hero.jpg";
+import shardaPortalRooms from "../assets/showcase/sharda-07-portal-rooms.jpg";
 import shardaGuest from "../assets/showcase/sharda-02-guest.jpg";
 import shardaCalendar from "../assets/showcase/sharda-03-calendar.jpg";
 import shardaInvoice from "../assets/showcase/sharda-04-invoice.jpg";
 import shardaCmd from "../assets/showcase/sharda-05-cmd.jpg";
+import eduflowCover from "../assets/showcase/eduflow-00-cover.jpg";
 import eduflowDashboard from "../assets/showcase/eduflow-01-dashboard.jpg";
-import eduflowPipeline from "../assets/showcase/eduflow-02-pipeline.jpg";
+import eduflowJourney from "../assets/showcase/eduflow-02-journey.jpg";
+import eduflowLeads from "../assets/showcase/eduflow-03-leads.jpg";
+import eduflowStudents from "../assets/showcase/eduflow-04-students.jpg";
+import eduflowTests from "../assets/showcase/eduflow-05-tests.jpg";
+import eduflowFees from "../assets/showcase/eduflow-06-fees.jpg";
+import eduflowApps from "../assets/showcase/eduflow-07-apps.jpg";
 import brushStore from "../assets/showcase/brush-01-store.jpg";
+import brushBuilder from "../assets/showcase/brush-03-builder.jpg";
 import brushCatalogue from "../assets/showcase/brush-06-catalogue.jpg";
 import brushCart from "../assets/showcase/brush-09-cart.jpg";
 import scrapexCover from "../assets/showcase/case-scrapex-01-cover.jpg";
@@ -38,6 +49,21 @@ import nbCalendar from "../assets/showcase/noticeboard-calendar.jpg";
 import nbSingle from "../assets/showcase/noticeboard-single.jpg";
 import nbAdminRuns from "../assets/showcase/noticeboard-admin-runs.png";
 import nbAdminSources from "../assets/showcase/noticeboard-admin-sources.png";
+
+import logoUmvadla from "../assets/clients/umvadla.png";
+import logoUmvadlaDark from "../assets/clients/umvadla-dark.png";
+import logoSharda from "../assets/clients/sharda.png";
+import logoShardaDark from "../assets/clients/sharda-dark.png";
+import logoTrajectx from "../assets/clients/trajectx.png";
+import logoTrajectxDark from "../assets/clients/trajectx-dark.png";
+import logoBrush from "../assets/clients/brush-light.png";
+import logoBrushDark from "../assets/clients/brush.png";
+import logoScrapex from "../assets/clients/scrapex-light.png";
+import logoScrapexDark from "../assets/clients/scrapex.png";
+import logoNoticeboard from "../assets/clients/noticeboard.png";
+import logoNoticeboardDark from "../assets/clients/noticeboard-dark.png";
+import logoTreatx from "../assets/clients/treatx.png";
+import logoTreatxDark from "../assets/clients/treatx-dark.png";
 
 export type Shot = { src: string; caption: string };
 
@@ -67,6 +93,12 @@ export type CaseStudy = {
   /** Product shots sit on their own ground rather than being cropped. */
   coverFit?: "cover" | "contain";
   coverBg?: string;
+  /** Client logo for engineered spec plate on cards and hero views. */
+  logo?: string;
+  logoDark?: string;
+  logoClass?: string;
+  /** Flag for projects currently in active development or upcoming pipeline */
+  inPipeline?: boolean;
   shots: Shot[];
   /** Disciplines, as they would appear on a scope of work. */
   services: string[];
@@ -96,6 +128,9 @@ export const caseStudies: CaseStudy[] = [
       "A school website whose every image, notice and staff profile is editable by the people who run the school, with no developer in the loop.",
     cover: umvadlaHome,
     coverAlt: "UMV Adla school website — the live landing page",
+    logo: logoUmvadla,
+    logoDark: logoUmvadlaDark,
+    logoClass: "h-32 sm:h-40 md:h-48 lg:h-52 w-auto max-w-[68%]",
     shots: [
       { src: umvadlaHome, caption: "umvadla.in — the live landing page" },
       { src: umvadlaAcademics, caption: "Academics — curriculum and student life" },
@@ -179,21 +214,39 @@ export const caseStudies: CaseStudy[] = [
       label: "hotel-booking-crm-community.vercel.app",
       href: "https://hotel-booking-crm-community.vercel.app",
     },
-    cover: shardaDashboard,
+    cover: shardaCover,
     coverAlt: "Sharda Palace CRM — Live operating dashboard and availability grid",
+    logo: logoSharda,
+    logoDark: logoShardaDark,
+    logoClass: "h-28 sm:h-36 md:h-44 lg:h-48 w-auto max-w-[68%]",
     shots: [
       {
-        src: shardaDashboard,
-        caption: "Live Operating Dashboard — check-ins, check-outs, and financials",
+        src: shardaPortalHero,
+        caption: "Public Booking Engine — direct reservations, temple proximity & 20% advance token",
+      },
+      {
+        src: shardaPortalRooms,
+        caption: "Room Selection & Inventory — 100% ground-floor step-free access and live pricing",
+      },
+      {
+        src: shardaBookings,
+        caption: "Master Bookings Ledger — 319 live reservations with guest verification and status",
+      },
+      {
+        src: shardaCalendar,
+        caption: "Room Availability Grid — multi-room inventory synced with OTA channels",
+      },
+      {
+        src: shardaInvoice,
+        caption: "GST Tax Invoices & Billing — folio settlements, advance tokens and receipts",
+      },
+      {
+        src: shardaGuest,
+        caption: "Lifetime Guest Dossier — stay counts, lifetime value and communication history",
       },
       {
         src: shardaCmd,
-        caption: "The ⌘K global command menu — instant navigation across 13 modules",
-      },
-      { src: shardaGuest, caption: "Lifetime guest value and communication history" },
-      {
-        src: shardaCalendar,
-        caption: "Room availability chart and booking engine synced with OTAs",
+        caption: "The ⌘K global command menu — instant navigation across 13 hotel modules",
       },
     ],
     services: [
@@ -220,19 +273,19 @@ export const caseStudies: CaseStudy[] = [
         role: "Headless accessible components layered with custom design tokens for a specialized desktop hotel booking dashboard.",
       },
       {
-        name: "Deployment",
-        stack: "GitHub Pages / Local Build",
-        role: "Distributed statically while communicating out to standalone MongoDB Atlas endpoints for billing and reservations.",
+        name: "Deployment & Auth",
+        stack: "Vercel, Superadmin RBAC, Session Management",
+        role: "Zero local on-prem dependencies; authenticated staff access from any device with persistent audit tracing.",
       },
       {
-        name: "Messaging",
-        stack: "WhatsApp, SMS, Email",
-        role: "Templates for the messages a hotel repeats, bulk sends addressed to a guest segment, and a delivery history per channel.",
+        name: "Messaging Engine",
+        stack: "WhatsApp, SMS, Automated Arrival Concierge",
+        role: "Pre-arrival check-in passes, directions (500m to Baba Baidyanath Mandir), VIP temple priest assistance, and receipt dispatches.",
       },
       {
-        name: "Channel Manager",
-        stack: "REST APIs, Webhooks, OTA Interfaces",
-        role: "Multiplexes 6 custom APIs for 6 major OTA channels into one place, automatically syncing inventory and preventing overbooking.",
+        name: "Channel Distribution",
+        stack: "REST APIs, Webhooks, Booking.com Integration",
+        role: "Bi-directional channel synchronization automatically locking inventory upon reservation and mapping commission splits.",
       },
     ],
     capabilities: [
@@ -245,95 +298,148 @@ export const caseStudies: CaseStudy[] = [
         body: "Every create, edit and status change is stamped with the staff member and the time. Activity Logs answers who changed what, without anyone having to remember.",
       },
       {
-        title: "Nothing runs in the hotel",
-        body: "No server on the premises, no local backup to remember, no single computer whose failure stops the desk. Staff sign in from any device.",
+        title: "Pilgrim & Senior-Citizen Ready",
+        body: "Tracks step-free ground-floor room assignments, 24/7 instantaneous geyser readiness for 4:00 AM temple queues, and direct priest coordination.",
       },
       {
-        title: "6 OTAs in one place",
-        body: "Integrated 6 custom APIs for 6 OTA channels directly into the dashboard. Availability, rates, and incoming reservations synchronize automatically across all platforms.",
+        title: "Live OTA Channel Sync",
+        body: "Integrates direct booking engine with external channels like Booking.com, reconciling 319+ reservations and ₹2.54L+ in automated revenue tracking.",
       },
     ],
     outcomes: [
-      { figure: "13", label: "Modules, front desk to balance sheet" },
-      { figure: "1", label: "Database behind every screen" },
-      { figure: "3", label: "Tools replaced at the counter" },
+      { figure: "319", label: "Live reservations audited on system" },
+      { figure: "₹2.54L", label: "Gross booking revenue tracked in INR" },
+      { figure: "13", label: "Modules, front desk to ledger" },
+      { figure: "100%", label: "Step-free ground floor visibility" },
     ],
     stack: [
       "React 18",
       "Vite",
+      "TypeScript",
       "Tailwind CSS",
-      "MongoDB Atlas",
       "Radix UI",
       "Recharts",
-      "Embla Carousel",
+      "Lucide Icons",
+      "Date-fns",
     ],
   },
 
   /* ---------------------------------------------------------------- 03 */
   {
-    slug: "eduflow",
+    slug: "trajectx",
     n: "03",
-    title: "The admissions journey as the system of record",
-    client: "EduFlow · Kraft Studios in-house product",
+    title: "Every aspirant, from first call to final admit",
+    client: "TrajectX · CAT & GMAT Coaching OS",
     year: "2026",
     summary:
-      "An admissions OS where enquiry, counselling, follow-up and fee collection sit on one record, so a prospective student never goes cold between the form and the receipt.",
-    cover: eduflowDashboard,
-    coverAlt: "EduFlow admissions dashboard — live counters, funnel and enrolment trend",
+      "A unified institutional management platform connecting prospective enquiries, structured counselling, batch execution, mock test analytics, and B-school admission outcomes on one shared source of truth.",
+    live: {
+      label: "eduflow-by-kraft.vercel.app",
+      href: "https://eduflow-by-kraft.vercel.app",
+    },
+    cover: eduflowCover,
+    coverAlt: "TrajectX Student Journey Manager — Institutional intelligence and admissions pipeline",
+    logo: logoTrajectx,
+    logoDark: logoTrajectxDark,
+    logoClass: "h-14 sm:h-18 md:h-22 lg:h-26 w-auto max-w-[78%]",
     shots: [
       {
         src: eduflowDashboard,
-        caption: "Dashboard — the day's pulse, funnel position and enrolment trend",
+        caption: "Institutional Intelligence & Pipeline Funnel — live MongoDB analytics with dual stage charts",
       },
-      { src: eduflowPipeline, caption: "Pipeline — every prospective student by journey stage" },
+      {
+        src: eduflowJourney,
+        caption: "9-Phase Journey Kanban — linear lifecycle progression from lead to verified admit",
+      },
+      {
+        src: eduflowLeads,
+        caption: "Admissions CRM & Leads — multi-channel enquiry capture, SLA routing & pipeline triage",
+      },
+      {
+        src: eduflowStudents,
+        caption: "Student Directory & Cohort Management — CAT & GMAT track rosters and mentor assignments",
+      },
+      {
+        src: eduflowTests,
+        caption: "Mock Test Performance & Diagnostics — proctored scoring, accuracy percentiles & negative mark audits",
+      },
+      {
+        src: eduflowFees,
+        caption: "Instalment Fee Ledgers — automated payment schedules, receipts & balance tracking in INR",
+      },
+      {
+        src: eduflowApps,
+        caption: "B-School Application Tracker — IIM composite score calculators, GD/PI prep & call letters",
+      },
     ],
-    services: ["Product design", "Interface system", "Platform engineering"],
+    services: [
+      "Admissions CRM",
+      "Dual Exam Engine",
+      "Lifecycle Kanban",
+      "Mock Analytics",
+      "Fee Ledgers",
+      "Institutional Intelligence",
+    ],
     problem:
-      "An enquiry arrives on a website form, is answered on WhatsApp, discussed on a call nobody logged, and quoted a fee in a spreadsheet one counsellor keeps locally. By the time anyone asks why the student went quiet, the record of what was promised has scattered across four tools and three people.",
+      "Coaching institutes lose high-intent aspirants in the gap between lead capture, counselling follow-ups, and academic pacing. Prospective enquiries live in chaotic WhatsApp chats and local spreadsheets, mock percentiles sit in disconnected exam portals, and fee instalments require manual reconciliations. By the time leadership asks why conversion dropped, the context of what was promised to a student is lost across four tools.",
     approach:
-      "Treat the journey as the system of record rather than the outcome it reports on. Every prospective student sits at exactly one of eight stages, and moving them is a deliberate act that timestamps itself — so the pipeline is a description of reality instead of an optimistic guess.",
+      "Model the aspirant lifecycle as an immutable 9-phase linear progression engine on MongoDB Atlas. An enquiry isn't a static form submission — it is a live candidate journey linking multi-channel lead routing, diagnostic counselling notes, batch timetables, sectional accuracy, and B-school GD/PI interview prep under a single unified student record with granular role-based access control.",
     architecture: [
       {
         name: "Client",
-        stack: "React single-page application",
-        role: "Dashboard, leads, pipeline, the 360° record, follow-ups and tasks, with the eight-stage board driven by drag and drop.",
+        stack: "React 19, TypeScript, TanStack Router, Tailwind CSS, Lucide",
+        role: "Specialized coaching operations cockpit with high-density tabular ledgers, drag-and-drop journey Kanban, and instant role-switching between Super Admin, Director, Counsellor, and Mentor.",
       },
       {
-        name: "API",
-        stack: "Python, FastAPI",
-        role: "Lead capture, stage transitions, follow-up scheduling and task assignment, each write recorded against its author.",
+        name: "Core Engine",
+        stack: "Dual Examination Scoring Engine (CAT & GMAT Focus Edition)",
+        role: "Dedicated pipelines tracking VARC/DILR/QA (198 raw marks scale) and GMAT Focus Edition (205–805 score scale with Quantitative, Verbal, and Data Insights balancing).",
       },
       {
-        name: "Data",
-        stack: "MongoDB Atlas",
-        role: "Leads, stage history, counsellor assignment, interactions, follow-ups, tasks and the commercial position per student.",
+        name: "Data & State",
+        stack: "MongoDB Atlas, Real-time Aggregation Pipelines",
+        role: "Document store capturing student 360° dossiers, proctored mock analytics, attendance streaks, SLA follow-up timestamps, and custom agreed fee instalment ledgers.",
       },
       {
-        name: "Record",
-        stack: "Lead 360° view",
-        role: "Timeline, internal notes, the journey control and the paid/pending snapshot on one screen, so a handover survives a colleague being away.",
+        name: "Admissions & Operations",
+        stack: "10 Dedicated Modules, Multi-Role RBAC",
+        role: "Modular operational surface spanning CRM leads, curriculum pacing, proctored test scoring, biometric attendance alerts, IIM call letter tracking, and revenue intelligence.",
       },
     ],
     capabilities: [
       {
-        title: "A card is a whole conversation",
-        body: "Programme of interest, intent band, indicative fee value and acquisition source sit on the face of the card, so triage happens without opening anything.",
+        title: "9-Phase Linear Lifecycle Progression",
+        body: "Every candidate advances through explicit, timestamped phases: Enquiry, Counselling, Enrolment, Foundation, Sectionals, Full Mocks, B-School Apps, Interviews, and Verified Admits.",
       },
       {
-        title: "Commitments, not reminders",
-        body: "Each follow-up is a promise made to a specific student on a specific channel, assigned to a named counsellor with a time on it.",
+        title: "Dual CAT & GMAT Exam Engines",
+        body: "Separate exam tracks with specialized scoring models — percentile projections mapped to all-India competitive cohorts, topic accuracy breakdowns, and negative mark penalty audits.",
       },
       {
-        title: "Built to extend",
-        body: "The surrounding modules — students, communications, payments, courses, campaigns, analytics — are mapped and navigable in the product, so the team can see where the system is going.",
+        title: "Admissions CRM & SLA Follow-up Queues",
+        body: "Direct channel lead capture, counsellor assignment routing, automated SLA timers, and 1-click conversion to enrolled batches with custom negotiated fee plans.",
+      },
+      {
+        title: "Role-Based Operating Cockpits",
+        body: "Strict RBAC views tailored for Super Administrators, Managing Directors, Admissions Counsellors, and Academic Mentors to protect sensitive financial and performance records.",
       },
     ],
     outcomes: [
-      { figure: "8", label: "Journey stages, one spine" },
-      { figure: "6", label: "Modules live in phase one" },
-      { figure: "1", label: "Record per student" },
+      { figure: "9", label: "Lifecycle progression phases" },
+      { figure: "10", label: "Specialized coaching operations modules" },
+      { figure: "2", label: "Dedicated exam tracks (CAT & GMAT)" },
+      { figure: "84.2%", label: "Average mock accuracy projected across batches" },
     ],
-    stack: ["React", "FastAPI", "Python", "MongoDB Atlas", "Tailwind"],
+    stack: [
+      "React 19",
+      "TypeScript",
+      "TanStack Router",
+      "MongoDB Atlas",
+      "Tailwind CSS",
+      "Radix UI",
+      "Lucide Icons",
+      "Vite",
+    ],
   },
 
   /* ---------------------------------------------------------------- 04 */
@@ -345,12 +451,28 @@ export const caseStudies: CaseStudy[] = [
     year: "2026",
     summary:
       "A print storefront where catalogue, checkout, payments, inventory and order operations run on one spine instead of four disconnected tools.",
+    live: {
+      label: "brush-art.in",
+      href: "https://www.brush-art.in",
+    },
     cover: brushStore,
-    coverAlt: "Brush storefront — custom wall art commerce",
+    coverAlt: "Brush storefront — custom wall art and print commerce",
+    logo: logoBrush,
+    logoDark: logoBrushDark,
+    logoClass: "h-16 sm:h-20 md:h-24 lg:h-28 w-auto max-w-[75%]",
     shots: [
-      { src: brushStore, caption: "Storefront — the wall-art configurator entry point" },
-      { src: brushCatalogue, caption: "Catalogue — filtering across collections" },
-      { src: brushCart, caption: "Cart — framing and size options carried through to checkout" },
+      {
+        src: brushCatalogue,
+        caption: "Catalogue & Filtering — 337+ artworks with live genre categorization and mockups",
+      },
+      {
+        src: brushBuilder,
+        caption: "Build Your Pack Studio — custom gallery wall setup configurator",
+      },
+      {
+        src: brushCart,
+        caption: "Cart & Checkout Flow — instant slide-out drawer, discounts and pan-India shipping",
+      },
     ],
     services: [
       "Storefront",
@@ -431,6 +553,9 @@ export const caseStudies: CaseStudy[] = [
       "Scrape X — the five side panels: Font Scraper, Palette Extractor, Image Sampler, Document Scraper and Email Extractor",
     coverFit: "contain",
     coverBg: "#E9E6DE",
+    logo: logoScrapex,
+    logoDark: logoScrapexDark,
+    logoClass: "h-14 sm:h-18 md:h-22 lg:h-26 w-auto max-w-[78%]",
     shots: [
       { src: scrapexFont, caption: "Font Scraper — live specimens and the exact workbook preview" },
       {
@@ -527,6 +652,9 @@ export const caseStudies: CaseStudy[] = [
       "A pipeline that discovers, parses and verifies government exam and recruitment notices, then holds every one behind a human review queue before it is published.",
     cover: nbHomeV2,
     coverAlt: "The Notice Board — discovery and verification pipeline",
+    logo: logoNoticeboard,
+    logoDark: logoNoticeboardDark,
+    logoClass: "w-[82%] sm:w-[78%] md:w-[75%] max-w-[420px] h-auto max-h-20 sm:max-h-24 md:max-h-28",
     shots: [
       { src: nbHomeV2, caption: "The student-facing feed of verified government notifications" },
       {
@@ -586,6 +714,72 @@ export const caseStudies: CaseStudy[] = [
       { figure: "100%", label: "Of notices human-approved" },
     ],
     stack: ["Next.js 15", "React 19", "Node-cron", "Puppeteer", "Prisma ORM", "Duck-Duck-Scrape"],
+  },
+  /* ---------------------------------------------------------------- 07 */
+  {
+    slug: "treatx",
+    n: "07",
+    title: "Precision online media and document engine",
+    client: "TreatX · Image & Document OS",
+    year: "2026",
+    summary:
+      "A client-side WebAssembly and edge-accelerated processing engine for high-fidelity image upscaling, perceptual compression, and interactive multi-page PDF operations.",
+    cover: "",
+    coverAlt: "TreatX online media and document enhancement engine",
+    logo: logoTreatx,
+    logoDark: logoTreatxDark,
+    logoClass: "h-14 sm:h-18 md:h-22 lg:h-26 w-auto max-w-[78%]",
+    inPipeline: true,
+    shots: [],
+    services: [
+      "Image processing",
+      "PDF manipulation",
+      "WebAssembly compute",
+      "Perceptual compression",
+      "Zero-knowledge privacy",
+    ],
+    problem:
+      "Routine digital assets operations—upscaling low-res photography, optimizing document sizes for submission limits, and reorganizing multi-page PDFs—routinely push users toward intrusive subscription tools, ad-heavy web converters, or services that retain confidential files on third-party servers.",
+    approach:
+      "TreatX runs compute directly inside the user's browser using compiled WebAssembly workers for zero-upload privacy, falling back to ephemeral edge nodes strictly when multi-pass neural reconstruction is required. No payload persists longer than the active browser session.",
+    architecture: [
+      {
+        name: "Client Runtime",
+        stack: "Rust, WebAssembly, Web Workers, OffscreenCanvas",
+        role: "Client-side image decoding, bilinear/bicubic resampling, and real-time PDF page reordering without server transit.",
+      },
+      {
+        name: "Edge Pipeline",
+        stack: "Node.js, Libvips, Sharp, Poppler",
+        role: "High-throughput ephemeral compute cluster for heavy multi-pass compression algorithms and batch PDF serialization.",
+      },
+      {
+        name: "Zero-Knowledge State",
+        stack: "Ephemeral In-Memory Buffers, Cryptographic Shredding",
+        role: "Temporary operational memory with immediate cryptographic erasure upon output stream dispatch.",
+      },
+    ],
+    capabilities: [
+      {
+        title: "Perceptual Resolution Recovery",
+        body: "Enhances fine edges, typography, and detail fidelity in low-res raster assets without haloing or artificial smearing.",
+      },
+      {
+        title: "Adaptive Size Compression",
+        body: "Calculates optimal structural similarity indexes (SSIM) to slash file sizes up to 80% with imperceptible visual loss across JPEG, WebP, PNG, and PDF.",
+      },
+      {
+        title: "Interactive PDF Matrix",
+        body: "Instant drag-and-drop page rearrangement, rotation, deletion, page extraction, and multi-document merge workflows.",
+      },
+    ],
+    outcomes: [
+      { figure: "< 80ms", label: "Client Wasm execution latency" },
+      { figure: "100%", label: "Client-side privacy guarantee" },
+      { figure: "80%", label: "Average file size reduction" },
+      { figure: "0 B", label: "Persistent server storage" },
+    ],
+    stack: ["Rust", "WebAssembly", "Sharp", "Libvips", "Poppler", "TypeScript", "React 19", "Tailwind CSS"],
   },
 ];
 

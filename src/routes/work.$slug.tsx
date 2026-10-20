@@ -15,7 +15,7 @@ import { bySlug, caseStudies, type CaseStudy } from "../data/caseStudies";
 export const Route = createFileRoute("/work/$slug")({
   loader: ({ params }) => {
     const study = bySlug(params.slug);
-    if (!study) throw notFound();
+    if (!study || study.inPipeline) throw notFound();
     return study;
   },
   head: ({ loaderData }) => {
@@ -40,8 +40,9 @@ export const Route = createFileRoute("/work/$slug")({
 function CaseStudyPage() {
   const study = Route.useLoaderData() as CaseStudy;
   if (!study) return null;
-  const index = caseStudies.findIndex((c) => c.slug === study.slug);
-  const next = caseStudies[(index + 1) % caseStudies.length];
+  const liveStudies = caseStudies.filter((c) => !c.inPipeline);
+  const index = liveStudies.findIndex((c) => c.slug === study.slug);
+  const next = liveStudies[(index + 1) % liveStudies.length];
   if (!next) return null;
 
   return (
