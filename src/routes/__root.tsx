@@ -103,8 +103,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "Kraft Studios — engineered aesthetics for ambitious organisations.",
       },
       { name: "author", content: "Kraft Studios" },
+      { property: "og:site_name", content: "Kraft Studios" },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://kraftstudios.site" },
+      { property: "og:title", content: "Kraft Studios — Engineered Aesthetics" },
+      {
+        property: "og:description",
+        content: "The visual soul and software engine, designed as one.",
+      },
+      { property: "og:image", content: "https://kraftstudios.site/og-image.png" },
+      { property: "og:image:secure_url", content: "https://kraftstudios.site/og-image.png" },
+      { property: "og:image:type", content: "image/png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "Kraft Studios — Engineered Aesthetics" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Kraft Studios — Engineered Aesthetics" },
+      {
+        name: "twitter:description",
+        content: "The visual soul and software engine, designed as one.",
+      },
+      { name: "twitter:image", content: "https://kraftstudios.site/og-image.png" },
     ],
     links: [
       {
@@ -118,6 +137,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap",
       },
       { rel: "icon", href: `${import.meta.env.BASE_URL}favicon.png`, type: "image/png" },
+      { rel: "apple-touch-icon", href: `${import.meta.env.BASE_URL}apple-touch-icon.png` },
     ],
     scripts: [
       { children: themeInitScript },

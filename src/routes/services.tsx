@@ -8,7 +8,15 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import { useRef } from "react";
-import { Eyebrow, PageFrame, PageIntro, Reveal, FadeUp, Magnetic, CornerMarks } from "../components/KraftSite";
+import {
+  Eyebrow,
+  PageFrame,
+  PageIntro,
+  Reveal,
+  FadeUp,
+  Magnetic,
+  CornerMarks,
+} from "../components/KraftSite";
 import { ArrowUpRight } from "lucide-react";
 
 import brushLogo from "../assets/clients/brush.png";
@@ -24,6 +32,28 @@ export const Route = createFileRoute("/services")({
         content:
           "In-house ecosystems spanning verified information systems, curated aesthetics, and print infrastructure.",
       },
+      { property: "og:title", content: "Our Brands — Kraft Studios" },
+      {
+        property: "og:description",
+        content:
+          "In-house ecosystems spanning verified information systems, curated aesthetics, and print infrastructure.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://kraftstudios.site/services" },
+      { property: "og:image", content: "https://kraftstudios.site/og-image.png" },
+      { property: "og:image:secure_url", content: "https://kraftstudios.site/og-image.png" },
+      { property: "og:image:type", content: "image/png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "Our Brands — Kraft Studios" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Our Brands — Kraft Studios" },
+      {
+        name: "twitter:description",
+        content:
+          "In-house ecosystems spanning verified information systems, curated aesthetics, and print infrastructure.",
+      },
+      { name: "twitter:image", content: "https://kraftstudios.site/og-image.png" },
     ],
   }),
   component: BrandsPage,
@@ -35,7 +65,8 @@ const brands = [
     title: "Brush",
     domain: "brush-art.in",
     logo: brushLogo,
-    logoClass: "h-20 md:h-28 lg:h-32 w-auto object-contain object-left block grayscale invert dark:grayscale-0 dark:invert-0",
+    logoClass:
+      "h-20 md:h-28 lg:h-32 w-auto object-contain object-left block grayscale invert dark:grayscale-0 dark:invert-0",
     copy: "A print and framing infrastructure platform running a unified ecommerce configuration engine allowing artists to scale their fulfilment effortlessly.",
     items: ["Custom Fulfilment", "Redundant Gateways", "Automated PDF Invoicing"],
     stats: [
@@ -214,7 +245,11 @@ function BrandsPage() {
                   <div className="lg:col-span-5 flex flex-col justify-between">
                     <FadeUp delay={0.2}>
                       <div className="relative border-t border-line pt-10 pb-6 px-4">
-                        <CornerMarks size={12} stroke={1.5} className="pointer-events-none absolute inset-0 text-reg/40" />
+                        <CornerMarks
+                          size={12}
+                          stroke={1.5}
+                          className="pointer-events-none absolute inset-0 text-reg/40"
+                        />
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10">
                           {brand.stats.map((s) => (
                             <div key={s.label}>
@@ -260,7 +295,10 @@ function BrandsPage() {
           ))}
         </div>
 
-        <section className="bg-ink text-paper selection:bg-reg selection:text-paper relative overflow-hidden" data-cursor-text="SYSTEM">
+        <section
+          className="bg-ink text-paper selection:bg-reg selection:text-paper relative overflow-hidden"
+          data-cursor-text="SYSTEM"
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 0.05, scale: 1 }}

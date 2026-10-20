@@ -28,7 +28,20 @@ export const Route = createFileRoute("/work/")({
         content: "Case studies where design, software and operations work as one.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://kraftstudios.site/work" },
+      { property: "og:image", content: "https://kraftstudios.site/og-image.png" },
+      { property: "og:image:secure_url", content: "https://kraftstudios.site/og-image.png" },
+      { property: "og:image:type", content: "image/png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "Selected Work — Kraft Studios" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Selected Work — Kraft Studios" },
+      {
+        name: "twitter:description",
+        content: "Case studies where design, software and operations work as one.",
+      },
+      { name: "twitter:image", content: "https://kraftstudios.site/og-image.png" },
     ],
   }),
   component: WorkIndex,
@@ -141,7 +154,8 @@ function CaseStudyCard({
 
               <div className="mt-12 flex items-center justify-between border-t border-line/60 pt-6">
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45">
-                  {study.architecture.length} layers · {study.stack.length} technologies · {study.year}
+                  {study.architecture.length} layers · {study.stack.length} technologies ·{" "}
+                  {study.year}
                 </p>
                 <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-amber-600 dark:text-amber-400">
                   <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
@@ -161,7 +175,9 @@ function CaseStudyCard({
                 <div className="relative flex h-full w-full flex-col items-center justify-between p-6 sm:p-8 md:p-10 select-none bg-[radial-gradient(var(--line)_1px,transparent_1px)] [background-size:20px_20px]">
                   <div className="flex w-full items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45 z-10">
                     <span>SYS // {study.n}</span>
-                    <span className="text-amber-600 dark:text-amber-400 font-medium">IN THE PIPELINE</span>
+                    <span className="text-amber-600 dark:text-amber-400 font-medium">
+                      IN THE PIPELINE
+                    </span>
                   </div>
                   <div className="flex flex-1 items-center justify-center w-full py-4 z-10">
                     <img

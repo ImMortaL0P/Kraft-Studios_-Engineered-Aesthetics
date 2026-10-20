@@ -21,6 +21,12 @@ export const Route = createFileRoute("/work/$slug")({
   head: ({ loaderData }) => {
     const s = loaderData as CaseStudy | undefined;
     if (!s) return {};
+    const imageUrl = s.cover
+      ? s.cover.startsWith("http")
+        ? s.cover
+        : `https://kraftstudios.site${s.cover.startsWith("/") ? "" : "/"}${s.cover}`
+      : "https://kraftstudios.site/og-image.png";
+
     return {
       meta: [
         { title: `${s.client} — ${s.title} | Kraft Studios` },
@@ -28,7 +34,14 @@ export const Route = createFileRoute("/work/$slug")({
         { property: "og:title", content: `${s.client} — ${s.title}` },
         { property: "og:description", content: s.summary },
         { property: "og:type", content: "article" },
+        { property: "og:url", content: `https://kraftstudios.site/work/${s.slug}` },
+        { property: "og:image", content: imageUrl },
+        { property: "og:image:secure_url", content: imageUrl },
+        { property: "og:image:alt", content: `${s.client} — ${s.title}` },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: `${s.client} — ${s.title}` },
+        { name: "twitter:description", content: s.summary },
+        { name: "twitter:image", content: imageUrl },
       ],
     };
   },
@@ -156,7 +169,11 @@ function Cover({ study }: { study: CaseStudy }) {
         className="relative overflow-hidden rounded-md border border-line"
         style={study.coverBg ? { backgroundColor: study.coverBg } : undefined}
       >
-        <CornerMarks size={18} stroke={1.5} className="pointer-events-none absolute inset-3 z-10 text-white/40" />
+        <CornerMarks
+          size={18}
+          stroke={1.5}
+          className="pointer-events-none absolute inset-3 z-10 text-white/40"
+        />
         <img
           src={study.cover}
           alt={study.coverAlt}
@@ -212,7 +229,11 @@ function Architecture({ study }: { study: CaseStudy }) {
             delay={i * 0.07}
             className="group relative bg-paper p-7 transition-colors duration-500 hover:bg-surface md:p-9"
           >
-            <CornerMarks size={10} stroke={1} className="pointer-events-none absolute inset-2 text-reg/20 transition-colors duration-500 group-hover:text-reg/60" />
+            <CornerMarks
+              size={10}
+              stroke={1}
+              className="pointer-events-none absolute inset-2 text-reg/20 transition-colors duration-500 group-hover:text-reg/60"
+            />
             <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-reg">
               Layer {String(i + 1).padStart(2, "0")}
             </span>

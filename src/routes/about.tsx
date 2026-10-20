@@ -22,7 +22,17 @@ export const Route = createFileRoute("/about")({
       { property: "og:title", content: "About — Kraft Studios" },
       { property: "og:description", content: "Building the engine. Designing the soul." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://kraftstudios.site/about" },
+      { property: "og:image", content: "https://kraftstudios.site/og-image.png" },
+      { property: "og:image:secure_url", content: "https://kraftstudios.site/og-image.png" },
+      { property: "og:image:type", content: "image/png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "About Kraft Studios — Engineered Aesthetics" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "About — Kraft Studios" },
+      { name: "twitter:description", content: "Building the engine. Designing the soul." },
+      { name: "twitter:image", content: "https://kraftstudios.site/og-image.png" },
     ],
   }),
   component: AboutPage,
@@ -125,15 +135,7 @@ function AnimatedLinesBackground() {
   );
 }
 
-function TeamPhoto({
-  src,
-  alt,
-  firstName,
-}: {
-  src: string;
-  alt: string;
-  firstName: string;
-}) {
+function TeamPhoto({ src, alt, firstName }: { src: string; alt: string; firstName: string }) {
   const photoRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState({ x: 0.5, y: 0.5, active: false });
 

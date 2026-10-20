@@ -87,7 +87,20 @@ export const Route = createFileRoute("/")({
         content: "The visual soul and software engine, designed as one.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://kraftstudios.site" },
+      { property: "og:image", content: "https://kraftstudios.site/og-image.png" },
+      { property: "og:image:secure_url", content: "https://kraftstudios.site/og-image.png" },
+      { property: "og:image:type", content: "image/png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "Kraft Studios — Engineered Aesthetics" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Kraft Studios — Engineered Aesthetics" },
+      {
+        name: "twitter:description",
+        content: "The visual soul and software engine, designed as one.",
+      },
+      { name: "twitter:image", content: "https://kraftstudios.site/og-image.png" },
     ],
   }),
   component: HomePage,
@@ -1153,9 +1166,7 @@ function Work() {
     "lg:col-span-5",
     "lg:col-span-6 lg:col-start-4",
   ];
-  const ratios = [
-    "aspect-[4/3] lg:aspect-[16/10]",
-  ];
+  const ratios = ["aspect-[4/3] lg:aspect-[16/10]"];
 
   return (
     <section id="work" className="site-shell relative py-24 lg:py-36">
@@ -1272,7 +1283,9 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
             >
               <div className="flex w-full items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45 z-10">
                 <span>SYS // {study.n}</span>
-                <span className="text-amber-600 dark:text-amber-400 font-medium">IN THE PIPELINE</span>
+                <span className="text-amber-600 dark:text-amber-400 font-medium">
+                  IN THE PIPELINE
+                </span>
               </div>
               <div className="flex flex-1 items-center justify-center w-full py-4 z-10">
                 <img
@@ -1370,9 +1383,7 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
                 : "text-white/35 group-hover:text-white/80"
             }`}
           />
-          <span
-            className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] backdrop-blur-sm transition-colors duration-300 bg-ink/75 text-paper"
-          >
+          <span className="absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] backdrop-blur-sm transition-colors duration-300 bg-ink/75 text-paper">
             <ArrowUpRight size={11} />
             View Case Study
           </span>
@@ -1397,7 +1408,9 @@ function ProjectCard({ study, cls, ratio }: { study: CaseStudy; cls: string; rat
               </span>
             )}
           </div>
-          <h2 className={`mt-2 font-display text-2xl font-bold tracking-[-0.025em] transition-colors duration-300 ${!study.inPipeline ? "group-hover:text-reg" : ""} lg:text-[2.1rem]`}>
+          <h2
+            className={`mt-2 font-display text-2xl font-bold tracking-[-0.025em] transition-colors duration-300 ${!study.inPipeline ? "group-hover:text-reg" : ""} lg:text-[2.1rem]`}
+          >
             {study.title}
           </h2>
           <p className="mt-3 max-w-[44ch] text-[15px] leading-relaxed text-ink/60">
